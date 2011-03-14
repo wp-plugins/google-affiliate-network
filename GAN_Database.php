@@ -218,9 +218,9 @@ class GAN_Database {
     $wpdb->query($sql);
     $sql = $wpdb->prepare("delete from " . GAN_AD_STATS_TABLE . ' where adid = %d',$id);
     $wpdb->query($sql);
-    $sql = $wpdb->prepare("select count(*) from ".GAN_AD_TABLE. ' where MerchantID = %s",$MerchantID);
+    $sql = $wpdb->prepare("select count(*) from ".GAN_AD_TABLE. ' where MerchantID = %s',$MerchantID);
     if ($wpdb->get_var($sql) == 0) {
-      $sql = $wpdb->prepare("delete from " . GAN_MERCH_STATS_TABLE . where MerchantID = %s",$MerchantID);
+      $sql = $wpdb->prepare("delete from " . GAN_MERCH_STATS_TABLE . " where MerchantID = %s",$MerchantID);
       $wpdb->query($sql);
     }
   }
@@ -254,13 +254,13 @@ class GAN_Database {
     global $wpdb;
     $adids = $wpdb->get_col("select adid " . GAN_AD_STATS_TABLE . ' order by Impressions');
     foreach ($adids as $adid) {
-      if ($wpdb->get_var(select count(*) from " . GAN_AD_TABLE . ' where id = '.$adid) == 0) {
-	$wpdb->query("delete from " . GAN_AD_STATS_TABLE . ' where adid = ".$adid);
+      if ($wpdb->get_var("select count(*) from " . GAN_AD_TABLE . ' where id = '.$adid) == 0) {
+	$wpdb->query("delete from " . GAN_AD_STATS_TABLE . ' where adid = '.$adid);
       }
     }
     $merchids = $wpdb->get_col("select MerchantID from " . GAN_MERCH_STATS_TABLE . ' order by Impressions');
     foreach ($merchids as $MerchantID) {
-      if ($wpdb->get_var(select count(*) from " . GAN_AD_TABLE . " where MerchantID = '".$MerchantID."'") == 0) {
+      if ($wpdb->get_var("select count(*) from " . GAN_AD_TABLE . " where MerchantID = '".$MerchantID."'") == 0) {
 	$wpdb->query("delete from " . GAN_MERCH_STATS_TABLE . " where MerchantID = '".$MerchantID."'");
       }
     }
