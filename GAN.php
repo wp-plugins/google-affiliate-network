@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 2.1
+ * Version: 2.2
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -85,6 +85,14 @@ class GAN_Plugin {
 		    'Add new', 
 		    'manage_options', 'gan-database-add-element', 
 		    array($this,'admin_add_element'));
+	  add_submenu_page( 'gan-database-page', 'Ad Impression Statistics',
+	  	    'Ad Stats',
+		    'manage_options', 'gan-database-ad-impstats',
+		    array($this,'admin_ad_impstats'));
+	  add_submenu_page( 'gan-database-page', 'Merchant Impression Statistics',
+	  	    'Merchant Stats',
+		    'manage_options', 'gan-database-merch-impstats',
+		    array($this,'admin_merch_impstats'));
 	}
 
 	/* Front side head action: load our style sheet */
@@ -198,7 +206,6 @@ class GAN_Plugin {
 	        'total' => $num_pages,
 	        'current' => $pagenum
 	     )); ?>
-	    <?php $this->hidden_filter_fields(); ?>
 	<div class="tablenav">
 	<div class="tablenav-pages"><?php $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s&#8211;%s of %s' ) . '</span>%s',
 	        number_format_i18n( ( $pagenum - 1 ) * $per_page + 1 ),
@@ -250,13 +257,13 @@ class GAN_Plugin {
 		        ?></td><td valign="top" width="40%" align="left" ><?php 
 			  echo $GANRow['LinkName'];   /* Link name */
 		        ?><br /><a href="<?php 
-			  $this->make_page_query($id, 'editrow' );	/* Edit link */
+			  $this->make_page_query('gan-database-page',$id, 'editrow' );	/* Edit link */
 			?>">Edit</a> <a href="<?php 
-			  $this->make_page_query($id, 'delete' );  /* Delete link */
+			  $this->make_page_query('gan-database-page',$id, 'delete' );  /* Delete link */
 			?>">Delete</a> <a href="<?php
-			  $this->make_page_query($id, 'sidetoggle' ); /* Side toggle link */
+			  $this->make_page_query('gan-database-page',$id, 'sidetoggle' ); /* Side toggle link */
 			?>">Toggle&nbsp;Side</a> <a href="<?php
-			  $this->make_page_query($id, 'enabledtoggle' ); /* Enable toggle link */
+			  $this->make_page_query('gan-database-page',$id, 'enabledtoggle' ); /* Enable toggle link */
 			?>">Toggle&nbsp;Enabled</a></td><td valign="top" width="10%" align="left" ><?php 
 			  echo $GANRow['ImageWidth'];	/* Image width (0 = text) */
 		        ?></td><td valign="top" width="10%" align="left" ><?php 
@@ -703,11 +710,300 @@ class GAN_Plugin {
 	  return false;
 	}
 
+	function admin_ad_impstats() {
+	  //must check that the user has the required capability 
+	  if (!current_user_can('manage_options'))
+	  {
+	    wp_die( __('You do not have sufficient permissions to access this page.') );
+	  }
+	  global $wpdb;
+	  /* Filters: merchant id and image width (0 == text ad). */
+	  if ( isset($_GET['merchid']) ) {
+	    $merchid = $_GET['merchid'];
+	  } else {
+	    $merchid = "";
+	  }
+	  if ( isset($_GET['imwidth']) ) {
+	    $imwidth = $_GET['imwidth'];
+	  } else {
+	    $imwidth = -1;
+	  }
+	  /* Build where clause. */
+	  if ( $merchid != "" || $imwidth != -1 ) {
+	    $wclause = ""; $and = "";
+	    if ($merchid != "") {
+		$wclause = $wpdb->prepare($wclause . " MerchantID = %s",
+					  $merchid);
+		$and = " && ";
+	    }
+	    if ($imwidth != -1) $wclause = $wpdb->prepare($wclause . $and . 
+							  " ImageWidth = %d",
+							  $imwidth);
+	    $where = " where " . $wclause . " ";
+	    $wand  = " && " . $wclause . " ";
+	  } else {
+	    $wand = " ";
+	    $where = " ";
+	  }
+	  /* Handle row action links: */
+	  if ( isset($_GET['id']) && isset($_GET['action']) ) {
+	    $id     = $_GET['id'];
+	    $action = $_GET['action'];
+	    if( $action == 'delete' ) {
+	      GAN_Database::delete_GAN_AD_STATS($id);
+	    }
+	  /* Global actions: */
+	  } else if ( isset($_GET['flushstats']) ) {
+	    GAN_Database::flush_GAN_AD_STATS($where);
+	  }
+	  /* Handle pagenation. */
+	  if ( isset($_GET['pagenum']) ) {
+	    $pagenum = $_GET['pagenum'];
+	  } else {
+	    $pagenum = 1;
+	  }
+	  if ( isset($_GET['GAN_rows_per_page']) ) {
+	    $per_page = $_GET['GAN_rows_per_page'];
+	  } else {
+	    $per_page = 20;
+	  }
+	  $skiprecs = ($pagenum - 1) * $per_page;
+	  /* Head of page, filter and screen options. */
+	  ?><div class="wrap"><div id="icon-gan-ad-imp" class="icon32"><br /></div><h2>Ad Impression Statistics</h2>
+	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
+		<input type="hidden" name="page" value="gan-database-ad-impstats" />
+		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
+		<input type="submit" name="filter" class="button" value="Filter" />
+		<label for="gan-rows-per-page">Rows per page</label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
+	        <input type="submit" name="screenopts" class="button" value="Apply" /></form><?php
+	  /* Get database rows */
+	  $ADStatsData = GAN_Database::get_GAN_AD_VIEW_data($where);
+	  if ( ! empty($ADStatsData) ) {
+	    /* Non empty results.  Get row count. */
+	    $ADStatsDataRowCount = GAN_Database::get_GAN_AD_VIEW_row_count($where);
+	    $num_pages = ceil($ADStatsDataRowCount / $per_page);
+	    /* Build page links. */
+	     $page_links = paginate_links( array(
+	        'base' => add_query_arg( array ('pagenum' => '%#%', 'GAN_rows_per_page' => $per_page ) ),
+	        'format' => '',
+	        'prev_text' => __('&laquo;'),
+	        'next_text' => __('&raquo;'),
+	        'total' => $num_pages,
+	        'current' => $pagenum
+	     )); ?>
+	<div class="tablenav">
+	<div class="tablenav-pages"><?php $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s&#8211;%s of %s' ) . '</span>%s',
+	        number_format_i18n( ( $pagenum - 1 ) * $per_page + 1 ),
+	        number_format_i18n( min( $pagenum * $per_page, $ADStatsDataRowCount ) ),
+	        number_format_i18n( $ADStatsDataRowCount ),
+	        $page_links
+	); echo $page_links_text; ?></div>
+	<form method="get" action="<?php echo admin_url('admin.php'); ?>">
+	<input type="hidden" name="page" value="gan-database-ad-impstats" />
+	<?php $this->hidden_filter_fields(); ?>
+	<div class="alignleft actions">
+	<input type="submit" name="flushstats" class="button" value="Flush Stats" /></div>
+	<br class="clear" /></div>
+	     	     <table class="widefat page fixed" cellspacing="2">
+		<thead>
+		<tr><th align="left" width="20%" scope="col" class="manage-column">Advertiser</th>
+		    <th align="left" width="50%" scope="col" class="manage-column">Link Name</th>
+		    <th align="right" width="8%"  scope="col" class="manage-column">Image Width</th>
+		    <th align="right" width="12%"  scope="col" class="manage-column">Impressions</th>
+		    <th align="right" width="10%"  scope="col" class="manage-column">Last View</th></tr>
+		</thead>
+		<tfoot>
+		<tr><th align="left" width="20%" scope="col" class="manage-column">Advertiser</th>
+		    <th align="left" width="50%" scope="col" class="manage-column">Link Name</th>
+		    <th align="right" width="8%"  scope="col" class="manage-column">Image Width</th>
+		    <th align="right" width="12%"  scope="col" class="manage-column">Impressions</th>
+		    <th align="right" width="10%"  scope="col" class="manage-column">Last View</th></tr>
+		</tfoot>
+		<tbody>
+		<?php /* Display each row. */
+		      $index = 0; $alt = 'alternate';
+		      foreach ((array)$ADStatsData as $ADStatRow) {
+			$index++;       /* count record. */ 
+			if ($index <= $skiprecs) {continue;}	/* Previous pages. */
+		        if ($index >  ($skiprecs+$per_page)) {break;} /* Next pages. */
+			$id = $ADStatRow['id'];    /* Id for row actions. */
+			?><tr class="<?php echo $alt; ?> iedit"><td valign="top" width="20%" align="left"><?php
+			  echo GAN_Database::get_merch_name($ADStatRow['MerchantID']);  /* Advertiser name */
+			?></td><td valign="top" width="10%" align="left" ><?php 
+			  echo GAN_Database::get_link_name($ADStatRow['adid']);   /* Link name */
+		        ?><br /><a href="<?php 
+			  $this->make_page_query('gan-database-ad-impstats',$id,'delete');  /* Delete link */
+			?>">Delete</a></td><td valign="top" width="8%" align="right" ><?php 
+			  echo $ADStatRow['ImageWidth']; /* Image Width */
+		        ?></td><td valign="top" width="12%" align="right" ><?php 
+			  echo $ADStatRow['Impressions']; /* Impressions */
+		        ?></td><td valign="top" width="10%" align="right" ><?php 
+			  echo $ADStatRow['LastRunDate']; /* Last Run Data */
+			?></td></tr><?php
+			/* Toggle row backgrounds */
+			if ($alt == '') {
+			  $alt = 'alternate';
+			} else {
+			  $alt = '';
+			}
+		      } ?></tbody>
+		</table><div class="tablenav">
+	<div class="tablenav-pages"><?php $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s&#8211;%s of %s' ) . '</span>%s',
+	        number_format_i18n( ( $pagenum - 1 ) * $per_page + 1 ),
+	        number_format_i18n( min( $pagenum * $per_page, $ADStatsDataRowCount ) ),
+	        number_format_i18n( $ADStatsDataRowCount ),
+	        $page_links
+	); echo $page_links_text; ?></div>
+	<form method="get" action="<?php echo admin_url('admin.php'); ?>">
+	<input type="hidden" name="page" value="gan-database-ad-impstats" />
+	<?php $this->hidden_filter_fields(); ?>
+	<div class="alignleft actions">
+	<input type="submit" name="flushstats" class="button" value="Flush Stats" /></div>
+	<br class="clear" /></div></form>
+	<?php
+	  } else {
+	  ?><h4>No matching entries found.</h4><?php
+	  }
+	  ?><form method="get" action="<?php echo admin_url('admin.php'); ?>">
+		<input type="hidden" name="page" value="gan-database-ad-impstats" />
+		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
+		<input type="submit" name="filter" class="button" value="Filter" />
+		<label for="gan-rows-per-page">Rows per page</label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
+	        <input type="submit" name="screenopts" class="button" value="Apply" /></form><?php
+	}
+
+	function admin_merch_impstats() {
+	  //must check that the user has the required capability 
+	  if (!current_user_can('manage_options'))
+	  {
+	    wp_die( __('You do not have sufficient permissions to access this page.') );
+	  }
+	  /* Handle row action links: */
+	  if ( isset($_GET['id']) && isset($_GET['action']) ) {
+	    $id     = $_GET['id'];
+	    $action = $_GET['action'];
+	    if( $action == 'delete' ) {
+	      GAN_Database::delete_GAN_MERCH_STATS($id);
+	    }
+	  /* Global actions: */
+	  } else if ( isset($_GET['flushstats']) ) {
+	    GAN_Database::flush_GAN_MERCH_STATS($where);
+	  }
+	  /* Handle pagenation. */
+	  if ( isset($_GET['pagenum']) ) {
+	    $pagenum = $_GET['pagenum'];
+	  } else {
+	    $pagenum = 1;
+	  }
+	  if ( isset($_GET['GAN_rows_per_page']) ) {
+	    $per_page = $_GET['GAN_rows_per_page'];
+	  } else {
+	    $per_page = 20;
+	  }
+	  $skiprecs = ($pagenum - 1) * $per_page;
+	  /* Head of page, filter and screen options. */
+	  ?><div class="wrap"><div id="icon-gan-merch-imp" class="icon32"><br /></div><h2>Merchant Impression Statistics</h2>
+	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
+		<input type="hidden" name="page" value="gan-database-merch-impstats" />
+		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
+		<input type="submit" name="filter" class="button" value="Filter" />
+		<label for="gan-rows-per-page">Rows per page</label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
+	        <input type="submit" name="screenopts" class="button" value="Apply" /></form><?php
+	  /* Get database rows */
+	  $MerchStatsData = GAN_Database::get_GAN_MERCH_STATS_data($where);
+	  if ( ! empty($MerchStatsData) ) {
+	    /* Non empty results.  Get row count. */
+	    $MerchStatsDataRowCount = GAN_Database::get_GAN_MERCH_STATS_row_count($where);
+	    $num_pages = ceil($MerchStatsDataRowCount / $per_page);
+	    /* Build page links. */
+	     $page_links = paginate_links( array(
+	        'base' => add_query_arg( array ('pagenum' => '%#%', 'GAN_rows_per_page' => $per_page ) ),
+	        'format' => '',
+	        'prev_text' => __('&laquo;'),
+	        'next_text' => __('&raquo;'),
+	        'total' => $num_pages,
+	        'current' => $pagenum
+	     )); ?>
+	<div class="tablenav">
+	<div class="tablenav-pages"><?php $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s&#8211;%s of %s' ) . '</span>%s',
+	        number_format_i18n( ( $pagenum - 1 ) * $per_page + 1 ),
+	        number_format_i18n( min( $pagenum * $per_page, $MerchStatsDataRowCount ) ),
+	        number_format_i18n( $MerchStatsDataRowCount ),
+	        $page_links
+	); echo $page_links_text; ?></div>
+	<form method="get" action="<?php echo admin_url('admin.php'); ?>">
+	<input type="hidden" name="page" value="gan-database-merch-impstats" />
+	<?php $this->hidden_filter_fields(); ?>
+	<div class="alignleft actions">
+	<input type="submit" name="flushstats" class="button" value="Flush Stats" /></div>
+	<br class="clear" /></div>
+	     	     <table class="widefat page fixed" cellspacing="2">
+		<thead>
+		<tr><th align="left" width="75%" scope="col" class="manage-column">Advertiser</th>
+		    <th align="right" width="15%"  scope="col" class="manage-column">Impressions</th>
+		    <th align="right" width="10%"  scope="col" class="manage-column">Last View</th></tr>
+		</thead>
+		<tfoot>
+		<tr><th align="left" width="75%" scope="col" class="manage-column">Advertiser</th>
+		    <th align="right" width="15%"  scope="col" class="manage-column">Impressions</th>
+		    <th align="right" width="10%"  scope="col" class="manage-column">Last View</th></tr>
+		</tfoot>
+		<tbody>
+		<?php /* Display each row. */
+		      $index = 0; $alt = 'alternate';
+		      foreach ((array)$MerchStatsData as $MerchStatRow) {
+			$index++;       /* count record. */ 
+			if ($index <= $skiprecs) {continue;}	/* Previous pages. */
+		        if ($index >  ($skiprecs+$per_page)) {break;} /* Next pages. */
+			$id = $MerchStatRow['id'];    /* Id for row actions. */
+			?><tr class="<?php echo $alt; ?> iedit"><td valign="top" width="75%" align="left"><?php
+			  echo GAN_Database::get_merch_name($MerchStatRow['MerchantID']);  /* Advertiser name */
+		        ?><br /><a href="<?php 
+			  $this->make_page_query('gan-database-merch-impstats',$id,'delete');  /* Delete link */
+			?>">Delete</a></td><td valign="top" width="15%" align="right" ><?php 
+			  echo $MerchStatRow['Impressions']; /* Impressions */
+		        ?></td><td valign="top" width="10%" align="right" ><?php 
+			  echo $MerchStatRow['LastRunDate']; /* Last Run Data */
+			?></td></tr><?php
+			/* Toggle row backgrounds */
+			if ($alt == '') {
+			  $alt = 'alternate';
+			} else {
+			  $alt = '';
+			}
+		      } ?></tbody>
+		</table><div class="tablenav">
+	<div class="tablenav-pages"><?php $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s&#8211;%s of %s' ) . '</span>%s',
+	        number_format_i18n( ( $pagenum - 1 ) * $per_page + 1 ),
+	        number_format_i18n( min( $pagenum * $per_page, $MerchStatsDataRowCount ) ),
+	        number_format_i18n( $MerchStatsDataRowCount ),
+	        $page_links
+	); echo $page_links_text; ?></div>
+	<form method="get" action="<?php echo admin_url('admin.php'); ?>">
+	<input type="hidden" name="page" value="gan-database-merch-impstats" />
+	<?php $this->hidden_filter_fields(); ?>
+	<div class="alignleft actions">
+	<input type="submit" name="flushstats" class="button" value="Flush Stats" /></div>
+	<br class="clear" /></div></form>
+	<?php
+	  } else {
+	  ?><h4>No matching entries found.</h4><?php
+	  }
+	  ?><form method="get" action="<?php echo admin_url('admin.php'); ?>">
+		<input type="hidden" name="page" value="gan-database-merch-impstats" />
+		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
+		<input type="submit" name="filter" class="button" value="Filter" />
+		<label for="gan-rows-per-page">Rows per page</label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
+	        <input type="submit" name="screenopts" class="button" value="Apply" /></form><?php
+	}
+
+
+
 	/*
 	 * Build an action link
 	 */
 
-	function make_page_query($id, $what)
+	function make_page_query($page, $id, $what)
 	{
 		if ( isset($_GET['GAN_rows_per_page']) ) {
 		  $per_page = $_GET['GAN_rows_per_page'];
@@ -729,7 +1025,7 @@ class GAN_Plugin {
 		} else {
 		  $imwidth = -1;
 	 	}
-		echo admin_url('admin.php') . "?page=gan-database-page&"
+		echo admin_url('admin.php') . "?page=".$page."&"
 			. "GAN_rows_per_page=$per_page&"
 			. "pagenum=$pagenum&"
 			. "merchid=$merchid&"

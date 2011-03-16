@@ -1,16 +1,22 @@
 #icon-gan-db {
-        background: transparent url(GANicons32.png) no-repeat -12px -5px;
+        background: transparent url(../images/GANicons32.png) no-repeat -12px -5px;
 }
 
 #icon-gan-add-db {
-        background: transparent url(GANicons32.png) no-repeat -64px -5px;
+        background: transparent url(../images/GANicons32.png) no-repeat -64px -5px;
 }
 
 #icon-gan-edit-db {
-        background: transparent url(GANicons32.png) no-repeat -131px -5px;
+        background: transparent url(../images/GANicons32.png) no-repeat -131px -5px;
 }
 
+#icon-gan-ad-imp {
+	background: transparent url(../images/GANicons32.png) no-repeat -177px -5px;
+}
 
+#icon-gan-merch-imp {
+	background: transparent url(../images/GANicons32.png) no-repeat -223px -5px;
+}
 
 table.ganstats {
 width:100%;

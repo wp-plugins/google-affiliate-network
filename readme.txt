@@ -1,7 +1,7 @@
 === Google Affiliate Network ===
-Contributors: RobertHeller
+Contributors: Robert Heller
 Donate link: http://www.deepsoft.com/GAN
-Tags: gan,affiliate,widget
+Tags: gan,affiliate,widget,google,plugin,ads
 Requires at least: 2.7
 Tested up to: 3.1
 Stable tag: 2.1

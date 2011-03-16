@@ -399,6 +399,41 @@ class GAN_Database {
 				" WHERE ID = %s",$id);
     return $wpdb->get_var($sql);
   }
+  static function get_GAN_AD_VIEW_data($where) {
+    global $wpdb;
+    return $wpdb->get_results("SELECT * FROM " . GAN_AD_STATS_TABLE_VIEW . $where . ' Order by Impressions', 'ARRAY_A');
+  }
+  static function get_GAN_AD_VIEW_row_count($where) {
+    global $wpdb;
+    return $wpdb->get_var("SELECT count(*) FROM " . GAN_AD_STATS_TABLE_VIEW . $where);
+  }
+  static function delete_GAN_AD_STATS($id) {
+    global $wpdb;
+    $sql = $wpdb->prepare("delete from " . GAN_AD_STATS_TABLE . ' where id = %d',$id);
+    $wpdb->query($sql);
+  }
+  static function flush_GAN_AD_STATS($where) {
+    global $wpdb;
+    $wpdb->query("delete from " . GAN_AD_STATS_TABLE . $where);
+  }
+  static function get_GAN_MERCH_STATS_data($where) {
+    global $wpdb;
+    return $wpdb->get_results("SELECT * FROM " . GAN_MERCH_STATS_TABLE . $where . ' Order by Impressions', 'ARRAY_A');
+  }
+  static function get_GAN_MERCH_STATS_row_count($where) {
+    global $wpdb;
+    return $wpdb->get_var("SELECT count(*) FROM " . GAN_MERCH_STATS_TABLE . $where);
+  }
+  static function delete_GAN_MERCH_STATS($id) {
+    global $wpdb;
+    $sql = $wpdb->prepare("delete from " . GAN_MERCH_STATS_TABLE . ' where id = %d',$id);
+    $wpdb->query($sql);
+  }
+  static function flush_GAN_MERCH_STATS($where) {
+    global $wpdb;
+    $wpdb->query("delete from " . GAN_MERCH_STATS_TABLE . $where);
+  }
 }
 
 ?>
+
