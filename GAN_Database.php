@@ -233,7 +233,7 @@ class GAN_Database {
   }
   static function delete_ad_by_id($id) {
     global $wpdb;
-    $sql = $wpdb->prepare("select MerchantID " . GAN_AD_TABLE . ' where id = %d',$id);
+    $sql = $wpdb->prepare("select DISTINCT MerchantID " . GAN_AD_TABLE . ' where id = %d',$id);
     $MerchantID = $wpdb->get_var($sql);
     $sql = $wpdb->prepare("delete from " . GAN_AD_TABLE . ' where id = %d',$id);
     $wpdb->query($sql);
@@ -269,7 +269,10 @@ class GAN_Database {
   }
   static function deleteexpired($wand) {
     global $wpdb;
-    $wpdb->query("delete from " . GAN_AD_TABLE . ' where EndDate<CURDATE() ' . $wand);
+    $idstodelete = $wpdb->get_col("select id from " . GAN_AD_TABLE . ' where EndDate<CURDATE() ' . $wand);
+    foreach ($idstodelete as $id) {
+      GAN_Database::delete_ad_by_id($id);
+    }
   }
   static function clean_stats_tables() {
     global $wpdb;

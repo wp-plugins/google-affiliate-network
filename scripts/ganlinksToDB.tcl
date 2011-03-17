@@ -87,6 +87,11 @@ while { [gets stdin line] >= 0 } {
   }
 }
 
+
+#**** Needed: hook to clean up statistics tables -- the below will leave orphans
+#**** Thought: move this functionallity to a WP cron job where the full plugin
+#**** is available.
+
 #	Edit if your WP prefix is other then wp_
 puts "delete from wp_DWS_GAN where EndDate<CURDATE();"
 if {[catch {::mysql::exec $DB "delete from wp_DWS_GAN where EndDate<CURDATE()"} result]} {
@@ -94,6 +99,7 @@ if {[catch {::mysql::exec $DB "delete from wp_DWS_GAN where EndDate<CURDATE()"} 
 } else {
   puts "-- DB Result: $result"
 }
+
 
 ::mysql::close $DB
 

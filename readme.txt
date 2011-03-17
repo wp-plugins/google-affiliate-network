@@ -4,7 +4,7 @@ Donate link: http://www.deepsoft.com/GAN
 Tags: gan,affiliate,widget,google,plugin,ads
 Requires at least: 2.7
 Tested up to: 3.1
-Stable tag: 2.2
+Stable tag: 2.3
 
 A Widget plugin to display Google Affiliate Network ads.  Both text
 links and image ads can be displayed.  The widgets are parameterized.
@@ -42,6 +42,14 @@ There are no Frequently Asked Questions yet.
 There are no Screenshots yet.
 
 == Changelog ==
+
+= 2.3 =
+* Changed the statistics reseting from 'flush' (delete) to 'zero', since 
+  deleting rows from the stats tables is counter-indicated.  Reseting the
+  statistics to a zero state (0 impressions, last date to the beginning of 
+  the epoch) is what should be done.
+* Fixed small database error (failing to delete empty advertisers).
+* Fixed the delete expired function to properly clean up the stats tables.
 
 = 2.2 =
 * Added stats view to admin pages.
