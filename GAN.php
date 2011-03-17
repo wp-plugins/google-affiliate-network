@@ -56,7 +56,7 @@ class GAN_Plugin {
 		add_action('wp_head', array($this,'wp_head'));
 		add_action('admin_head', array($this,'admin_head'));
 		add_action('wp_dashboard_setup', array($this,'wp_dashboard_setup'));
-
+		GAN_Database::PopulateStatsTables();
 	}
 	/* Activation hook: create database tables. */
 	function install() {

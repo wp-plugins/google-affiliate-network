@@ -169,12 +169,43 @@ class GAN_Database {
 			  " WHERE ID = %d",$id);
     return $wpdb->get_row($sql, 'ARRAY_A' );
   }
+  static function init_counts($id) {
+    //file_put_contents("php://stderr","*** GAN_Database::init_counts(".$id.")\n");
+    global $wpdb;
+    $merchid = $wpdb->get_var($wpdb->prepare("SELECT MerchantID FROM ".
+					     GAN_AD_TABLE.
+					     " WHERE ID = %d",$id));
+    //file_put_contents("php://stderr","*** -: merchid = ".$merchid."\n");
+    $merchcount = $wpdb->get_var($wpdb->prepare("SELECT count(Impressions) FROM ".
+						GAN_MERCH_STATS_TABLE.
+						" WHERE MerchantID = %s",
+						$merchid));
+    //file_put_contents("php://stderr","*** -: merchcount = ".$merchcount."\n");
+    if ($merchcount == 0) {
+      $wpdb->insert(GAN_MERCH_STATS_TABLE,array("MerchantID" => $merchid),"%s");
+    }
+    $adcount = $wpdb->get_var($wpdb->prepare("SELECT count(Impressions) FROM ".
+					    GAN_AD_STATS_TABLE.
+					    " WHERE adid = %d",$id));
+    //file_put_contents("php://stderr","*** -: adcount = ".$adcount."\n");
+    if ($adcount == 0) {
+      $wpdb->insert(GAN_AD_STATS_TABLE,array("adid" => $id),"%d");
+    }
+  }
+  static function PopulateStatsTables() {
+    global $wpdb;
+    $alladids = $wpdb->get_col("SELECT id from ".GAN_AD_TABLE);
+    foreach ($alladids as $adid) {
+      GAN_Database::init_counts($adid);
+    }
+  }
   /* Update an ad's impression counts (merchant and the ad itself). If the
    * ad or merchant does not already have a impression count row, it is
    * created.
    */
   static function bump_counts($id) {
     //file_put_contents("php://stderr","*** GAN_Database::bump_counts(".$id.")\n");
+    GAN_Database::init_counts($id);
     global $wpdb;
     $merchid = $wpdb->get_var($wpdb->prepare("SELECT MerchantID FROM ".
 					     GAN_AD_TABLE.
@@ -184,12 +215,7 @@ class GAN_Database {
 						GAN_MERCH_STATS_TABLE.
 						" WHERE MerchantID = %s",
 						$merchid));
-    //file_put_contents("php://stderr","*** -: merchseen (1) = ".$merchseen."\n");
-    if ($merchseen == NULL || $merchseen == 0) {
-      $wpdb->insert(GAN_MERCH_STATS_TABLE,array("MerchantID" => $merchid),"%s");
-      $merchseen = 0;
-    }
-    //file_put_contents("php://stderr","*** -: merchseen (2) = ".$merchseen."\n");
+    //file_put_contents("php://stderr","*** -: merchseen = ".$merchseen."\n");
     $wpdb->update( GAN_MERCH_STATS_TABLE,
 		   array("Impressions" => $merchseen + 1,
 			 "LastRunDate" => date('Y-m-d')),
@@ -198,12 +224,7 @@ class GAN_Database {
     $adseen = $wpdb->get_var($wpdb->prepare("SELECT Impressions FROM ".
 					    GAN_AD_STATS_TABLE.
 					    " WHERE adid = %d",$id));
-    //file_put_contents("php://stderr","*** -: adseen (1) = ".$adseen."\n");
-    if ($adseen == NULL || $adseen == 0) {
-      $wpdb->insert(GAN_AD_STATS_TABLE,array("adid" => $id),"%d");
-      $adseen = 0;
-    }
-    //file_put_contents("php://stderr","*** -: adseen (2) = ".$adseen."\n");
+    //file_put_contents("php://stderr","*** -: adseen = ".$adseen."\n");
     $wpdb->update( GAN_AD_STATS_TABLE,
 		   array("Impressions" => $adseen + 1,
 		         "LastRunDate" => date('Y-m-d')),
@@ -296,6 +317,7 @@ class GAN_Database {
 				     'enabled' => $enabled),
 				array("%s","%s","%s","%s","%s","%s","%s","%s",
 				      "%s","%s","%s","%s","%s","%s","%d","%d"));
+    GAN_Database::init_counts($wpdb->insert_id);
   }
   static function update_GAN($id,$Advertiser,$LinkID,$LinkName,$MerchandisingText,
 			     $AltText,$StartDate,$EndDate,$ClickserverLink,
