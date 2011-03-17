@@ -983,7 +983,7 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-merch-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="flushstats" class="button" value="Zero Stats" /></div>
+	<input type="submit" name="zerostats" class="button" value="Zero Stats" /></div>
 	<br class="clear" /></div></form>
 	<?php
 	  } else {
