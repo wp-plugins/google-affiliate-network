@@ -429,14 +429,14 @@ class GAN_Database {
     global $wpdb;
     return $wpdb->get_var("SELECT count(*) FROM " . GAN_AD_STATS_TABLE_VIEW . $where);
   }
-  static function delete_GAN_AD_STATS($id) {
+  static function zero_GAN_AD_STAT($id) {
     global $wpdb;
-    $sql = $wpdb->prepare("delete from " . GAN_AD_STATS_TABLE . ' where id = %d',$id);
+    $sql = $wpdb->prepare("update " . GAN_AD_STATS_TABLE . " set Impressions=0,LastRunDate='1970-01-01' where id = %d",$id);
     $wpdb->query($sql);
   }
-  static function flush_GAN_AD_STATS($where) {
+  static function zero_GAN_AD_STATS($where) {
     global $wpdb;
-    $wpdb->query("delete from " . GAN_AD_STATS_TABLE . $where);
+    $wpdb->query("update " . GAN_AD_STATS_TABLE . " set Impressions=0,LastRunDate='1970-01-01' ".$where);
   }
   static function get_GAN_MERCH_STATS_data($where) {
     global $wpdb;
@@ -446,12 +446,12 @@ class GAN_Database {
     global $wpdb;
     return $wpdb->get_var("SELECT count(*) FROM " . GAN_MERCH_STATS_TABLE . $where);
   }
-  static function delete_GAN_MERCH_STATS($id) {
+  static function zero_GAN_MERCH_STAT($id) {
     global $wpdb;
-    $sql = $wpdb->prepare("delete from " . GAN_MERCH_STATS_TABLE . ' where id = %d',$id);
+    $sql = $wpdb->prepare("update " . GAN_MERCH_STATS_TABLE . " set Impressions=0,LastRunDate='1970-01-01'  where id = %d",$id);
     $wpdb->query($sql);
   }
-  static function flush_GAN_MERCH_STATS($where) {
+  static function zero_GAN_MERCH_STATS($where) {
     global $wpdb;
     $wpdb->query("delete from " . GAN_MERCH_STATS_TABLE . $where);
   }

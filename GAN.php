@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 2.2
+ * Version: 2.3
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -749,12 +749,12 @@ class GAN_Plugin {
 	  if ( isset($_GET['id']) && isset($_GET['action']) ) {
 	    $id     = $_GET['id'];
 	    $action = $_GET['action'];
-	    if( $action == 'delete' ) {
-	      GAN_Database::delete_GAN_AD_STATS($id);
+	    if( $action == 'zero' ) {
+	      GAN_Database::zero_GAN_AD_STAT($id);
 	    }
 	  /* Global actions: */
-	  } else if ( isset($_GET['flushstats']) ) {
-	    GAN_Database::flush_GAN_AD_STATS($where);
+	  } else if ( isset($_GET['zerostats']) ) {
+	    GAN_Database::zero_GAN_AD_STATS($where);
 	  }
 	  /* Handle pagenation. */
 	  if ( isset($_GET['pagenum']) ) {
@@ -802,7 +802,7 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-ad-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="flushstats" class="button" value="Flush Stats" /></div>
+	<input type="submit" name="zerostats" class="button" value="Zero Stats" /></div>
 	<br class="clear" /></div>
 	     	     <table class="widefat page fixed" cellspacing="2">
 		<thead>
@@ -832,8 +832,8 @@ class GAN_Plugin {
 			?></td><td valign="top" width="10%" align="left" ><?php 
 			  echo GAN_Database::get_link_name($ADStatRow['adid']);   /* Link name */
 		        ?><br /><a href="<?php 
-			  $this->make_page_query('gan-database-ad-impstats',$id,'delete');  /* Delete link */
-			?>">Delete</a></td><td valign="top" width="8%" align="right" ><?php 
+			  $this->make_page_query('gan-database-ad-impstats',$id,'zero');  /* zero stat */
+			?>">Zero</a></td><td valign="top" width="8%" align="right" ><?php 
 			  echo $ADStatRow['ImageWidth']; /* Image Width */
 		        ?></td><td valign="top" width="12%" align="right" ><?php 
 			  echo $ADStatRow['Impressions']; /* Impressions */
@@ -858,7 +858,7 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-ad-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="flushstats" class="button" value="Flush Stats" /></div>
+	<input type="submit" name="zerostats" class="button" value="Zero Stats" /></div>
 	<br class="clear" /></div></form>
 	<?php
 	  } else {
@@ -882,12 +882,12 @@ class GAN_Plugin {
 	  if ( isset($_GET['id']) && isset($_GET['action']) ) {
 	    $id     = $_GET['id'];
 	    $action = $_GET['action'];
-	    if( $action == 'delete' ) {
-	      GAN_Database::delete_GAN_MERCH_STATS($id);
+	    if( $action == 'zero' ) {
+	      GAN_Database::zero_GAN_MERCH_STAT($id);
 	    }
 	  /* Global actions: */
-	  } else if ( isset($_GET['flushstats']) ) {
-	    GAN_Database::flush_GAN_MERCH_STATS($where);
+	  } else if ( isset($_GET['zerostats']) ) {
+	    GAN_Database::zero_GAN_MERCH_STATS($where);
 	  }
 	  /* Handle pagenation. */
 	  if ( isset($_GET['pagenum']) ) {
@@ -935,7 +935,7 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-merch-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="flushstats" class="button" value="Flush Stats" /></div>
+	<input type="submit" name="zerostats" class="button" value="Zero Stats" /></div>
 	<br class="clear" /></div>
 	     	     <table class="widefat page fixed" cellspacing="2">
 		<thead>
@@ -959,8 +959,8 @@ class GAN_Plugin {
 			?><tr class="<?php echo $alt; ?> iedit"><td valign="top" width="75%" align="left"><?php
 			  echo GAN_Database::get_merch_name($MerchStatRow['MerchantID']);  /* Advertiser name */
 		        ?><br /><a href="<?php 
-			  $this->make_page_query('gan-database-merch-impstats',$id,'delete');  /* Delete link */
-			?>">Delete</a></td><td valign="top" width="15%" align="right" ><?php 
+			  $this->make_page_query('gan-database-merch-impstats',$id,'zero');  /* Zero stat */
+			?>">Zero</a></td><td valign="top" width="15%" align="right" ><?php 
 			  echo $MerchStatRow['Impressions']; /* Impressions */
 		        ?></td><td valign="top" width="10%" align="right" ><?php 
 			  echo $MerchStatRow['LastRunDate']; /* Last Run Data */
@@ -983,7 +983,7 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-merch-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="flushstats" class="button" value="Flush Stats" /></div>
+	<input type="submit" name="flushstats" class="button" value="Zero Stats" /></div>
 	<br class="clear" /></div></form>
 	<?php
 	  } else {
