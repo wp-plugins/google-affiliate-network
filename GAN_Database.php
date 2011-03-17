@@ -453,7 +453,7 @@ class GAN_Database {
   }
   static function zero_GAN_MERCH_STATS($where) {
     global $wpdb;
-    $wpdb->query("delete from " . GAN_MERCH_STATS_TABLE . $where);
+    $wpdb->query("update " . GAN_MERCH_STATS_TABLE . " set Impressions=0,LastRunDate='1970-01-01' ".$where);
   }
 }
 
