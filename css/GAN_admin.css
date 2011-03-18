@@ -18,6 +18,10 @@
 	background: transparent url(../images/GANicons32.png) no-repeat -223px -5px;
 }
 
+#icon-gan-options {
+	background: transparent url(../images/GANicons32.png) no-repeat -269px -5px;
+}
+
 table.ganstats {
 width:100%;
 font-size:200%;

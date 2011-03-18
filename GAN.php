@@ -57,6 +57,8 @@ class GAN_Plugin {
 		add_action('admin_head', array($this,'admin_head'));
 		add_action('wp_dashboard_setup', array($this,'wp_dashboard_setup'));
 		GAN_Database::PopulateStatsTables();
+		add_action('gan_daily_event',array($this,'check_autoexpire'));
+		add_option('wp_gan_autoexpire','yes');
 	}
 	/* Activation hook: create database tables. */
 	function install() {
@@ -64,9 +66,11 @@ class GAN_Plugin {
 		GAN_Database::make_ad_stats_table();
 		GAN_Database::make_merch_stats_table();
 		GAN_Database::make_views();
+		wp_schedule_event(mktime(2,0,0), 'daily', 'gan_daily_event');
 	}
         /* Deactivation hook: nothing at present. */
 	function deinstall() {
+		wp_clear_scheduled_hook('gan_daily_event');
 	}
 
 	/* Initialize our widgets */
@@ -93,6 +97,10 @@ class GAN_Plugin {
 	  	    'Merchant Stats',
 		    'manage_options', 'gan-database-merch-impstats',
 		    array($this,'admin_merch_impstats'));
+	  add_submenu_page( 'gan-database-page', 'Configure Options',
+			    'Configure','manage_options', 
+			    'gan-database-options',
+			    array($this,'admin_configure_options'));
 	}
 
 	/* Front side head action: load our style sheet */
@@ -997,7 +1005,40 @@ class GAN_Plugin {
 	        <input type="submit" name="screenopts" class="button" value="Apply" /></form><?php
 	}
 
-
+	function admin_configure_options() {
+	  //must check that the user has the required capability 
+	  if (!current_user_can('manage_options'))
+	  {
+	    wp_die( __('You do not have sufficient permissions to access this page.') );
+	  }
+	  if ( isset($_GET['saveoptions']) ) {
+	    $autoexpire = $_GET['gan_autoexpire'];
+	    update_option('wp_gan_autoexpire',$autoexpire);
+	    ?><div id="message"class="updated fade"><p>Options Saved</p></div><?php
+	  }
+	  /* Head of page, filter and screen options. */
+	  $autoexpire = get_option('wp_gan_autoexpire');
+	  ?><div class="wrap"><div id="icon-gan-options" class="icon32"><br /></div><h2>Configure Options</h2>
+	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
+	    	<input type="hidden" name="page" value="gan-database-options" />
+		<table class="form-table">
+		  <tr valign="top">
+		    <th scope="row"><label for="gan_autoexpire" style="width:20%;">Enable Autoexpire?</label></th>
+		    <td><input type="radio" name="gan_autoexpire" value="yes"<?php
+				if ($autoexpire == 'yes') {
+				  echo ' checked="checked" ';
+				} 
+			?> />Yes&nbsp;<input type="radio" name="gan_autoexpire" value="no"<?php
+				if ($autoexpire == 'no') {
+				  echo ' checked="checked" ';
+				}
+			?> />No</td></tr>
+		</table>
+		<p>
+			<input type="submit" name="saveoptions" class="button-primary" value="Save Options">
+		</p>
+		</form></div><?php
+	}
 
 	/*
 	 * Build an action link
@@ -1283,6 +1324,11 @@ class GAN_Plugin {
 	  </tbody>
 	  </table>
 	  <?php
+	}
+	function check_autoexpire() {
+	  if (get_option('wp_gan_autoexpire') == 'yes') {
+	    GAN_Database::deleteexpired('');
+	  }
 	}
 }
 
