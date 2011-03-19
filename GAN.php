@@ -81,24 +81,24 @@ class GAN_Plugin {
 
 	/* Add in our Admin Menu */
 	function admin_menu() {
-	  add_menu_page( 'GAN Database', 'GAN DB', 'manage_options', 
+	  add_menu_page( __('GAN Database'), __('GAN DB'), 'manage_options', 
 		 'gan-database-page', array($this,'admin_database_page'), 
 		 GAN_PLUGIN_IMAGE_URL.'/GAN_menu.png');
 
-	  add_submenu_page( 'gan-database-page', 'Add new GAN DB element', 
-		    'Add new', 
+	  add_submenu_page( 'gan-database-page', __('Add new GAN DB element'), 
+		    __('Add new'), 
 		    'manage_options', 'gan-database-add-element', 
 		    array($this,'admin_add_element'));
-	  add_submenu_page( 'gan-database-page', 'Ad Impression Statistics',
-	  	    'Ad Stats',
+	  add_submenu_page( 'gan-database-page', __('Ad Impression Statistics'),
+	  	    __('Ad Stats'),
 		    'manage_options', 'gan-database-ad-impstats',
 		    array($this,'admin_ad_impstats'));
-	  add_submenu_page( 'gan-database-page', 'Merchant Impression Statistics',
-	  	    'Merchant Stats',
+	  add_submenu_page( 'gan-database-page', __('Merchant Impression Statistics'),
+	  	    __('Merchant Stats'),
 		    'manage_options', 'gan-database-merch-impstats',
 		    array($this,'admin_merch_impstats'));
-	  add_submenu_page( 'gan-database-page', 'Configure Options',
-			    'Configure','manage_options', 
+	  add_submenu_page( 'gan-database-page', __('Configure Options'),
+			    __('Configure'),'manage_options', 
 			    'gan-database-options',
 			    array($this,'admin_configure_options'));
 	}
@@ -191,13 +191,13 @@ class GAN_Plugin {
 	  }
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
-	  ?><div class="wrap"><div id="icon-gan-db" class="icon32"><br /></div><h2>GAN Database <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element"; ?>" class="button add-new-h2">Add New</a></h2>
+	  ?><div class="wrap"><div id="icon-gan-db" class="icon32"><br /></div><h2><?php _e('GAN Database'); ?> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element"; ?>" class="button add-new-h2"><?php _e('Add New'); ?></a></h2>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-page" />
 		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
-		<input type="submit" name="filter" class="button" value="Filter" />
-		<label for="gan-rows-per-page">Rows per page</label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
-	        <input type="submit" name="screenopts" class="button" value="Apply" /></form><?php
+		<input type="submit" name="filter" class="button" value="<?php _e('Filter'); ?>" />
+		<label for="gan-rows-per-page"><?php _e('Rows per page'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
+	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply'); ?>" /></form><?php
 	  /* Get database rows */
 	  $GANData = GAN_Database::get_GAN_data($where);
 	  if ( ! empty($GANData) ) { 
@@ -225,30 +225,30 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-page" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="enableall" class="button" value="Enable All" />
-	<input type="submit" name="deleteexpired" class="button" value="Delete Expired" />
-	<input type="submit" name="cleanstats" class="button" value="Clean Stats Tables" /></div>
+	<input type="submit" name="enableall" class="button" value="<?php _e('Enable All'); ?>" />
+	<input type="submit" name="deleteexpired" class="button" value="<?php _e('Delete Expired'); ?>" />
+	<input type="submit" name="cleanstats" class="button" value="<?php _e('Clean Stats Tables'); ?>" /></div>
 	<br class="clear" /></div>
 	     <table class="widefat page fixed" cellspacing="2">
 		<thead>
-		<tr><th align="left" width="10%" scope="col" class="manage-column">Advertiser</th>
-		    <th align="left" width="10%" scope="col" class="manage-column">Link ID</th>
-		    <th align="left" width="40%" scope="col" class="manage-column">Link Name</th>
-		    <th align="left" width="10%"  scope="col" class="manage-column">Image Width</th>
-		    <th align="left" width="10%" scope="col" class="manage-column">Start Date</th>
-		    <th align="left" width="10%" scope="col" class="manage-column">End Date</th>
-		    <th align="left" width="5%"  scope="col" class="manage-column">Side</th>
-		    <th align="left" width="5%"  scope="col" class="manage-column">En?</th></tr>
+		<tr><th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser'); ?></th>
+		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Link ID'); ?></th>
+		    <th align="left" width="40%" scope="col" class="manage-column"><?php _e('Link Name'); ?></th>
+		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Image Width'); ?></th>
+		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Start Date'); ?></th>
+		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('End Date'); ?></th>
+		    <th align="left" width="5%"  scope="col" class="manage-column"><?php _e('Side'); ?></th>
+		    <th align="left" width="5%"  scope="col" class="manage-column"><?php _e('En?'); ?></th></tr>
 		</thead>
 		<tfoot>
-		<tr><th align="left" width="10%" scope="col" class="manage-column">Advertiser</th>
-		    <th align="left" width="10%" scope="col" class="manage-column">Link ID</th>
-		    <th align="left" width="40%" scope="col" class="manage-column">Link Name</th>
-		    <th align="left" width="10%"  scope="col" class="manage-column">Image Width</th>
-		    <th align="left" width="10%" scope="col" class="manage-column">Start Date</th>
-		    <th align="left" width="10%" scope="col" class="manage-column">End Date</th>
-		    <th align="left" width="5%"  scope="col" class="manage-column">Side</th>
-		    <th align="left" width="5%"  scope="col" class="manage-column">En?</th></tr>
+		<tr><th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser'); ?></th>
+		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Link ID'); ?></th>
+		    <th align="left" width="40%" scope="col" class="manage-column"><?php _e('Link Name'); ?></th>
+		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Image Width'); ?></th>
+		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Start Date'); ?></th>
+		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('End Date'); ?></th>
+		    <th align="left" width="5%"  scope="col" class="manage-column"><?php _e('Side'); ?></th>
+		    <th align="left" width="5%"  scope="col" class="manage-column"><?php _e('En?'); ?></th></tr>
 		</tfoot>
 	        <tbody>
 		<?php /* Display each row. */
@@ -268,11 +268,11 @@ class GAN_Plugin {
 			  $this->make_page_query('gan-database-page',$id, 'editrow' );	/* Edit link */
 			?>">Edit</a> <a href="<?php 
 			  $this->make_page_query('gan-database-page',$id, 'delete' );  /* Delete link */
-			?>">Delete</a> <a href="<?php
+			?>"><?php _e('Delete'); ?></a> <a href="<?php
 			  $this->make_page_query('gan-database-page',$id, 'sidetoggle' ); /* Side toggle link */
-			?>">Toggle&nbsp;Side</a> <a href="<?php
+			?>"><?php _e('Toggle&nbsp;Side'); ?></a> <a href="<?php
 			  $this->make_page_query('gan-database-page',$id, 'enabledtoggle' ); /* Enable toggle link */
-			?>">Toggle&nbsp;Enabled</a></td><td valign="top" width="10%" align="left" ><?php 
+			?>"><?php _e('Toggle&nbsp;Enabled'); ?></a></td><td valign="top" width="10%" align="left" ><?php 
 			  echo $GANRow['ImageWidth'];	/* Image width (0 = text) */
 		        ?></td><td valign="top" width="10%" align="left" ><?php 
 			  echo $GANRow['StartDate'];	/* Start date */
@@ -308,14 +308,14 @@ class GAN_Plugin {
 	<br class="clear" /></div></form>
 	<?php
 	  } else {
-	  ?><h4>No matching entries found.</h4><?php
+	  ?><h4><?php _e('No matching entries found.'); ?></h4><?php
 	  }
 	  ?><form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-page" />
 		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
-		<input type="submit" name="filter" class="button" value="Filter" />
-		<label for="gan-rows-per-page">Rows per page</label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
-		<input type="submit" name="screenopts" class="button" value="Apply" /></form></div><?php 
+		<input type="submit" name="filter" class="button" value="<?php _e('Filter'); ?>" />
+		<label for="gan-rows-per-page"><?php _e('Rows per page'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
+		<input type="submit" name="screenopts" class="button" value="<?php _e('Apply'); ?>" /></form></div><?php 
 	}
 
 	/* Add element to ad database */
@@ -329,7 +329,7 @@ class GAN_Plugin {
 	  {
 	    wp_die( __('You do not have sufficient permissions to access this page.') );
 	  }
-	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2>Add Element to GAN Database</h2><?php
+	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Element to GAN Database'); ?></h2><?php
 	  $defaults = array( 'Advertiser' => '', 'LinkID' => '', 'LinkName' => '' ,
 			     'MerchandisingText' => '', 'AltText' => '', 
 			     'StartDate' => '', 'EndDate' => '', 
@@ -376,100 +376,100 @@ class GAN_Plugin {
 	    <input type="hidden" name="page" value="gan-database-add-element">
 	    <table class="form-table">
 	    <tr valign="top">
-	      <th scope="row"><label for="GAN-Advertiser" style="width:20%;">Advertiser:</label></th>
+	      <th scope="row"><label for="GAN-Advertiser" style="width:20%;"><?php _e('Advertiser:'); ?></label></th>
 	      <td><input id="GAN-Advertiser" 
 			value="<?php echo $defaults['Advertiser']; ?>" 
 			name="Advertiser" 
 			style="width:75%;" /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-LinkID" style="width:20%;">Link ID:</label></th>
+		<th scope="row"><label for="GAN-LinkID" style="width:20%;"><?php _e('Link ID:'); ?></label></th>
 		<td><input id="GAN-LinkID" 
 			value="<?php echo $defaults['LinkID']; ?>" name="LinkID" 
 			style="width:75%;" /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-LinkName" style="width:20%;">Link Name:</label></th>
+		<th scope="row"><label for="GAN-LinkName" style="width:20%;"><?php _e('Link Name:'); ?></label></th>
 		<td><input id="GAN-LinkName" 
 			value="<?php echo $defaults['LinkName']; ?>" name="LinkName" 
 			style="width:75%;" /></td></tr>
 	    <tr valign="top">
 		<th scope="row"><label for="GAN-MerchandisingText" 
-			style="width:20%;top-margin:0;">Merchandising Text:</label></th>
+			style="width:20%;top-margin:0;"><?php _e('Merchandising Text:'); ?></label></th>
 		<td><textarea id="GAN-MerchandisingText" name="MerchandisingText" 
 			cols="50" rows="5" 
 			style="width:75%;"><?php echo $defaults['MerchandisingText']; ?></textarea></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-AltText" style="width:20%;">Alt Text:</label></th>
+		<th scope="row"><label for="GAN-AltText" style="width:20%;"><?php _e('Alt Text:'); ?></label></th>
 		<td><input id="GAN-AltText" 
 			value="<?php echo $defaults['AltText']; ?>" name="AltText" 
 			style="width:75%;" /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-StartDate" style="width:20%;">Start Date:</label></th>
+		<th scope="row"><label for="GAN-StartDate" style="width:20%;"><?php _e('Start Date:'); ?></label></th>
 		<td><input id="GAN-StartDate" 
 			value="<?php echo $defaults['StartDate']; ?>" name="StartDate" 
 			style="width:75%;" /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-EndDate" style="width:20%;">End Date:</label></th>
+		<th scope="row"><label for="GAN-EndDate" style="width:20%;"><?php _e('End Date:'); ?></label></th>
 		<td><input id="GAN-EndDate" 
 			value="<?php echo $defaults['EndDate']; ?>" name="EndDate" 
 			style="width:75%;" /></td></tr>
 	    <tr valign="top">
 		<th scope="row"><label for="GAN-ClickserverLink" 
-			style="width:20%;">Clickserver Link:</label></th>
+			style="width:20%;"><?php _e('Clickserver Link:'); ?></label></th>
 		<td><input id="GAN-ClickserverLink" 
 			value="<?php echo $defaults['ClickserverLink']; ?>"
 			name="ClickserverLink" 
 			style="width:75%;" /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-ImageURL" style="width:20%;">ImageURL:</label></th>
+		<th scope="row"><label for="GAN-ImageURL" style="width:20%;"><?php _e('ImageURL:'); ?></label></th>
 		<td><input id="GAN-ImageURL" 
 			value="<?php echo $defaults['ImageURL']; ?>" name="ImageURL" 
 			style="width:75%;" />
 	    </tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-ImageHeight" style="width:20%;">ImageHeight:</label></th>
+		<th scope="row"><label for="GAN-ImageHeight" style="width:20%;"><?php _e('ImageHeight:'); ?></label></th>
 		<td><input id="GAN-ImageHeight" 
 			value="<?php echo $defaults['ImageHeight']; ?>" 
 			name="ImageHeight" 
 			style="width:75%;" /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-ImageWidth" style="width:20%;">ImageWidth:</label></th>
+		<th scope="row"><label for="GAN-ImageWidth" style="width:20%;"><?php _e('ImageWidth:'); ?></label></th>
 		<td><input id="GAN-ImageWidth" 
 			value="<?php echo $defaults['ImageWidth']; ?>" 
 			name="ImageWidth" 
 			style="width:75%;" /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-LinkURL" style="width:20%;">LinkURL:</label></th>
+		<th scope="row"><label for="GAN-LinkURL" style="width:20%;"><?php _e('LinkURL:'); ?></label></th>
 		<td><input id="GAN-LinkURL" 
 			value="<?php echo $defaults['LinkURL']; ?>" name="LinkURL" 
 			style="width:75%;" /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-PromoType" style="width:20%;">PromoType:</label></th>
+		<th scope="row"><label for="GAN-PromoType" style="width:20%;"><?php _e('PromoType:'); ?></label></th>
 		<td><input id="GAN-PromoType" 
 			value="<?php echo $defaults['PromoType']; ?>" name="PromoType" 
 			style="width:75%;" /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-MerchantID" style="width:20%;">MerchantID:</label></th>
+		<th scope="row"><label for="GAN-MerchantID" style="width:20%;"><?php _e('MerchantID:'); ?></label></th>
 		<td><input id="GAN-MerchantID" 
 			value="<?php echo $defaults['MerchantID']; ?>" 
 			name="MerchantID" 
 			style="width:75%;" /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-side" style="width:20%;">side:</label></th>
+		<th scope="row"><label for="GAN-side" style="width:20%;"><?php _e('side:'); ?></label></th>
 		<td><select id="GAN-side" name="side" class="widefat"
 			>
-		    <option value="1" <?php if ( $defaults['side'] == 1) echo 'selected="selected"'; ?>>right</option>
-		    <option value="0" <?php if ( $defaults['side'] == 0) echo 'selected="selected"'; ?>>leader</option>
+		    <option value="1" <?php if ( $defaults['side'] == 1) echo 'selected="selected"'; ?>><?php _e('right'); ?></option>
+		    <option value="0" <?php if ( $defaults['side'] == 0) echo 'selected="selected"'; ?>><?php _e('leader'); ?></option>
 		</selected></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-enabled">enabled?</label></th>
+		<th scope="row"><label for="GAN-enabled"><?php _e('enabled?'); ?></label></th>
 		<td><input class="checkbox" type="checkbox"
 			<?php checked( $defaults['enabled'], true ); ?>
 			id="GAN-enabled" name="enabled" value="1"
 			/></td></tr>
 	  </table>
 	  <p>
-		<input type="submit" name="Add" class="button-primary" value="Add Element">
-		<a href="<?php $this->cancel_page_query(); ?>">Cancel</a>
+		<input type="submit" name="Add" class="button-primary" value="<?php _e('Add Element'); ?>">
+		<a href="<?php $this->cancel_page_query(); ?>"><?php _e('Cancel'); ?></a>
 	  </p>
 	  <?php $this->hidden_filter_fields(); ?>
 	  </form></div><?php
@@ -479,47 +479,47 @@ class GAN_Plugin {
 	function add_element_checkvalid() {
 	  $result = true;
 	  if ( empty($_GET['Advertiser']) ) {
-	    ?><p>Advertiser missing.</p><?php
+	    ?><p><?php _e('Advertiser missing.'); ?></p><?php
 	    $result = false;
 	  }
 	  if ( empty($_GET['LinkID']) ) {
-	    ?><p>Link ID missing.</p><?php
+	    ?><p><?php _e('Link ID missing.'); ?></p><?php
 	    $result = false;
 	  }
 	  if ( empty($_GET['LinkName']) ) {
-	    ?><p>Link Name missing.</p><?php
+	    ?><p><?php _e('Link Name missing.'); ?></p><?php
 	    $result = false;
 	  }
 	  if ( empty($_GET['StartDate']) ) {
-	    ?><p>Start Date missing.</p><?php
+	    ?><p><?php _e('Start Date missing.'); ?></p><?php
 	    $result = false;
 	  } else if ( !$this->checkdate('Start Date', $_GET['StartDate']) ) {
 	    $result = false;
 	  }
 	  if ( empty($_GET['EndDate']) ) {
-	    ?><p>End Date missing.</p><?php
+	    ?><p><?php _e('End Date missing.'); ?></p><?php
 	    $result = false;
 	  } else if ( !$this->checkdate('End Date', $_GET['EndDate']) ) {
 	    $result = false;
 	  }
 	  if ( empty($_GET['ClickserverLink']) ) {
-	    ?><p>Clickserver Link missing.</p><?php
+	    ?><p><?php _e('Clickserver Link missing.'); ?></p><?php
 	    $result = false;
 	  }
 	  if ( empty($_GET['MerchantID']) ) {
-	    ?><p>Merchant ID  missing.</p><?php
+	    ?><p><?php _e('Merchant ID  missing.'); ?></p><?php
 	    $result = false;
 	  }
 	  if ( empty($_GET['ImageHeight']) ) {
 	    $_GET['ImageHeight'] = 0;
 	  } else if ( !ereg("^[0-9]+$", $_GET['ImageHeight'], $trashed) ) {
-	    ?><p>Image Height should be a number.</p><?php
+	    ?><p><?php _e('Image Height should be a number.'); ?></p><?php
 	    $result = false;
 	  }
 	  if ( empty($_GET['ImageWidth']) ) {
 	    $_GET['ImageWidth'] = 0;
 	  } else if ( !ereg("^[0-9]+$", $_GET['ImageWidth'], $trashed) ) {
-	    ?><p>Image Width should be a number.</p><?php
+	    ?><p><?php _e('Image Width should be a number.'); ?></p><?php
 	    $result = false;
 	  }
 	  return $result;
@@ -532,7 +532,7 @@ class GAN_Plugin {
 	function checkdate( $label, $datestring ) {
 	  // Basic format check
 	  if (!ereg("^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$", $datestring, $trashed)) {
-	    ?><p><?php echo $label; ?> invalid: should be YYYY-MM-DD.</p><?php
+	    ?><p><?php printf(__('The date %s is invalid: should be YYYY-MM-DD.'),$label); ?> </p><?php
 	    return false;
 	  }
 	  $result = true;
@@ -541,11 +541,11 @@ class GAN_Plugin {
 	  $month=substr($datestring,$pos+1,2); // month
 	  $day=substr($datestring,$pos+4,2); // day
 	  if ($month < 1 || $month > 12) {		// month range check
-	    ?><p><?php echo $label; ?> month out of range, should be 1 to 12.</p><?php
+	    ?><p><?php printf(__('The date %s is invalid: month out of range, should be 1 to 12.'),$label); ?></p><?php
 	    $result = false;
 	  }
 	  if ($day < 1 || $day > 31) {			// date range check
-	    ?><p><?php echo $label; ?> date out of range, should be 1 to 31.</p><?php
+	    ?><p><?php printf(__('The date %s is invalid: date out of range, should be 1 to 31.'),$label); ?> </p><?php
 	    $result = false;
 	  }
 	  return $result;  
@@ -613,105 +613,105 @@ class GAN_Plugin {
 				      $_GET['enabled'] );
 	    return true;
 	  }
-	  ?><div class="wrap"><div id="icon-gan-edit-db" class="icon32"><br /></div><h2>Edit Element to GAN Database</h2>
+	  ?><div class="wrap"><div id="icon-gan-edit-db" class="icon32"><br /></div><h2><?php _e('Edit Element to GAN Database'); ?></h2>
 	  <form name="edit-GAN-element" method="GET" action="<?php echo admin_url('admin.php'); ?>">
 	  <input type="hidden" name="page" value="gan-database-page">
 	  <input type="hidden" value="<?php echo $id; ?>" name="id">
 	  <table class="form-table">
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-Advertiser" style="width:20%;">Advertiser:</label></th>
+		<th scope="row"><label for="GAN-Advertiser" style="width:20%;"><?php _e('Advertiser:'); ?></label></th>
 		<td><input id="GAN-Advertiser" 
 			value="<?php echo $defaults['Advertiser']; ?>" 
 			name="Advertiser" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-LinkID" style="width:20%;">Link ID:</label></th>
+		<th scope="row"><label for="GAN-LinkID" style="width:20%;"><?php _e('Link ID:'); ?></label></th>
 		<td><input id="GAN-LinkID" 
 			value="<?php echo $defaults['LinkID']; ?>" name="LinkID" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-LinkName" style="width:20%;">Link Name:</label></th>
+		<th scope="row"><label for="GAN-LinkName" style="width:20%;"><?php _e('Link Name:'); ?></label></th>
 		<td><input id="GAN-LinkName" 
 			value="<?php echo $defaults['LinkName']; ?>" name="LinkName" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
 		<th scope="row"><label for="GAN-MerchandisingText" 
-			style="width:20%;top-margin:0;">Merchandising Text:</label></th>
+			style="width:20%;top-margin:0;"><?php _e('Merchandising Text:'); ?></label></th>
 		<td><textarea id="GAN-MerchandisingText" name="MerchandisingText" 
 			cols="50" rows="5" 
 			style="width:75%;"><?php echo $defaults['MerchandisingText']; ?></textarea></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-AltText" style="width:20%;">Alt Text:</label></th>
+		<th scope="row"><label for="GAN-AltText" style="width:20%;"><?php _e('Alt Text:'); ?></label></th>
 		<td><input id="GAN-AltText" 
 			value="<?php echo $defaults['AltText']; ?>" name="AltText" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-StartDate" style="width:20%;">Start Date:</label></th>
+		<th scope="row"><label for="GAN-StartDate" style="width:20%;"><?php _e('Start Date:'); ?></label></th>
 		<td><input id="GAN-StartDate" 
 			value="<?php echo $defaults['StartDate']; ?>" name="StartDate" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-EndDate" style="width:20%;">End Date:</label></th>
+		<th scope="row"><label for="GAN-EndDate" style="width:20%;"><?php _e('End Date:'); ?></label></th>
 		<td><input id="GAN-EndDate" 
 			value="<?php echo $defaults['EndDate']; ?>" name="EndDate" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
 		<th scope="row"><label for="GAN-ClickserverLink" 
-			style="width:20%;">Clickserver Link:</label></th>
+			style="width:20%;"><?php _e('Clickserver Link:'); ?></label></th>
 		<td><input id="GAN-ClickserverLink" 
 			value="<?php echo $defaults['ClickserverLink']; ?>"
 			name="ClickserverLink" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-ImageURL" style="width:20%;">ImageURL:</label></th>
+		<th scope="row"><label for="GAN-ImageURL" style="width:20%;"><?php _e('ImageURL:'); ?></label></th>
 		<td><input id="GAN-ImageURL" 
 			value="<?php echo $defaults['ImageURL']; ?>" name="ImageURL" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-ImageHeight" style="width:20%;">ImageHeight:</label></th>
+		<th scope="row"><label for="GAN-ImageHeight" style="width:20%;"><?php _e('ImageHeight:'); ?></label></th>
 		<td><input id="GAN-ImageHeight" 
 			value="<?php echo $defaults['ImageHeight']; ?>" 
 			name="ImageHeight" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-ImageWidth" style="width:20%;">ImageWidth:</label></th>
+		<th scope="row"><label for="GAN-ImageWidth" style="width:20%;"><?php _e('ImageWidth:'); ?></label></th>
 		<td><input id="GAN-ImageWidth" 
 			value="<?php echo $defaults['ImageWidth']; ?>" 
 			name="ImageWidth" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-LinkURL" style="width:20%;">LinkURL:</label></th>
+		<th scope="row"><label for="GAN-LinkURL" style="width:20%;"><?php _e('LinkURL:'); ?></label></th>
 		<td><input id="GAN-LinkURL" 
 			value="<?php echo $defaults['LinkURL']; ?>" name="LinkURL" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-PromoType" style="width:20%;">PromoType:</label></th>
+		<th scope="row"><label for="GAN-PromoType" style="width:20%;"><?php _e('PromoType:'); ?></label></th>
 		<td><input id="GAN-PromoType" 
 			value="<?php echo $defaults['PromoType']; ?>" name="PromoType" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-MerchantID" style="width:20%;">MerchantID:</label></th>
+		<th scope="row"><label for="GAN-MerchantID" style="width:20%;"><?php _e('MerchantID:'); ?></label></th>
 		<td><input id="GAN-MerchantID" 
 			value="<?php echo $defaults['MerchantID']; ?>" 
 			name="MerchantID" 
 			style="width:75%;" /></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-side" style="width:20%;">side:</label></th>
+		<th scope="row"><label for="GAN-side" style="width:20%;"><?php _e('side:'); ?></label></th>
 		<td><select id="GAN-side" name="side" class="widefat"
 			>
-		    <option value="1" <?php if ( $defaults['side'] == 1) echo 'selected="selected"'; ?>>right</option>
-		    <option value="0" <?php if ( $defaults['side'] == 0) echo 'selected="selected"'; ?>>leader</option>
+		    <option value="1" <?php if ( $defaults['side'] == 1) echo 'selected="selected"'; ?>><?php _e('right'); ?></option>
+		    <option value="0" <?php if ( $defaults['side'] == 0) echo 'selected="selected"'; ?>><?php _e('leader'); ?></option>
 		</selected></td></tr>
 	  <tr valign="top">
-		<th scope="row"><label for="GAN-enabled">enabled?</label></th>
+		<th scope="row"><label for="GAN-enabled"><?php _e('enabled?'); ?></label></th>
 		<td><input class="checkbox" type="checkbox"
 			<?php checked( $defaults['enabled'], true ); ?>
 			id="GAN-enabled" name="enabled" value="1"
 			/></td></tr>
 	  </table>
 	  <p>
-		<input type="submit" name="Update" class="button-primary" value="Update Element">
-		<a href="<?php $this->cancel_page_query(); ?>">Cancel</a>
+		<input type="submit" name="Update" class="button-primary" value="<?php _e('Update Element'); ?>">
+		<a href="<?php $this->cancel_page_query(); ?>"><?php _e('Cancel'); ?></a>
 	  </p>
 	  <?php $this->hidden_filter_fields(); ?>
 	  </form></div><?php
@@ -777,13 +777,13 @@ class GAN_Plugin {
 	  }
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
-	  ?><div class="wrap"><div id="icon-gan-ad-imp" class="icon32"><br /></div><h2>Ad Impression Statistics</h2>
+	  ?><div class="wrap"><div id="icon-gan-ad-imp" class="icon32"><br /></div><h2><?php _e('Ad Impression Statistics'); ?></h2>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-ad-impstats" />
 		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
-		<input type="submit" name="filter" class="button" value="Filter" />
-		<label for="gan-rows-per-page">Rows per page</label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
-	        <input type="submit" name="screenopts" class="button" value="Apply" /></form><?php
+		<input type="submit" name="filter" class="button" value="<?php _e('Filter'); ?>" />
+		<label for="gan-rows-per-page"><?php _e('Rows per page'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
+	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply'); ?>" /></form><?php
 	  /* Get database rows */
 	  $ADStatsData = GAN_Database::get_GAN_AD_VIEW_data($where);
 	  if ( ! empty($ADStatsData) ) {
@@ -810,22 +810,22 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-ad-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="zerostats" class="button" value="Zero Stats" /></div>
+	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats'); ?>" /></div>
 	<br class="clear" /></div>
 	     	     <table class="widefat page fixed" cellspacing="2">
 		<thead>
-		<tr><th align="left" width="20%" scope="col" class="manage-column">Advertiser</th>
-		    <th align="left" width="50%" scope="col" class="manage-column">Link Name</th>
-		    <th align="right" width="8%"  scope="col" class="manage-column">Image Width</th>
-		    <th align="right" width="12%"  scope="col" class="manage-column">Impressions</th>
-		    <th align="right" width="10%"  scope="col" class="manage-column">Last View</th></tr>
+		<tr><th align="left" width="20%" scope="col" class="manage-column"><?php _e('Advertiser'); ?></th>
+		    <th align="left" width="50%" scope="col" class="manage-column"><?php _e('Link Name'); ?></th>
+		    <th align="right" width="8%"  scope="col" class="manage-column"><?php _e('Image Width'); ?></th>
+		    <th align="right" width="12%"  scope="col" class="manage-column"><?php _e('Impressions'); ?></th>
+		    <th align="right" width="10%"  scope="col" class="manage-column"><?php _e('Last View'); ?></th></tr>
 		</thead>
 		<tfoot>
-		<tr><th align="left" width="20%" scope="col" class="manage-column">Advertiser</th>
-		    <th align="left" width="50%" scope="col" class="manage-column">Link Name</th>
-		    <th align="right" width="8%"  scope="col" class="manage-column">Image Width</th>
-		    <th align="right" width="12%"  scope="col" class="manage-column">Impressions</th>
-		    <th align="right" width="10%"  scope="col" class="manage-column">Last View</th></tr>
+		<tr><th align="left" width="20%" scope="col" class="manage-column"><?php _e('Advertiser'); ?></th>
+		    <th align="left" width="50%" scope="col" class="manage-column"><?php _e('Link Name'); ?></th>
+		    <th align="right" width="8%"  scope="col" class="manage-column"><?php _e('Image Width'); ?></th>
+		    <th align="right" width="12%"  scope="col" class="manage-column"><?php _e('Impressions'); ?></th>
+		    <th align="right" width="10%"  scope="col" class="manage-column"><?php _e('Last View'); ?></th></tr>
 		</tfoot>
 		<tbody>
 		<?php /* Display each row. */
@@ -841,7 +841,7 @@ class GAN_Plugin {
 			  echo GAN_Database::get_link_name($ADStatRow['adid']);   /* Link name */
 		        ?><br /><a href="<?php 
 			  $this->make_page_query('gan-database-ad-impstats',$id,'zero');  /* zero stat */
-			?>">Zero</a></td><td valign="top" width="8%" align="right" ><?php 
+			?>"><?php _e('Zero'); ?></a></td><td valign="top" width="8%" align="right" ><?php 
 			  echo $ADStatRow['ImageWidth']; /* Image Width */
 		        ?></td><td valign="top" width="12%" align="right" ><?php 
 			  echo $ADStatRow['Impressions']; /* Impressions */
@@ -866,18 +866,18 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-ad-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="zerostats" class="button" value="Zero Stats" /></div>
+	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats'); ?>" /></div>
 	<br class="clear" /></div></form>
 	<?php
 	  } else {
-	  ?><h4>No matching entries found.</h4><?php
+	  ?><h4><?php _e('No matching entries found.'); ?></h4><?php
 	  }
 	  ?><form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-ad-impstats" />
 		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
-		<input type="submit" name="filter" class="button" value="Filter" />
-		<label for="gan-rows-per-page">Rows per page</label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
-	        <input type="submit" name="screenopts" class="button" value="Apply" /></form><?php
+		<input type="submit" name="filter" class="button" value="<?php _e('Filter'); ?>" />
+		<label for="gan-rows-per-page"><?php _e('Rows per page'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
+	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply'); ?>" /></form><?php
 	}
 
 	function admin_merch_impstats() {
@@ -910,13 +910,13 @@ class GAN_Plugin {
 	  }
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
-	  ?><div class="wrap"><div id="icon-gan-merch-imp" class="icon32"><br /></div><h2>Merchant Impression Statistics</h2>
+	  ?><div class="wrap"><div id="icon-gan-merch-imp" class="icon32"><br /></div><h2><?php _e('Merchant Impression Statistics'); ?></h2>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-merch-impstats" />
 		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
-		<input type="submit" name="filter" class="button" value="Filter" />
-		<label for="gan-rows-per-page">Rows per page</label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
-	        <input type="submit" name="screenopts" class="button" value="Apply" /></form><?php
+		<input type="submit" name="filter" class="button" value="<?php _e('Filter'); ?>" />
+		<label for="gan-rows-per-page"><?php _e('Rows per page'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
+	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply'); ?>" /></form><?php
 	  /* Get database rows */
 	  $MerchStatsData = GAN_Database::get_GAN_MERCH_STATS_data($where);
 	  if ( ! empty($MerchStatsData) ) {
@@ -943,18 +943,18 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-merch-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="zerostats" class="button" value="Zero Stats" /></div>
+	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats'); ?>" /></div>
 	<br class="clear" /></div>
 	     	     <table class="widefat page fixed" cellspacing="2">
 		<thead>
-		<tr><th align="left" width="75%" scope="col" class="manage-column">Advertiser</th>
-		    <th align="right" width="15%"  scope="col" class="manage-column">Impressions</th>
-		    <th align="right" width="10%"  scope="col" class="manage-column">Last View</th></tr>
+		<tr><th align="left" width="75%" scope="col" class="manage-column"><?php _e('Advertiser'); ?></th>
+		    <th align="right" width="15%"  scope="col" class="manage-column"><?php _e('Impressions'); ?></th>
+		    <th align="right" width="10%"  scope="col" class="manage-column"><?php _e('Last View'); ?></th></tr>
 		</thead>
 		<tfoot>
-		<tr><th align="left" width="75%" scope="col" class="manage-column">Advertiser</th>
-		    <th align="right" width="15%"  scope="col" class="manage-column">Impressions</th>
-		    <th align="right" width="10%"  scope="col" class="manage-column">Last View</th></tr>
+		<tr><th align="left" width="75%" scope="col" class="manage-column"><?php _e('Advertiser'); ?></th>
+		    <th align="right" width="15%"  scope="col" class="manage-column"><?php _e('Impressions'); ?></th>
+		    <th align="right" width="10%"  scope="col" class="manage-column"><?php _e('Last View'); ?></th></tr>
 		</tfoot>
 		<tbody>
 		<?php /* Display each row. */
@@ -968,7 +968,7 @@ class GAN_Plugin {
 			  echo GAN_Database::get_merch_name($MerchStatRow['MerchantID']);  /* Advertiser name */
 		        ?><br /><a href="<?php 
 			  $this->make_page_query('gan-database-merch-impstats',$id,'zero');  /* Zero stat */
-			?>">Zero</a></td><td valign="top" width="15%" align="right" ><?php 
+			?>"><?php _e('Zero'); ?></a></td><td valign="top" width="15%" align="right" ><?php 
 			  echo $MerchStatRow['Impressions']; /* Impressions */
 		        ?></td><td valign="top" width="10%" align="right" ><?php 
 			  echo $MerchStatRow['LastRunDate']; /* Last Run Data */
@@ -991,18 +991,18 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-merch-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="zerostats" class="button" value="Zero Stats" /></div>
+	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats'); ?>" /></div>
 	<br class="clear" /></div></form>
 	<?php
 	  } else {
-	  ?><h4>No matching entries found.</h4><?php
+	  ?><h4><?php _e('No matching entries found.'); ?></h4><?php
 	  }
 	  ?><form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-merch-impstats" />
 		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
-		<input type="submit" name="filter" class="button" value="Filter" />
-		<label for="gan-rows-per-page">Rows per page</label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
-	        <input type="submit" name="screenopts" class="button" value="Apply" /></form><?php
+		<input type="submit" name="filter" class="button" value="<?php _e('Filter'); ?>" />
+		<label for="gan-rows-per-page"><?php _e('Rows per page'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
+	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply'); ?>" /></form><?php
 	}
 
 	function admin_configure_options() {
@@ -1018,24 +1018,24 @@ class GAN_Plugin {
 	  }
 	  /* Head of page, filter and screen options. */
 	  $autoexpire = get_option('wp_gan_autoexpire');
-	  ?><div class="wrap"><div id="icon-gan-options" class="icon32"><br /></div><h2>Configure Options</h2>
+	  ?><div class="wrap"><div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options'); ?></h2>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 	    	<input type="hidden" name="page" value="gan-database-options" />
 		<table class="form-table">
 		  <tr valign="top">
-		    <th scope="row"><label for="gan_autoexpire" style="width:20%;">Enable Autoexpire?</label></th>
+		    <th scope="row"><label for="gan_autoexpire" style="width:20%;"><?php _e('Enable Autoexpire?'); ?></label></th>
 		    <td><input type="radio" name="gan_autoexpire" value="yes"<?php
 				if ($autoexpire == 'yes') {
 				  echo ' checked="checked" ';
 				} 
-			?> />Yes&nbsp;<input type="radio" name="gan_autoexpire" value="no"<?php
+			?> /><?php _e('Yes'); ?>&nbsp;<input type="radio" name="gan_autoexpire" value="no"<?php
 				if ($autoexpire == 'no') {
 				  echo ' checked="checked" ';
 				}
-			?> />No</td></tr>
+			?> /><?php _e('No'); ?></td></tr>
 		</table>
 		<p>
-			<input type="submit" name="saveoptions" class="button-primary" value="Save Options">
+			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options'); ?>">
 		</p>
 		</form></div><?php
 	}
@@ -1152,7 +1152,7 @@ class GAN_Plugin {
 	    <select name="merchid" id="gan-merchid" maxlength="20">
 	    <option value="" <?php 
 		if ( $merchid == "" ) echo 'selected="selected"'; 
-		?>>All</option><?php
+		?>><?php _e('All'); ?></option><?php
 	  foreach ((array)$GANMerchants as $GANMerchant) {
 	    $shortadvert = substr($GANMerchant['Advertiser'],0,25);
 	    ?><option value="<?php echo $GANMerchant['MerchantID']; ?>" <?php 
@@ -1175,7 +1175,7 @@ class GAN_Plugin {
 	    <select name="imwidth" id="gan-imwidth" maxlength="4">
 	    <option value="-1" <?php 
 		if ( $imwidth == "-1" ) echo 'selected="selected"'; 
-		?>>All</option><?php
+		?>><?php _e('All'); ?></option><?php
 	  foreach ((array)$GANImageWidths as $GANImageWidth) {
 	    ?><option value="<?php echo $GANImageWidth['ImageWidth']; ?>" <?php 
 		if ( $imwidth == $GANImageWidth['ImageWidth'] ) 
@@ -1202,13 +1202,13 @@ class GAN_Plugin {
 	  ?><div class="table">
 		<table class="ganstats">
 		<tr><td class="ganstats_total"><?php echo $total_ads; ?></td>
-		    <td class="ganstats_label">total ads</td>
+		    <td class="ganstats_label"><?php _e('Total ads'); ?></td>
 		    <td class="ganstats_total"><?php echo $disabled; ?></td>
-		    <td class="ganstats_label">Disabled</td></tr>
+		    <td class="ganstats_label"><?php _e('Disabled'); ?></td></tr>
 		<tr><td class="ganstats_total"><?php echo $advertisers; ?></td>
-		    <td class="ganstats_label">advertisers</td>
+		    <td class="ganstats_label"><?php _e('Advertisers'); ?></td>
 		    <td class="ganstats_total"><?php echo $widths; ?></td>
-		    <td class="ganstats_label">widths</td></tr>
+		    <td class="ganstats_label"><?php _e('Widths'); ?></td></tr>
 		</table>
 		</div><?php 
 	}
@@ -1220,13 +1220,13 @@ class GAN_Plugin {
 	  //echo "\n<!-- GAN_Plugin::impression_stats_widget: top_merch is ".print_r($top_merch,true)." -->\n";
 	  //echo "\n<!-- GAN_Plugin::impression_stats_widget: max_merch_impressions = ".$max_merch_impressions." -->\n";
 	  ?>
-	  <h4 style="width: 100%;text-align: center;">Merchants</h4><br />
+	  <h4 style="width: 100%;text-align: center;"><?php _e('Merchants'); ?></h4><br />
 	  <table class="ganmerchimpstats" width="100%">
 	    <thead>
 		<tr>
-		   <th scope="col">Maximum</th><th scope="col">Minimum</th>
-		   <th scope="col">Average</th><th scope="col">Std. Deviation</th>
-		   <th scope="col">Variance</th></tr>
+		   <th scope="col"><?php _e('Maximum'); ?></th><th scope="col"><?php _e('Minimum'); ?></th>
+		   <th scope="col"><?php _e('Average'); ?></th><th scope="col"><?php _e('Std. Deviation'); ?></th>
+		   <th scope="col"><?php _e('Variance'); ?></th></tr>
 	    <tbody>
 		<tr>
 		   <td width="20%" style="text-align: center;"><?php echo $merch_statistics['maximum']; ?></td>
@@ -1239,8 +1239,8 @@ class GAN_Plugin {
 	  <table class="ganmerchtopimps" width="100%">
 	  <tbody>
 		<tr>
-		   <th scope="col"><span class="auraltext">Merchant</span> </th>
-		   <th scope="col"><span class="auraltext">Number of Impressions</span> </th>
+		   <th scope="col"><span class="auraltext"><?php _e('Merchant'); ?></span> </th>
+		   <th scope="col"><span class="auraltext"><?php _e('Number of Impressions'); ?></span> </th>
 		</tr>
 		<?php
 		   $loop = 1;
@@ -1278,9 +1278,9 @@ class GAN_Plugin {
 	  <table class="ganadimpstats" width="100%">
 	    <thead>
 		<tr>
-		   <th scope="col">Maximum</th><th scope="col">Minimum</th>
-		   <th scope="col">Average</th><th scope="col">Std. Deviation</th>
-		   <th scope="col">Variance</th></tr>
+		   <th scope="col"><?php _e('Maximum'); ?></th><th scope="col"><?php _e('Minimum'); ?></th>
+		   <th scope="col"><?php _e('Average'); ?></th><th scope="col"><?php _e('Std. Deviation'); ?></th>
+		   <th scope="col"><?php _e('Variance'); ?></th></tr>
 	    <tbody>
 		<tr>
 		   <td width="20%" style="text-align: center;"><?php echo $ad_statistics['maximum']; ?></td>
@@ -1293,8 +1293,8 @@ class GAN_Plugin {
 	  <table class="ganadtopimps" width="100%">
 	  <tbody>
 		<tr>
-		   <th scope="col"><span class="auraltext">Ad</span> </th>
-		   <th scope="col"><span class="auraltext">Number of Impressions</span> </th>
+		   <th scope="col"><span class="auraltext"><?php _e('Ad'); ?></span> </th>
+		   <th scope="col"><span class="auraltext"><?php _e('Number of Impressions'); ?></span> </th>
 		</tr>
 		<?php
 		   $loop = 1;

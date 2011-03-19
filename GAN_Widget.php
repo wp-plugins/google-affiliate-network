@@ -11,13 +11,13 @@ class GAN_Widget extends WP_Widget {
 
 	/* Initialize ourselves */
         function GAN_Widget() {
-                $widget_ops = array( 'classname' => 'deepwoodsgan', 'description' => __('Display Google Affiliate Network links', 'deepwoodsgan') );
+                $widget_ops = array( 'classname' => 'deepwoodsgan', 'description' => __('Display Google Affiliate Network links') );
 
                 /* Widget control settings. */
                 $control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'deepwoodsgan-widget' );
 
                 /* Create the widget. */
-                $this->WP_Widget( 'deepwoodsgan-widget', __('GAN Widget', 'deepwoodsgan'), $widget_ops, $control_ops );
+                $this->WP_Widget( 'deepwoodsgan-widget', __('GAN Widget'), $widget_ops, $control_ops );
         }
 
         /**
@@ -135,30 +135,30 @@ class GAN_Widget extends WP_Widget {
 				'ifwidth' => 728, 'ifheight' => 90 );
             $instance = wp_parse_args( (array) $instance, $defaults ); ?>
             <p>
-                <label for="<?php echo $this->get_field_id( 'maxads' ); ?>">Max ads:</label>
+                <label for="<?php echo $this->get_field_id( 'maxads' ); ?>"><?php _e('Max ads:'); ?></label>
                 <input id="<?php echo $this->get_field_id( 'maxads' ); ?>" 
                         value="<?php echo $instance['maxads']; ?>"
                         name="<?php echo $this->get_field_name( 'maxads' ); ?>"
                         style="width:100%;" />
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id( 'ulid' ); ?>">Side:</label>
+                <label for="<?php echo $this->get_field_id( 'ulid' ); ?>"><?php _e('Side:'); ?></label>
                 <select id="<?php echo $this->get_field_id( 'ulid' ); ?>" 
                         name="<?php echo $this->get_field_name( 'ulid' ); ?>" 
                         class="widefat" style="width:100%;">
-                    <option value="GANright"  <?php if ( 'GANright' == $instance['ulid'] ) echo 'selected="selected"'; ?>>right</option>
-                    <option value="GANleader" <?php if ( 'GANleader' == $instance['ulid'] ) echo 'selected="selected"'; ?>>leader</option>
+                    <option value="GANright"  <?php if ( 'GANright' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('right'); ?></option>
+                    <option value="GANleader" <?php if ( 'GANleader' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('leader'); ?></option>
                 </select>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id( 'ifwidth' ); ?>">Ad frame width:</label>
+                <label for="<?php echo $this->get_field_id( 'ifwidth' ); ?>"><?php _e('Ad frame width:'); ?></label>
                 <input id="<?php echo $this->get_field_id( 'ifwidth' ); ?>" 
                         value="<?php echo $instance['ifwidth']; ?>"
                         name="<?php echo $this->get_field_name( 'ifwidth' ); ?>"
                         style="width:100%;" />
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id( 'ifheight' ); ?>">Ad frame height:</label>
+                <label for="<?php echo $this->get_field_id( 'ifheight' ); ?>"><?php _e('Ad frame height:'); ?></label>
                 <input id="<?php echo $this->get_field_id( 'ifheight' ); ?>" 
                         value="<?php echo $instance['ifheight']; ?>"
                         name="<?php echo $this->get_field_name( 'ifheight' ); ?>"
