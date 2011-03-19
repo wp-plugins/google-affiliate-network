@@ -32,10 +32,12 @@ if ($wp_db_version < 8201) {
 require_once(dirname(__FILE__) . "/GAN_Constants.php");
 require_once(dirname(__FILE__) . "/GAN_Database.php");
 
+/* load_plugin_textdomain('gan',.GAN_PLUGIN_URL.'/languages/',basename(GAN_DIR).'/languages/'); */
+
 /* Make sure we are first and only program */
 if (headers_sent()) {
   @header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
-  wp_die(__('Headers Sent', 'The headers have been sent by another plugin - there may be a plugin conflict.'));
+  wp_die(__('The headers have been sent by another plugin - there may be a plugin conflict.','gan'));
 }
   
 /* http Headers */
@@ -54,7 +56,7 @@ echo '<link rel="stylesheet" type="text/css" href="' . $path . '" />';
 
 /* Make sure we have the parameters we need. */
 if (!isset($_GET['ulid']) && !isset($_GET['maxads']) ) {
-  wp_die(__('Missing parameters!','The needed parameters are missing. Probably because this file was not called from an iframe.'));
+  wp_die(__('The needed parameters are missing. Probably because this file was not called from an iframe.','gan'));
 }
 
 /* Load parameters */

@@ -17,13 +17,13 @@ class GAN_ImageWidget extends WP_Widget {
 	 */
 	function GAN_ImageWidget() {
 		/* Widget settings. */
-		$widget_ops = array( 'classname' => 'deepwoodsimggan', 'description' => __('Display Google Affiliate Network Image links') );
+		$widget_ops = array( 'classname' => 'deepwoodsimggan', 'description' => __('Display Google Affiliate Network Image links','gan') );
 
 		/* Widget control settings. */
 		$control_ops = array( 'width' => 300, 'height' => 350, 'id_base' => 'deepwoodsgan-image-widget' );
 
 		/* Create the widget. */
-		$this->WP_Widget( 'deepwoodsgan-image-widget', __('GAN Image Widget'), $widget_ops, $control_ops );
+		$this->WP_Widget( 'deepwoodsgan-image-widget', __('GAN Image Widget','gan'), $widget_ops, $control_ops );
 	}
 
 	/**
@@ -141,44 +141,44 @@ class GAN_ImageWidget extends WP_Widget {
 				'width' => 120, 'height' => 60 );
 	    $instance = wp_parse_args( (array) $instance, $defaults ); ?>
 	    <p>
-		<label for="<?php echo $this->get_field_id( 'maxads' ); ?>"><?php _e('Max ads:'); ?></label>
+		<label for="<?php echo $this->get_field_id( 'maxads' ); ?>"><?php _e('Max ads:','gan'); ?></label>
 		<input id="<?php echo $this->get_field_id( 'maxads' ); ?>" 
 			value="<?php echo $instance['maxads']; ?>"
 			name="<?php echo $this->get_field_name( 'maxads' ); ?>"
 			style="width:100%;" />
 	    </p>
 	    <p>
-		<label for="<?php echo $this->get_field_id( 'width' ); ?>"><?php _e('Width:'); ?></label>
+		<label for="<?php echo $this->get_field_id( 'width' ); ?>"><?php _e('Width:','gan'); ?></label>
 		<input id="<?php echo $this->get_field_id( 'width' ); ?>" 
 			value="<?php echo $instance['width']; ?>"
 			name="<?php echo $this->get_field_name( 'width' ); ?>"
 			style="width:100%;" />
 	    </p>
 	    <p>
-		<label for="<?php echo $this->get_field_id( 'height' ); ?>"><?php _e('Height:'); ?></label>
+		<label for="<?php echo $this->get_field_id( 'height' ); ?>"><?php _e('Height:','gan'); ?></label>
 		<input id="<?php echo $this->get_field_id( 'height' ); ?>" 
 			value="<?php echo $instance['height']; ?>"
 			name="<?php echo $this->get_field_name( 'height' ); ?>"
 			style="width:100%;" />
 	    </p>
 	    <p>
-		<label for="<?php echo $this->get_field_id( 'ulid' ); ?>"><?php _e('Side:'); ?></label>
+		<label for="<?php echo $this->get_field_id( 'ulid' ); ?>"><?php _e('Side:','gan'); ?></label>
 		<select id="<?php echo $this->get_field_id( 'ulid' ); ?>" 
 			name="<?php echo $this->get_field_name( 'ulid' ); ?>" 
 			class="widefat" style="width:100%;">
-		    <option value="GANright"  <?php if ( 'GANright' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('right'); ?></option>
-		    <option value="GANleader" <?php if ( 'GANleader' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('leader'); ?></option>
+		    <option value="GANright"  <?php if ( 'GANright' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('right','gan'); ?></option>
+		    <option value="GANleader" <?php if ( 'GANleader' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('leader','gan'); ?></option>
 		</select>
 	    </p>
             <p>
-                <label for="<?php echo $this->get_field_id( 'ifwidth' ); ?>"><?php _e('Ad frame width:'); ?></label>
+                <label for="<?php echo $this->get_field_id( 'ifwidth' ); ?>"><?php _e('Ad frame width:','gan'); ?></label>
                 <input id="<?php echo $this->get_field_id( 'ifwidth' ); ?>" 
                         value="<?php echo $instance['ifwidth']; ?>"
                         name="<?php echo $this->get_field_name( 'ifwidth' ); ?>"
                         style="width:100%;" />
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id( 'ifheight' ); ?>"><?php _e('Ad frame height:'); ?></label>
+                <label for="<?php echo $this->get_field_id( 'ifheight' ); ?>"><?php _e('Ad frame height:','gan'); ?></label>
                 <input id="<?php echo $this->get_field_id( 'ifheight' ); ?>" 
                         value="<?php echo $instance['ifheight']; ?>"
                         name="<?php echo $this->get_field_name( 'ifheight' ); ?>"
