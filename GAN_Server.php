@@ -32,7 +32,7 @@ if ($wp_db_version < 8201) {
 require_once(dirname(__FILE__) . "/GAN_Constants.php");
 require_once(dirname(__FILE__) . "/GAN_Database.php");
 
-/* load_plugin_textdomain('gan',.GAN_PLUGIN_URL.'/languages/',basename(GAN_DIR).'/languages/'); */
+load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',basename(GAN_DIR).'/languages/');
 
 /* Make sure we are first and only program */
 if (headers_sent()) {

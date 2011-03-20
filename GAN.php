@@ -59,8 +59,8 @@ class GAN_Plugin {
 		GAN_Database::PopulateStatsTables();
 		add_action('gan_daily_event',array($this,'check_autoexpire'));
 		add_option('wp_gan_autoexpire','yes');
-		/* load_plugin_textdomain('gan',.GAN_PLUGIN_URL.'/languages/',
-					  basename(GAN_DIR).'/languages/'); */
+		load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',
+					  basename(GAN_DIR).'/languages/');
 	}
 	/* Activation hook: create database tables. */
 	function install() {
