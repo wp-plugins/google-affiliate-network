@@ -278,6 +278,16 @@ class GAN_Database {
     global $wpdb;
     $adids = $wpdb->get_col("select adid " . GAN_AD_STATS_TABLE . ' order by Impressions');
     foreach ($adids as $adid) {
+      if ($wpdb->get_var("select count(*) from " . GAN_AD_STATS_TABLE . ' where adid = '.$adid) > 1) {
+	$ids = $wpdb->get_col(select id from " . GAN_AD_STATS_TABLE . ' where adid = '.$adid.' order by Impressions desc');
+	$flag = 0;
+	foreach ($ids as $id) {
+	  if ($flag) $wpdb->query("delete from " . GAN_AD_STATS_TABLE . ' where id = '.$id);
+	  else $flag = 1;
+	}
+      }
+    }	
+    foreach ($adids as $adid) {
       if ($wpdb->get_var("select count(*) from " . GAN_AD_TABLE . ' where id = '.$adid) == 0) {
 	$wpdb->query("delete from " . GAN_AD_STATS_TABLE . ' where adid = '.$adid);
       }

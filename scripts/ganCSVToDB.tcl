@@ -27,9 +27,9 @@
 # The script flushes expired links each time it is run.
 #
 # DB Access -- edit these three lines to code in your DB access info.
-set USER     {deepsoft}
-set PASSWORD {deepsoft}
-set DATABASE {deepsoft}
+set USER     {username}
+set PASSWORD {password}
+set DATABASE {databasename}
 # If your db prefix is other then 'wp_', you'll need to edit the SQL 
 # statements below.
 #
