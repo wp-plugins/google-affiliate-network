@@ -279,7 +279,7 @@ class GAN_Database {
     $adids = $wpdb->get_col("select adid " . GAN_AD_STATS_TABLE . ' order by Impressions');
     foreach ($adids as $adid) {
       if ($wpdb->get_var("select count(*) from " . GAN_AD_STATS_TABLE . ' where adid = '.$adid) > 1) {
-	$ids = $wpdb->get_col(select id from " . GAN_AD_STATS_TABLE . ' where adid = '.$adid.' order by Impressions desc');
+	$ids = $wpdb->get_col("select id from " . GAN_AD_STATS_TABLE . ' where adid = '.$adid.' order by Impressions desc');
 	$flag = 0;
 	foreach ($ids as $id) {
 	  if ($flag) $wpdb->query("delete from " . GAN_AD_STATS_TABLE . ' where id = '.$id);
@@ -431,6 +431,12 @@ class GAN_Database {
   static function get_link_name($id) {
     global $wpdb;
     $sql = $wpdb->prepare("SELECT DISTINCT LinkName FROM ".GAN_AD_TABLE.
+				" WHERE ID = %d",$id);
+    return $wpdb->get_var($sql);
+  }
+  static function get_link_id($id) {
+    global $wpdb;
+    $sql = $wpdb->prepare("SELECT DISTINCT LinkID FROM ".GAN_AD_TABLE.
 				" WHERE ID = %s",$id);
     return $wpdb->get_var($sql);
   }

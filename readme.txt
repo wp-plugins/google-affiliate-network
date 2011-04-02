@@ -4,7 +4,7 @@ Donate link: http://www.deepsoft.com/GAN
 Tags: gan,affiliate,widget,google,plugin,ads
 Requires at least: 2.7
 Tested up to: 3.1
-Stable tag: 2.3
+Stable tag: 2.4
 
 A Widget plugin to display Google Affiliate Network ads.  Both text
 links and image ads can be displayed.  The widgets are parameterized.
@@ -42,6 +42,10 @@ There are no Frequently Asked Questions yet.
 There are no Screenshots yet.
 
 == Changelog ==
+
+= 2.4 =
+* Added in internationalization.
+* Improved the ad stats display (include additional database fields).
 
 = 2.3 =
 * Changed the statistics reseting from 'flush' (delete) to 'zero', since 

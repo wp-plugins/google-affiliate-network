@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 2.3
+ * Version: 2.4
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -816,15 +816,19 @@ class GAN_Plugin {
 	<br class="clear" /></div>
 	     	     <table class="widefat page fixed" cellspacing="2">
 		<thead>
-		<tr><th align="left" width="20%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
-		    <th align="left" width="50%" scope="col" class="manage-column"><?php _e('Link Name','gan'); ?></th>
+		<tr><th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
+		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Link ID','gan'); ?></th>
+		    <th align="left" width="40%" scope="col" class="manage-column"><?php _e('Link Name','gan'); ?></th>
+		    <th align="right" width="10%" scope="col" class="manage-column"><?php _e('End Date','gan'); ?></th>
 		    <th align="right" width="8%"  scope="col" class="manage-column"><?php _e('Image Width','gan'); ?></th>
 		    <th align="right" width="12%"  scope="col" class="manage-column"><?php _e('Impressions','gan'); ?></th>
 		    <th align="right" width="10%"  scope="col" class="manage-column"><?php _e('Last View','gan'); ?></th></tr>
 		</thead>
 		<tfoot>
-		<tr><th align="left" width="20%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
-		    <th align="left" width="50%" scope="col" class="manage-column"><?php _e('Link Name','gan'); ?></th>
+		<tr><th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
+		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Link ID','gan'); ?></th>
+		    <th align="left" width="40%" scope="col" class="manage-column"><?php _e('Link Name','gan'); ?></th>
+		    <th align="right" width="10%" scope="col" class="manage-column"><?php _e('End Date','gan'); ?></th>
 		    <th align="right" width="8%"  scope="col" class="manage-column"><?php _e('Image Width','gan'); ?></th>
 		    <th align="right" width="12%"  scope="col" class="manage-column"><?php _e('Impressions','gan'); ?></th>
 		    <th align="right" width="10%"  scope="col" class="manage-column"><?php _e('Last View','gan'); ?></th></tr>
@@ -837,13 +841,17 @@ class GAN_Plugin {
 			if ($index <= $skiprecs) {continue;}	/* Previous pages. */
 		        if ($index >  ($skiprecs+$per_page)) {break;} /* Next pages. */
 			$id = $ADStatRow['id'];    /* Id for row actions. */
-			?><tr class="<?php echo $alt; ?> iedit"><td valign="top" width="20%" align="left"><?php
+			?><tr class="<?php echo $alt; ?> iedit"><td valign="top" width="10%" align="left"><?php
 			  echo GAN_Database::get_merch_name($ADStatRow['MerchantID']);  /* Advertiser name */
-			?></td><td valign="top" width="10%" align="left" ><?php 
+			?></td><td valign="top" width="10%" align="left"><?php
+			  echo GAN_Database::get_link_id($ADStatRow['adid']);   /* Link ID */
+			?></td><td valign="top" width="40%" align="left" ><?php 
 			  echo GAN_Database::get_link_name($ADStatRow['adid']);   /* Link name */
 		        ?><br /><a href="<?php 
 			  $this->make_page_query('gan-database-ad-impstats',$id,'zero');  /* zero stat */
-			?>"><?php _e('Zero','gan'); ?></a></td><td valign="top" width="8%" align="right" ><?php 
+			?>"><?php _e('Zero','gan'); ?></a></td><td valign="top" width="10%" align="right" ><?php
+			  echo $ADStatRow['EndDate']; /* End Date */
+			?></a></td><td valign="top" width="8%" align="right" ><?php 
 			  echo $ADStatRow['ImageWidth']; /* Image Width */
 		        ?></td><td valign="top" width="12%" align="right" ><?php 
 			  echo $ADStatRow['Impressions']; /* Impressions */
