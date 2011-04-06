@@ -477,4 +477,3 @@ class GAN_Database {
 }
 
 ?>
-
