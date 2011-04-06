@@ -51,6 +51,15 @@ while { [gets stdin line] >= 0 } {
   if {[regexp "^Advertiser Site Name\t" "$line"] > 0} {break}
 }
 
+proc fixdate {date} {
+  if {[regexp {^([[:digit:]]*)/([[:digit:]]*)/([[:digit:]]*)$} "$date" -> m d y] > 0} {
+    if {[string length $y] < 4} {set y 20$y}
+    return [format {%04d-%02d-%02d} $y $m $d]
+  } else {
+    return $date
+  }
+}
+
 proc db_quote {s} {
   regsub -all {'} $s {\'} result
   return "'$result'"
@@ -64,8 +73,11 @@ while { [gets stdin line] >= 0 } {
 			LinkURL, PromoType,  MerchantID,side,enabled) values (}
   set elts [split "$line" "\t"]
   if {[llength $elts] < 14} {continue}
+  set elts [lreplace $elts 5 5 [fixdate [lindex $elts 5]]]
   if {"[lindex $elts 6]" eq "none" || "[lindex $elts 6]" eq ""} {
     set elts [lreplace $elts 6 6 "2099-12-31"]
+  } else {
+    set elts [lreplace $elts 6 6 [fixdate [lindex $elts 6]]]
   }
   foreach dbelt $elts \
 	  type {string string string string string string string string string 

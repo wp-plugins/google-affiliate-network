@@ -65,6 +65,15 @@ proc tsv_unquote {s} {
   }
 }
 
+proc fixdate {date} {
+  if {[regexp {^([[:digit:]]*)/([[:digit:]]*)/([[:digit:]]*)$} "$date" -> m d y] > 0} {
+    if {[string length $y] < 4} {set y 20$y}
+    return [format {%04d-%02d-%02d} $y $m $d]
+  } else {
+    return $date
+  }
+}
+
 while { [gets stdin line] >= 0 } {
 #				Edit if your WP prefix is other then wp_
   set sqlstatement {insert into wp_DWS_GAN (LinkID, LinkName,  MerchantID,
@@ -75,12 +84,21 @@ while { [gets stdin line] >= 0 } {
   set rawelts [split "$line" "\t"]
   
   if {[llength $rawelts] < 16} {continue}
+  set LinkID [string trim [tsv_unquote [lindex $rawelts 0]]]
+  if {[regexp {^[[:digit:]]} $LinkID] > 0} {set LinkID J$LinkID}
+  set elts [list $LinkID]
+  lappend elts [lindex $rawelts 1]
+  set MerchantID [string trim [tsv_unquote [lindex $rawelts 2]]]
+  if {[regexp {^[[:digit:]]} $MerchantID] > 0} {set MerchantID K$MerchantID}
+  lappend elts $MerchantID
+  eval [list lappend elts] [lrange $rawelts 3 5]
   set elts [lrange $rawelts 0 5]
   set height 0; set width 0
-  regexp {^([[:digit:]]*)x([[:digit:]]*)$} [lindex $rawelts 6] -> width height
+  regexp {^"([[:digit:]]*)x([[:digit:]]*)"$} [lindex $rawelts 6] -> width height
   lappend elts $height $width
-  lappend elts [lindex $rawelts 8]
-  set enddate [string trim [tsv_unquote [lindex $rawelts 9]]]
+  lappend elts [fixdate [string trim [tsv_unquote [lindex $rawelts 8]]]]
+  set enddate [fixdate [string trim [tsv_unquote [lindex $rawelts 9]]]]
+  
   if {"$enddate" eq "none" || "$enddate" eq ""} {
     lappend elts "2099-12-31"
   } else {
