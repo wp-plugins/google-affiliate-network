@@ -92,7 +92,6 @@ while { [gets stdin line] >= 0 } {
   if {[regexp {^[[:digit:]]} $MerchantID] > 0} {set MerchantID K$MerchantID}
   lappend elts $MerchantID
   eval [list lappend elts] [lrange $rawelts 3 5]
-  set elts [lrange $rawelts 0 5]
   set height 0; set width 0
   regexp {^"([[:digit:]]*)x([[:digit:]]*)"$} [lindex $rawelts 6] -> width height
   lappend elts $height $width
