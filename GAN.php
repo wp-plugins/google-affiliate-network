@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 2.4
+ * Version: 3.0
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -56,7 +56,6 @@ class GAN_Plugin {
 		add_action('wp_head', array($this,'wp_head'));
 		add_action('admin_head', array($this,'admin_head'));
 		add_action('wp_dashboard_setup', array($this,'wp_dashboard_setup'));
-		GAN_Database::PopulateStatsTables();
 		add_action('gan_daily_event',array($this,'check_autoexpire'));
 		add_option('wp_gan_autoexpire','yes');
 		load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',
@@ -64,10 +63,13 @@ class GAN_Plugin {
 	}
 	/* Activation hook: create database tables. */
 	function install() {
-		GAN_Database::make_ad_table();
-		GAN_Database::make_ad_stats_table();
-		GAN_Database::make_merch_stats_table();
-		GAN_Database::make_views();
+		$dbvers = GAN_Database::database_version();
+		if ($dbvers == 0.0) {
+		  GAN_Database::make_ad_table();
+		  GAN_Database::make_merchs_table();
+		} else if ($dbvers < 3.0) {
+		  GAN_Database::upgrade_database();
+		}
 		wp_schedule_event(mktime(2,0,0), 'daily', 'gan_daily_event');
 	}
         /* Deactivation hook: nothing at present. */
@@ -164,8 +166,6 @@ class GAN_Plugin {
 	    $action = $_GET['action'];
 	    if( $action == 'delete' ) {
 	      GAN_Database::delete_ad_by_id($id);
-	    } else if ($action == 'sidetoggle' ) {
-	      GAN_Database::toggle_side($id);
 	    } else if ( $action == 'enabledtoggle' ) {
 	      GAN_Database::toggle_enabled($id);
 	    } else if ( $action == 'editrow' ) {
@@ -239,8 +239,7 @@ class GAN_Plugin {
 		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Image Width','gan'); ?></th>
 		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Start Date','gan'); ?></th>
 		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('End Date','gan'); ?></th>
-		    <th align="left" width="5%"  scope="col" class="manage-column"><?php _e('Side','gan'); ?></th>
-		    <th align="left" width="5%"  scope="col" class="manage-column"><?php _e('En?','gan'); ?></th></tr>
+		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Enabled?','gan'); ?></th></tr>
 		</thead>
 		<tfoot>
 		<tr><th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
@@ -249,8 +248,7 @@ class GAN_Plugin {
 		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Image Width','gan'); ?></th>
 		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Start Date','gan'); ?></th>
 		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('End Date','gan'); ?></th>
-		    <th align="left" width="5%"  scope="col" class="manage-column"><?php _e('Side','gan'); ?></th>
-		    <th align="left" width="5%"  scope="col" class="manage-column"><?php _e('En?','gan'); ?></th></tr>
+		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('En?','gan'); ?></th></tr>
 		</tfoot>
 	        <tbody>
 		<?php /* Display each row. */
@@ -260,8 +258,9 @@ class GAN_Plugin {
 		        if ($index <= $skiprecs) {continue;}	/* Previous pages. */
 		        if ($index >  ($skiprecs+$per_page)) {break;} /* Next pages. */
 		        $id = $GANRow['id'];	/* Id for row actions. */
+			//echo "<!-- GANRow: ";print_r($GANRow);echo " -->\n";
 		        ?><tr class="<?php echo $alt; ?> iedit"><td valign="top" width="10%" align="left"><?php 
-			  echo $GANRow['Advertiser']; /* Advertiser name */
+			  echo GAN_Database::get_merch_name($GANRow['MerchantID']); /* Advertiser name */
 		        ?></td><td valign="top" width="10%" align="left" ><?php 
 			  echo $GANRow['LinkID'];     /* Link ID */
 		        ?></td><td valign="top" width="40%" align="left" ><?php 
@@ -271,8 +270,6 @@ class GAN_Plugin {
 			?>">Edit</a> <a href="<?php 
 			  $this->make_page_query('gan-database-page',$id, 'delete' );  /* Delete link */
 			?>"><?php _e('Delete','gan'); ?></a> <a href="<?php
-			  $this->make_page_query('gan-database-page',$id, 'sidetoggle' ); /* Side toggle link */
-			?>"><?php _e('Toggle&nbsp;Side','gan'); ?></a> <a href="<?php
 			  $this->make_page_query('gan-database-page',$id, 'enabledtoggle' ); /* Enable toggle link */
 			?>"><?php _e('Toggle&nbsp;Enabled','gan'); ?></a></td><td valign="top" width="10%" align="left" ><?php 
 			  echo $GANRow['ImageWidth'];	/* Image width (0 = text) */
@@ -281,10 +278,6 @@ class GAN_Plugin {
 		        ?></td><td valign="top" width="10%" align="left" ><?php 
 			  echo $GANRow['EndDate'];	/* End date */
 		        ?></td><td valign="top" width="10%" align="left" ><?php 
-			  /* Side */
-			  if ($GANRow['Side'] == 1) {echo 'right';} 
-			  else {echo 'leader';} 
-			?></td><td valign="top" width="10%" align="left" ><?php 
 			  /* Enabled */
 			  if ($GANRow['Enabled'] == 1) {echo 'yes';} 
 			  else {echo 'no';} ?></td></tr>
@@ -337,7 +330,7 @@ class GAN_Plugin {
 			     'StartDate' => '', 'EndDate' => '', 
 			     'ClickserverLink' => '', 'ImageURL' => '', 
 			     'ImageHeight' => 0, 'ImageWidth' => 0, 'LinkURL' => '',
-			     'PromoType' => '', 'MerchantID' => '' , 'side' => 1,
+			     'PromoType' => '', 'MerchantID' => '' , 
 			     'enabled' => 0 );
 	  if (isset($_GET['Advertiser']) ) {  $defaults['Advertiser'] = $_GET['Advertiser']; }
 	  if (isset($_GET['LinkID']) ) {  $defaults['LinkID'] =     $_GET['LinkID']; }
@@ -353,7 +346,6 @@ class GAN_Plugin {
 	  if (isset($_GET['LinkURL']) ) {  $defaults['LinkURL'] =    $_GET['LinkURL']; }
 	  if (isset($_GET['PromoType']) ) {  $defaults['PromoType'] =  $_GET['PromoType']; }
 	  if (isset($_GET['MerchantID']) ) {  $defaults['MerchantID'] = $_GET['MerchantID']; }
-	  if (isset($_GET['side']) ) {  $defaults['side'] =	      $_GET['side']; }
 	  if (isset($_GET['enabled']) ) {  $defaults['enabled'] =    $_GET['enabled']; }
 	  if( isset($_GET['Add']) &&
 	      $this->add_element_checkvalid() ) {
@@ -371,7 +363,6 @@ class GAN_Plugin {
 				     $_GET['LinkURL'],
 				     $_GET['PromoType'],
 				     $_GET['MerchantID'],
-				     $_GET['side'],
 				     $_GET['enabled'] );
 	  }
 	  ?><form name="add-GAN-element" method="GET" action="<?php echo admin_url('admin.php'); ?>">
@@ -455,13 +446,6 @@ class GAN_Plugin {
 			value="<?php echo $defaults['MerchantID']; ?>" 
 			name="MerchantID" 
 			style="width:75%;" /></td></tr>
-	    <tr valign="top">
-		<th scope="row"><label for="GAN-side" style="width:20%;"><?php _e('side:','gan'); ?></label></th>
-		<td><select id="GAN-side" name="side" class="widefat"
-			>
-		    <option value="1" <?php if ( $defaults['side'] == 1) echo 'selected="selected"'; ?>><?php _e('right','gan'); ?></option>
-		    <option value="0" <?php if ( $defaults['side'] == 0) echo 'selected="selected"'; ?>><?php _e('leader','gan'); ?></option>
-		</selected></td></tr>
 	    <tr valign="top">
 		<th scope="row"><label for="GAN-enabled"><?php _e('enabled?','gan'); ?></label></th>
 		<td><input class="checkbox" type="checkbox"
@@ -593,7 +577,6 @@ class GAN_Plugin {
 	  if (isset($_GET['LinkURL']) ) {  $defaults['LinkURL'] =    $_GET['LinkURL']; }
 	  if (isset($_GET['PromoType']) ) {  $defaults['PromoType'] =  $_GET['PromoType']; }
 	  if (isset($_GET['MerchantID']) ) {  $defaults['MerchantID'] = $_GET['MerchantID']; }
-	  if (isset($_GET['side']) ) {  $defaults['side'] =	      $_GET['side']; }
 	  if (isset($_GET['enabled']) ) {  $defaults['enabled'] =    $_GET['enabled']; }
 	  if( isset($_GET['Update']) &&
 	      $this->add_element_checkvalid() ) {
@@ -611,7 +594,6 @@ class GAN_Plugin {
 				      $_GET['LinkURL'],
 				      $_GET['PromoType'],
 				      $_GET['MerchantID'],
-				      $_GET['side'],
 				      $_GET['enabled'] );
 	    return true;
 	  }
@@ -697,13 +679,6 @@ class GAN_Plugin {
 			value="<?php echo $defaults['MerchantID']; ?>" 
 			name="MerchantID" 
 			style="width:75%;" /></td></tr>
-	  <tr valign="top">
-		<th scope="row"><label for="GAN-side" style="width:20%;"><?php _e('side:','gan'); ?></label></th>
-		<td><select id="GAN-side" name="side" class="widefat"
-			>
-		    <option value="1" <?php if ( $defaults['side'] == 1) echo 'selected="selected"'; ?>><?php _e('right','gan'); ?></option>
-		    <option value="0" <?php if ( $defaults['side'] == 0) echo 'selected="selected"'; ?>><?php _e('leader','gan'); ?></option>
-		</selected></td></tr>
 	  <tr valign="top">
 		<th scope="row"><label for="GAN-enabled"><?php _e('enabled?','gan'); ?></label></th>
 		<td><input class="checkbox" type="checkbox"

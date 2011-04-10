@@ -19,6 +19,8 @@ define('GAN_PLUGIN_IMAGE_URL', GAN_PLUGIN_URL . '/images');
 global $wpdb;
 /* Database table names */
 define('GAN_AD_TABLE',$wpdb->prefix . "DWS_GAN");	/* Base ad table */
+define('GAN_MERCH_TABLE',$wpdb->prefix . "DWS_GAN_MERCH");       /* Merchant Table */
+/* Old (pre V3) tables and views */
 /* Ad statistics */
 define('GAN_AD_STATS_TABLE',$wpdb->prefix . "DWS_GAN_AD_STATS");
 /* Merchant statistics */

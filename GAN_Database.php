@@ -8,12 +8,25 @@
  */
 
 class GAN_Database {
+  static function database_version () {
+    global $wpdb;
+    if ($wpdb->get_var("SHOW TABLES LIKE '" .GAN_AD_TABLE. "'") != GAN_AD_TABLE) {
+	return 0.0;
+    }
+    $advertrow = $wpdb->get_row('DESCRIBE '.GAN_AD_TABLE.' Advertiser', 'ARRAY_A' );
+    if (count($advertrow) < 1) {
+	return 3.0;
+    } else {
+	return 1.0;
+    }
+  }
+
   /* Create ad table.  This table holds the ads themselves. It corresponds to the
    * fields passed in the CSV passed in link subscription E-Mails
    */
   static function make_ad_table() {
     $columns = array ( 'id' => 'int NOT NULL AUTO_INCREMENT',	/* ID */
-		       'Advertiser' => 'varchar(255) NOT NULL' , /* Advertiser name */
+	// Moved to merch table   'Advertiser' => 'varchar(255) NOT NULL' , /* Advertiser name */
 		       'LinkID'     => 'varchar(16)  NOT NULL' , /* Link ID */
 		       'LinkName'   => 'varchar(255) NOT NULL' , /* Link Name */
 		       'MerchandisingText' => 'varchar(255)' ,   /* Merch text */
@@ -27,8 +40,11 @@ class GAN_Database {
 		       'LinkURL' => 'varchar(255) NOT NULL' ,	 /* Link URL */
 		       'PromoType' => 'varchar(32) NOT NULL' ,   /* Type of promo */
 		       'MerchantID'  => 'varchar(16) NOT NULL',  /* Merchant ID */
-		       'side' => 'boolean NOT NULL',		 /* side (not used) */
+	// column dropped (not used)   'side' => 'boolean NOT NULL',		 /* side (not used) */
 		       'enabled' => 'boolean NOT NULL',		 /* enabled flag */
+	// Columns added (from ad stats table):
+		       'LastRunDate' => "date default '1970-01-01'" , /* Last Impression data */
+		       'Impressions' => 'int default 0',	/* Impression count */
 		       'PRIMARY' => 'KEY (id)'
 		     );
     global $wpdb;
@@ -42,91 +58,92 @@ class GAN_Database {
 	dbDelta($sql);
     }
   }
-  /* Make Ad statisics table -- contains the number of impressions and the date
-   * of the last impression.
+  /* Make Merchants table -- contains the MerchantID, the Advertiser name, 
+   * number of impressions, and the date of the last impression.
    */
-  static function make_ad_stats_table() {
+  static function make_merchs_table() {
     $columns = array ( 'id' => 'int NOT NULL AUTO_INCREMENT',	/* ID */
-		       'adid' => 'int NOT NULL' ,		/* Ad ID */
-		       'LastRunDate' => "date default '1970-01-01'" , /* Last Impression data */
-		       'Impressions' => 'int default 0',	/* Impression count */
-		       'PRIMARY' => 'KEY (id)',
-		       'INDEX'     => '(adid)' );
-    global $wpdb;
-    $sql = "CREATE TABLE " . GAN_AD_STATS_TABLE . '(';
-    foreach($columns as $column => $option) {
-	$sql .= "{$column} {$option}, ";
-    }
-    $sql = rtrim($sql, ', ') . ")";
-    if($wpdb->get_var("SHOW TABLES LIKE '" . GAN_AD_STATS_TABLE . "'") != GAN_AD_STATS_TABLE) {
-	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-	dbDelta($sql);
-    }
-  }
-  /* Make Merchant statisics table -- contains the number of impressions and 
-   * the date of the last impression.
-   */
-  static function make_merch_stats_table() {
-    $columns = array ( 'id' => 'int NOT NULL AUTO_INCREMENT',	/* ID */
+		       'Advertiser' => 'varchar(255) NOT NULL' , /* Advertiser name */
 		       'MerchantID' => 'varchar(16) NOT NULL' , /* Merchant ID */
 		       'LastRunDate' => "date default '1970-01-01'" , /* Last Impression data */
 		       'Impressions' => 'int default 0', /* Impression count */
 		       'PRIMARY' => 'KEY (id)',
 		       'INDEX'     => '(MerchantID)' );
     global $wpdb;
-    $sql = "CREATE TABLE " . GAN_MERCH_STATS_TABLE . '(';
+    $sql = "CREATE TABLE " . GAN_MERCH_TABLE . '(';
     foreach($columns as $column => $option) {
 	$sql .= "{$column} {$option}, ";
     }
     $sql = rtrim($sql, ', ') . ")";
-    if($wpdb->get_var("SHOW TABLES LIKE '" . GAN_MERCH_STATS_TABLE . "'") != GAN_MERCH_STATS_TABLE) {
+    if($wpdb->get_var("SHOW TABLES LIKE '" . GAN_MERCH_TABLE . "'") != GAN_MERCH_TABLE) {
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 	$result = dbDelta($sql);
     }
   }
-
-  static function make_views() {
+  static function upgrade_database() {
     global $wpdb;
-    $sql = "CREATE VIEW ".GAN_AD_STATS_TABLE_VIEW.
-			" (id, adid, LastRunDate, Impressions, ".
-			"ImageHeight, ImageWidth, MerchantID, enabled, ".
-			"StartDate, EndDate) AS SELECT ";
-    $sql .= GAN_AD_STATS_TABLE . '.id, ';
-    $sql .= GAN_AD_STATS_TABLE . '.adid, ';
-    $sql .= GAN_AD_STATS_TABLE . '.LastRunDate, ';
-    $sql .= GAN_AD_STATS_TABLE . '.Impressions, ';
-    $sql .= GAN_AD_TABLE . '.ImageHeight, ';
-    $sql .= GAN_AD_TABLE . '.ImageWidth, ';
-    $sql .= GAN_AD_TABLE . '.MerchantID, ';
-    $sql .= GAN_AD_TABLE . '.enabled, ';
-    $sql .= GAN_AD_TABLE . '.StartDate, ';
-    $sql .= GAN_AD_TABLE . '.EndDate ';
-    $sql .= 'FROM '.GAN_AD_STATS_TABLE.', '.GAN_AD_TABLE.' WHERE ';
-    $sql .= GAN_AD_TABLE.'.id = '.GAN_AD_STATS_TABLE.'.adid';
-
-    if ($wpdb->get_var("SHOW TABLES LIKE '" . GAN_AD_STATS_TABLE_VIEW . "'") != GAN_AD_STATS_TABLE_VIEW) {
-	$result = $wpdb->query($sql);
+    $dbversion = GAN_Database::database_version();
+    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: dbversion = ".$dbversion."\n");
+    if ($dbversion == 3.0) return;
+    if ($dbversion == 0.0) {
+      GAN_Database::make_ad_table();
+      GAN_Database::make_merchs_table();
+      return;
     }
-    $sql = "CREATE VIEW ".GAN_MERCH_STATS_TABLE_VIEW.
-		        " (id, MerchantID, LastRunDate, Impressions, ".
-			"ImageHeight, ImageWidth, enabled, StartDate, ".
-			"EndDate) AS SELECT ";
-    $sql .= GAN_MERCH_STATS_TABLE . '.id, ';
-    $sql .= GAN_MERCH_STATS_TABLE . '.MerchantID, ';
-    $sql .= GAN_MERCH_STATS_TABLE . '.LastRunDate, ';
-    $sql .= GAN_MERCH_STATS_TABLE . '.Impressions, ';
-    $sql .= GAN_AD_TABLE . '.ImageHeight, ';
-    $sql .= GAN_AD_TABLE . '.ImageWidth, ';
-    $sql .= GAN_AD_TABLE . '.enabled, ';
-    $sql .= GAN_AD_TABLE . '.StartDate, ';
-    $sql .= GAN_AD_TABLE . '.EndDate ';
-    $sql .= 'FROM '.GAN_MERCH_STATS_TABLE.', '.GAN_AD_TABLE.' WHERE ';
-    $sql .= GAN_AD_TABLE.'.MerchantID = '.GAN_MERCH_STATS_TABLE.'.MerchantID';
-    if ($wpdb->get_var("SHOW TABLES LIKE '" . GAN_MERCH_STATS_TABLE_VIEW . "'") != GAN_MERCH_STATS_TABLE_VIEW) {
-	$result = $wpdb->query($sql);
+    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: making merchs table\n");
+    GAN_Database::make_merchs_table();
+    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: populating merchs table\n");
+    $query = 'SELECT DISTINCT MerchantID,Advertiser from '.GAN_AD_TABLE;
+    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: query = ".$query."\n");
+    $merchs = $wpdb->get_results($query, 'ARRAY_A' );
+    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: merchs = ".print_r((array)$merchs,true)."\n");
+    foreach ((array)$merchs as $merch) {
+      //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: inserting ".print_r($merch,true)." into merchs table\n");
+      $wpdb->insert(GAN_MERCH_TABLE,$merch,array("%s","%s"));
     }
-  }	  
-
+    $query = 'SELECT DISTINCT MerchantID,Impressions,LastRunDate from '.
+		GAN_MERCH_STATS_TABLE;
+    $merch_stats = $wpdb->get_results($query, 'ARRAY_A' );
+    foreach ((array)$merch_stats as $merch_stat) {
+      //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: inserting ".print_r($merch_stat,true)." into merchs table\n");
+      $wpdb->update( GAN_MERCH_TABLE, array("Impressions" => $merch_stat['Impressions'],
+					  "LastRunDate" => $merch_stat['LastRunDate']),
+				    array("MerchantID" => $merch_stat['MerchantID']),
+				    array("%d","%s"), "%s");
+    }
+    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: dropping ".GAN_MERCH_STATS_TABLE." and ".GAN_MERCH_STATS_TABLE_VIEW."\n");
+    $wpdb->query('DROP TABLE '.GAN_MERCH_STATS_TABLE);
+    $wpdb->query('DROP VIEW  '.GAN_MERCH_STATS_TABLE_VIEW);
+    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: Altering ".GAN_AD_TABLE.": dropping Advertiser and side columns\n");
+    $wpdb->query('ALTER TABLE '.GAN_AD_TABLE.' DROP COLUMN Advertiser');
+    $wpdb->query('ALTER TABLE '.GAN_AD_TABLE.' DROP COLUMN side');
+    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: Altering ".GAN_AD_TABLE.": adding stats columns\n");
+    $sql = 'ALTER TABLE '.GAN_AD_TABLE.' ADD COLUMN (';
+    $columns = array (
+		       'LastRunDate' => "date default '1970-01-01'" , /* Last Impression data */
+		       'Impressions' => 'int default 0',	/* Impression count */
+		     );
+    foreach($columns as $column => $option) {
+      $sql .= "{$column} {$option}, ";
+    }
+    $sql = rtrim($sql, ', ') . ")";
+    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: sql = ".$sql."\n");
+    $wpdb->query($sql);
+    $query = 'SELECT DISTINCT adid,Impressions,LastRunDate from '.
+		GAN_AD_STATS_TABLE;
+    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: merging in ad stats\n");
+    $ad_stats = $wpdb->get_results($query, 'ARRAY_A' );
+    foreach ((array)$ad_stats as $ad_stat) {
+      //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: inserting ".print_r($ad_stat,true)."\n");
+      $wpdb->update( GAN_AD_TABLE, array("Impressions" => $ad_stat['Impressions'],
+					  "LastRunDate" => $ad_stat['LastRunDate']),
+				    array("id" => $ad_stat['adid']),
+				    array("%d","%s"), "%d");
+    }
+    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: Dropping ".GAN_AD_STATS_TABLE." and ".GAN_AD_STATS_TABLE_VIEW."\n");
+    $wpdb->query('DROP TABLE '.GAN_AD_STATS_TABLE);
+    $wpdb->query('DROP VIEW  '.GAN_AD_STATS_TABLE_VIEW);
+  }
   /*
    * Return an array of ordered merchants (advertisers).  Returns only
    * merchants with enabled ads, with valid dates, with ads of the
@@ -135,12 +152,23 @@ class GAN_Database {
    */
   static function ordered_merchants($height,$width) {
     global $wpdb;
-    $sql = $wpdb->prepare(
+    if (GAN_Database::database_version() < 3.0) {
+      $sql = $wpdb->prepare(
 		   "SELECT DISTINCT MerchantID FROM ".GAN_MERCH_STATS_TABLE_VIEW.
 		   " WHERE ImageHeight = %d && ImageWidth = %d &&".
 		   " enabled = 1 &&".
 		   " CURDATE() >= StartDate && CURDATE() < EndDate".
 		   " ORDER BY Impressions",$height,$width);
+    } else {
+      $sql = $wpdb->prepare(
+		   "SELECT DISTINCT M.MerchantID FROM ".GAN_MERCH_TABLE.' M,'.
+			GAN_AD_TABLE.' A'.
+		   " WHERE A.ImageHeight = %d && A.ImageWidth = %d &&".
+		   " A.MerchantID = M.MerchantID &&".
+		   " A.enabled = 1 &&".
+		   " CURDATE() >= A.StartDate && CURDATE() < A.EndDate".
+		   " ORDER BY M.Impressions",$height,$width);
+    }		   
     return $wpdb->get_col($sql);
   }
   /*
@@ -151,13 +179,21 @@ class GAN_Database {
    */
   static function ordered_ads($height,$width,$merch) {
     global $wpdb;
-    $sql = $wpdb->prepare(
+    if (GAN_Database::database_version() < 3.0) {
+      $sql = $wpdb->prepare(
 		"SELECT DISTINCT adid FROM ".GAN_AD_STATS_TABLE_VIEW.
 		" WHERE ImageHeight = %d && ImageWidth = %d &&".
 		" enabled = 1 && MerchantID = %s &&".
 		" CURDATE() >= StartDate && CURDATE() < EndDate".
 		" ORDER BY Impressions",$height,$width,$merch);
-    
+    } else {    
+      $sql = $wpdb->prepare(
+		"SELECT DISTINCT id FROM ".GAN_AD_TABLE.
+		" WHERE ImageHeight = %d && ImageWidth = %d &&".
+		" enabled = 1 && MerchantID = %s &&".
+		" CURDATE() >= StartDate && CURDATE() < EndDate".
+		" ORDER BY Impressions",$height,$width,$merch);
+    }
     return $wpdb->get_col($sql);
   }
   /* Get a specified ad by its id. The complete ad's row is returned as an
@@ -170,6 +206,7 @@ class GAN_Database {
     return $wpdb->get_row($sql, 'ARRAY_A' );
   }
   static function init_counts($id) {
+    if (GAN_Database::database_version() >= 3.0) return;
     //file_put_contents("php://stderr","*** GAN_Database::init_counts(".$id.")\n");
     global $wpdb;
     $merchid = $wpdb->get_var($wpdb->prepare("SELECT MerchantID FROM ".
@@ -193,6 +230,7 @@ class GAN_Database {
     }
   }
   static function PopulateStatsTables() {
+    if (GAN_Database::database_version() >= 3.0) return;
     global $wpdb;
     $alladids = $wpdb->get_col("SELECT id from ".GAN_AD_TABLE);
     foreach ($alladids as $adid) {
@@ -211,25 +249,46 @@ class GAN_Database {
 					     GAN_AD_TABLE.
 					     " WHERE ID = %d",$id));
     //file_put_contents("php://stderr","*** -: merchid = ".$merchid."\n");
-    $merchseen = $wpdb->get_var($wpdb->prepare("SELECT Impressions FROM ".
+    if (GAN_Database::database_version() < 3.0) {
+      $merchseen = $wpdb->get_var($wpdb->prepare("SELECT Impressions FROM ".
 						GAN_MERCH_STATS_TABLE.
 						" WHERE MerchantID = %s",
 						$merchid));
     //file_put_contents("php://stderr","*** -: merchseen = ".$merchseen."\n");
-    $wpdb->update( GAN_MERCH_STATS_TABLE,
+      $wpdb->update( GAN_MERCH_STATS_TABLE,
 		   array("Impressions" => $merchseen + 1,
 			 "LastRunDate" => date('Y-m-d')),
 		   array("MerchantID" => $merchid),
 		   array("%d","%s"), "%s");
-    $adseen = $wpdb->get_var($wpdb->prepare("SELECT Impressions FROM ".
+      $adseen = $wpdb->get_var($wpdb->prepare("SELECT Impressions FROM ".
 					    GAN_AD_STATS_TABLE.
 					    " WHERE adid = %d",$id));
     //file_put_contents("php://stderr","*** -: adseen = ".$adseen."\n");
-    $wpdb->update( GAN_AD_STATS_TABLE,
+      $wpdb->update( GAN_AD_STATS_TABLE,
 		   array("Impressions" => $adseen + 1,
 		         "LastRunDate" => date('Y-m-d')),
 		   array("adid" => $id),
 		   array("%d","%s"), "%d");
+    } else {
+      $merchseen = $wpdb->get_var($wpdb->prepare("SELECT Impressions FROM ".
+					GAN_MERCH_TABLE.
+					" WHERE MerchantID = %s",
+					$merchid));
+      $wpdb->update( GAN_MERCH_TABLE,
+			array("Impressions" => $merchseen + 1,
+			      "LastRunDate" => date('Y-m-d')),
+			array("MerchantID" => $merchid),
+			array("%d","%s"), "%s");
+      $adseen = $wpdb->get_var($wpdb->prepare("SELECT Impressions FROM ".
+					    GAN_AD_TABLE.
+					    " WHERE id = %d",$id));
+    //file_put_contents("php://stderr","*** -: adseen = ".$adseen."\n");
+      $wpdb->update( GAN_AD_TABLE,
+		   array("Impressions" => $adseen + 1,
+		         "LastRunDate" => date('Y-m-d')),
+		   array("id" => $id),
+		   array("%d","%s"), "%d");
+    }
   }
   static function delete_ad_by_id($id) {
     global $wpdb;
@@ -237,22 +296,19 @@ class GAN_Database {
     $MerchantID = $wpdb->get_var($sql);
     $sql = $wpdb->prepare("delete from " . GAN_AD_TABLE . ' where id = %d',$id);
     $wpdb->query($sql);
-    $sql = $wpdb->prepare("delete from " . GAN_AD_STATS_TABLE . ' where adid = %d',$id);
-    $wpdb->query($sql);
-    $sql = $wpdb->prepare("select count(*) from ".GAN_AD_TABLE. ' where MerchantID = %s',$MerchantID);
-    if ($wpdb->get_var($sql) == 0) {
-      $sql = $wpdb->prepare("delete from " . GAN_MERCH_STATS_TABLE . " where MerchantID = %s",$MerchantID);
+    if (GAN_Database::database_version() < 3.0) {
+      $sql = $wpdb->prepare("delete from " . GAN_AD_STATS_TABLE . ' where adid = %d',$id);
       $wpdb->query($sql);
     }
-  }
-  static function toggle_side($id) {
-    global $wpdb;
-    $sql = $wpdb->prepare("SELECT Side FROM " . GAN_AD_TABLE . ' where id = %d',$id);
-    $curside = $wpdb->get_var($sql);
-    if ($curside == 0) {$newside = 1;}
-    else {$newside = 0;}
-    $sql = $wpdb->prepare("update " . GAN_AD_TABLE . " set Side=%d where id = %d",$newside,$id);
-    $wpdb->query($sql);
+    $sql = $wpdb->prepare("select count(*) from ".GAN_AD_TABLE. ' where MerchantID = %s',$MerchantID);
+    if ($wpdb->get_var($sql) == 0) {
+      if (GAN_Database::database_version() < 3.0) {
+	$sql = $wpdb->prepare("delete from " . GAN_MERCH_STATS_TABLE . " where MerchantID = %s",$MerchantID);
+      } else {
+	$sql = $wpdb->prepare("delete from " . GAN_MERCH_TABLE . " where MerchantID = %s",$MerchantID);
+      }
+      $wpdb->query($sql);
+    }
   }
   static function toggle_enabled($id) {
     global $wpdb;
@@ -274,34 +330,9 @@ class GAN_Database {
       GAN_Database::delete_ad_by_id($id);
     }
   }
-  static function clean_stats_tables() {
-    global $wpdb;
-    $adids = $wpdb->get_col("select adid " . GAN_AD_STATS_TABLE . ' order by Impressions');
-    foreach ($adids as $adid) {
-      if ($wpdb->get_var("select count(*) from " . GAN_AD_STATS_TABLE . ' where adid = '.$adid) > 1) {
-	$ids = $wpdb->get_col("select id from " . GAN_AD_STATS_TABLE . ' where adid = '.$adid.' order by Impressions desc');
-	$flag = 0;
-	foreach ($ids as $id) {
-	  if ($flag) $wpdb->query("delete from " . GAN_AD_STATS_TABLE . ' where id = '.$id);
-	  else $flag = 1;
-	}
-      }
-    }	
-    foreach ($adids as $adid) {
-      if ($wpdb->get_var("select count(*) from " . GAN_AD_TABLE . ' where id = '.$adid) == 0) {
-	$wpdb->query("delete from " . GAN_AD_STATS_TABLE . ' where adid = '.$adid);
-      }
-    }
-    $merchids = $wpdb->get_col("select MerchantID from " . GAN_MERCH_STATS_TABLE . ' order by Impressions');
-    foreach ($merchids as $MerchantID) {
-      if ($wpdb->get_var("select count(*) from " . GAN_AD_TABLE . " where MerchantID = '".$MerchantID."'") == 0) {
-	$wpdb->query("delete from " . GAN_MERCH_STATS_TABLE . " where MerchantID = '".$MerchantID."'");
-      }
-    }
-  }
   static function get_GAN_data($where) {
     global $wpdb;
-    return $wpdb->get_results("SELECT id,Advertiser,LinkID,ImageWidth,LinkName,StartDate,EndDate,Side,Enabled FROM " . GAN_AD_TABLE . $where . ' Order by EndDate', 'ARRAY_A');
+    return $wpdb->get_results("SELECT id,MerchantID,LinkID,ImageWidth,LinkName,StartDate,EndDate,Enabled FROM " . GAN_AD_TABLE . $where . ' Order by EndDate', 'ARRAY_A');
   }
   static function get_GAN_row_count($where) {
     global $wpdb;
@@ -310,34 +341,74 @@ class GAN_Database {
   static function insert_GAN($Advertiser,$LinkID,$LinkName,$MerchandisingText,
 			     $AltText,$StartDate,$EndDate,$ClickserverLink,
 			     $ImageURL,$ImageHeight,$ImageWidth,$LinkURL,
-			     $PromoType,$MerchantID,$side,$enabled) {
+			     $PromoType,$MerchantID,$enabled) {
     global $wpdb;
-    $wpdb->insert(GAN_AD_TABLE,array('Advertiser' => $Advertiser,
-				     'LinkID' => $LinkID,
-				     'LinkName' => $LinkName,
-				     'MerchandisingText' => $MerchandisingText,
-				     'AltText' => $AltText,
-				     'StartDate' => $StartDate,
-				     'EndDate' => $EndDate,
-				     'ClickserverLink' => $ClickserverLink,
-				     'ImageURL' => $ImageURL,
-				     'ImageHeight' => $ImageHeight,
-				     'ImageWidth' => $ImageWidth,
-				     'LinkURL' => $LinkURL,
-				     'PromoType' => $PromoType,
-				     'MerchantID' => $MerchantID,
-				     'side' => $side,
-				     'enabled' => $enabled),
+    if (preg_match("/^[[:digit:]]/",$LinkID)) {$LinkID = 'J'.$LinkID;}
+    if (preg_match("/^[[:digit:]]/",$MerchantID)) {$MerchantID = 'K'.$MerchantID;}
+    if (GAN_Database::database_version() < 3.0) {
+      $wpdb->insert(GAN_AD_TABLE,array('Advertiser' => $Advertiser,
+				       'LinkID' => $LinkID,
+				       'LinkName' => $LinkName,
+				       'MerchandisingText' => $MerchandisingText,
+				       'AltText' => $AltText,
+				       'StartDate' => $StartDate,
+				       'EndDate' => $EndDate,
+				       'ClickserverLink' => $ClickserverLink,
+				       'ImageURL' => $ImageURL,
+				       'ImageHeight' => $ImageHeight,
+				       'ImageWidth' => $ImageWidth,
+				       'LinkURL' => $LinkURL,
+				       'PromoType' => $PromoType,
+				       'MerchantID' => $MerchantID,
+				       'enabled' => $enabled),
 				array("%s","%s","%s","%s","%s","%s","%s","%s",
-				      "%s","%s","%s","%s","%s","%s","%d","%d"));
-    GAN_Database::init_counts($wpdb->insert_id);
+				      "%s","%s","%s","%s","%s","%s","%d"));
+      GAN_Database::init_counts($wpdb->insert_id);
+    } else {
+      $wpdb->insert(GAN_AD_TABLE,array('LinkID' => $LinkID,
+				       'LinkName' => $LinkName,
+				       'MerchandisingText' => $MerchandisingText,
+				       'AltText' => $AltText,
+				       'StartDate' => $StartDate,
+				       'EndDate' => $EndDate,
+				       'ClickserverLink' => $ClickserverLink,
+				       'ImageURL' => $ImageURL,
+				       'ImageHeight' => $ImageHeight,
+				       'ImageWidth' => $ImageWidth,
+				       'LinkURL' => $LinkURL,
+				       'PromoType' => $PromoType,
+				       'MerchantID' => $MerchantID,
+				       'enabled' => $enabled),
+				array("%s","%s","%s","%s","%s","%s","%s",
+				      "%s","%s","%s","%s","%s","%s","%d"));
+      $c = $wpdb->get_var($wpdb->prepare('SELECT count(*) from '.
+				GAN_MERCH_TABLE.
+				    ' Where MerchantID = %s',$MerchantID));
+      if ($c == 0) {
+	$wpdb->insert(GAN_MERCH_TABLE,array('Advertiser' => $Advertiser,
+					    'MerchantID' => $MerchantID),
+			array("%s","%s"));
+      } else {
+	$oldadname = $wpdb->get_var($wpdb->prepare('SELECT Advertiser from '.
+					GAN_MERCH_TABLE.
+					' Where MerchantID = %s',$MerchantID));
+	if ($oldadname != $Advertiser) {
+	  $wpdb->update(GAN_MERCH_TABLE,array('Advertiser' => $Advertiser),
+					array('MerchantID' => $MerchantID),
+					"%s","%s");
+	}
+      }
+    }
   }
   static function update_GAN($id,$Advertiser,$LinkID,$LinkName,$MerchandisingText,
 			     $AltText,$StartDate,$EndDate,$ClickserverLink,
 			     $ImageURL,$ImageHeight,$ImageWidth,$LinkURL,
-			     $PromoType,$MerchantID,$side,$enabled) {
+			     $PromoType,$MerchantID,$enabled) {
     global $wpdb;
-    $wpdb->update(GAN_AD_TABLE,array('Advertiser' => $Advertiser,
+    if (preg_match("/^[[:digit:]]/",$LinkID)) {$LinkID = 'J'.$LinkID;}
+    if (preg_match("/^[[:digit:]]/",$MerchantID)) {$MerchantID = 'K'.$MerchantID;}
+    if (GAN_Database::database_version() < 3.0) {
+      $wpdb->update(GAN_AD_TABLE,array('Advertiser' => $Advertiser,
 				     'LinkID' => $LinkID,
 				     'LinkName' => $LinkName,
 				     'MerchandisingText' => $MerchandisingText,
@@ -351,16 +422,56 @@ class GAN_Database {
 				     'LinkURL' => $LinkURL,
 				     'PromoType' => $PromoType,
 				     'MerchantID' => $MerchantID,
-				     'side' => $side,
 				     'enabled' => $enabled),
 				array('id' => $id),
 				array("%s","%s","%s","%s","%s","%s","%s","%s",
-				      "%s","%s","%s","%s","%s","%s","%d","%d"),
+				      "%s","%s","%s","%s","%s","%s","%d"),
 				array("%d"));
+    } else {
+      $wpdb->update(GAN_AD_TABLE,array('LinkID' => $LinkID,
+				     'LinkName' => $LinkName,
+				     'MerchandisingText' => $MerchandisingText,
+				     'AltText' => $AltText,
+				     'StartDate' => $StartDate,
+				     'EndDate' => $EndDate,
+				     'ClickserverLink' => $ClickserverLink,
+				     'ImageURL' => $ImageURL,
+				     'ImageHeight' => $ImageHeight,
+				     'ImageWidth' => $ImageWidth,
+				     'LinkURL' => $LinkURL,
+				     'PromoType' => $PromoType,
+				     'MerchantID' => $MerchantID,
+				     'enabled' => $enabled),
+				array('id' => $id),
+				array("%s","%s","%s","%s","%s","%s","%s",
+				      "%s","%s","%s","%s","%s","%s","%d"),
+				array("%d"));
+      $c = $wpdb->get_var($wpdb->prepare('SELECT count(*) from '.
+				GAN_MERCH_TABLE.
+				    ' Where MerchantID = %s',$MerchantID));
+      if ($c == 0) {
+	$wpdb->insert(GAN_MERCH_TABLE,array('Advertiser' => $Advertiser,
+					    'MerchantID' => $MerchantID),
+			array("%s","%s"));
+      } else {
+	$oldadname = $wpdb->get_var($wpdb->prepare('SELECT Advertiser from '.
+					GAN_MERCH_TABLE.
+					' Where MerchantID = %s',$MerchantID));
+	if ($oldadname != $Advertiser) {
+	  $wpdb->update(GAN_MERCH_TABLE,array('Advertiser' => $Advertiser),
+					array('MerchantID' => $MerchantID),
+					"%s","%s");
+	}
+      }
+    }
   }
   static function get_merchants() {
     global $wpdb;
-    return $wpdb->get_results("SELECT distinct Advertiser,MerchantID from  " . GAN_AD_TABLE . " order by Advertiser", 'ARRAY_A');
+    if (GAN_Database::database_version() < 3.0) {
+      return $wpdb->get_results("SELECT distinct Advertiser,MerchantID from  " . GAN_AD_TABLE . " order by Advertiser", 'ARRAY_A');
+    } else {
+      return $wpdb->get_results("SELECT distinct Advertiser,MerchantID from  " . GAN_MERCH_TABLE . " order by Advertiser", 'ARRAY_A');
+    }
   }
   static function get_imagewidths() {
     global $wpdb;
@@ -376,7 +487,11 @@ class GAN_Database {
   }
   static function advertiser_count() {
     global $wpdb;
-    return $wpdb->get_var("SELECT count(distinct MerchantID) FROM " . GAN_AD_TABLE);
+    if (GAN_Database::database_version() < 3.0) {
+      return $wpdb->get_var("SELECT count(distinct MerchantID) FROM " . GAN_AD_TABLE);
+    } else {
+      return $wpdb->get_var("SELECT count(distinct MerchantID) FROM " . GAN_MERCH_TABLE);
+    }
   }
   static function width_count() {
     global $wpdb;
@@ -384,49 +499,97 @@ class GAN_Database {
   }
   static function top_merch() {
     global $wpdb;
-    return $wpdb->get_results("SELECT Impressions, MerchantID from ".
+    if (GAN_Database::database_version() < 3.0) {
+      return $wpdb->get_results("SELECT Impressions, MerchantID from ".
 				      GAN_MERCH_STATS_TABLE.
 				    " order by Impressions DESC LIMIT 5", 'ARRAY_A');
+    } else {
+      return $wpdb->get_results("SELECT Impressions, MerchantID from ".
+				      GAN_MERCH_TABLE.
+				    " order by Impressions DESC LIMIT 5", 'ARRAY_A');
+    }
   }
   static function max_merch_impressions() {
     global $wpdb;
-    return $wpdb->get_var("SELECT MAX(Impressions) from ".
+    if (GAN_Database::database_version() < 3.0) {
+      return $wpdb->get_var("SELECT MAX(Impressions) from ".
 				GAN_MERCH_STATS_TABLE);
+    } else {
+      return $wpdb->get_var("SELECT MAX(Impressions) from ".
+				GAN_MERCH_TABLE);
+    }
   }
   static function merch_statistics() {
     global $wpdb;
-    return $wpdb->get_row("SELECT MAX(Impressions) maximum, ".
+    if (GAN_Database::database_version() < 3.0) {
+      return $wpdb->get_row("SELECT MAX(Impressions) maximum, ".
 	  			 "MIN(Impressions) minimum, ".
 				 "AVG(Impressions) average, ".
 				 "STDDEV(Impressions) std_deviation, ".
 				 "VARIANCE(Impressions) variance FROM ".
 				GAN_MERCH_STATS_TABLE, 'ARRAY_A');
+    } else {
+      return $wpdb->get_row("SELECT MAX(Impressions) maximum, ".
+	  			 "MIN(Impressions) minimum, ".
+				 "AVG(Impressions) average, ".
+				 "STDDEV(Impressions) std_deviation, ".
+				 "VARIANCE(Impressions) variance FROM ".
+				GAN_MERCH_TABLE, 'ARRAY_A');
+    }
   }
   static function top_ads() {
     global $wpdb;
-    return $wpdb->get_results("SELECT Impressions, adid from ".
+    if (GAN_Database::database_version() < 3.0) {
+      return $wpdb->get_results("SELECT Impressions, adid from ".
 				    GAN_AD_STATS_TABLE.
 				    " order by Impressions DESC LIMIT 5", 'ARRAY_A');
+    } else {
+      return $wpdb->get_results("SELECT Impressions, id adid from ".
+				    GAN_AD_TABLE.
+				    " order by Impressions DESC LIMIT 5", 'ARRAY_A');
+    }
   }
   static function ad_statistics() {
     global $wpdb;
-    return $wpdb->get_row("SELECT MAX(Impressions) maximum, ".
+    if (GAN_Database::database_version() < 3.0) {
+      return $wpdb->get_row("SELECT MAX(Impressions) maximum, ".
 	  				            "MIN(Impressions) minimum, ".
 						    "AVG(Impressions) average, ".
 						    "STDDEV(Impressions) std_deviation, ".
 						    "VARIANCE(Impressions) variance FROM ".
 						GAN_AD_STATS_TABLE, 'ARRAY_A');
+    } else {
+      return $wpdb->get_row("SELECT MAX(Impressions) maximum, ".
+	  				            "MIN(Impressions) minimum, ".
+						    "AVG(Impressions) average, ".
+						    "STDDEV(Impressions) std_deviation, ".
+						    "VARIANCE(Impressions) variance FROM ".
+						GAN_AD_TABLE, 'ARRAY_A');
+    }
   }
   static function max_ad_impressions() {
     global $wpdb;
-    return $wpdb->get_var("SELECT MAX(Impressions) from ".
+    if (GAN_Database::database_version() < 3.0) {
+      return $wpdb->get_var("SELECT MAX(Impressions) from ".
 					 	GAN_AD_STATS_TABLE);
+    } else {
+      return $wpdb->get_var("SELECT MAX(Impressions) from ".
+					 	GAN_AD_TABLE);
+    }
   }
   static function get_merch_name($merchid) {
     global $wpdb;
-    $sql = $wpdb->prepare("SELECT DISTINCT Advertiser FROM ".GAN_AD_TABLE.
+    if (GAN_Database::database_version() < 3.0) {
+      $sql = $wpdb->prepare("SELECT DISTINCT Advertiser FROM ".GAN_AD_TABLE.
 			  " WHERE MerchantID = %s",$merchid);
-    return $wpdb->get_var($sql);
+    } else {
+      $sql = $wpdb->prepare("SELECT DISTINCT Advertiser FROM ".GAN_MERCH_TABLE.
+			  " WHERE MerchantID = %s",$merchid);
+    }
+    file_put_contents("php://stderr","*** GAN_Database::get_merch_name: sql = ".$sql."\n");
+    $adv = $wpdb->get_var($sql);
+    file_put_contents("php://stderr","*** GAN_Database::get_merch_name: adv = ".$adv."\n");
+    return $adv;
   }
   static function get_link_name($id) {
     global $wpdb;
@@ -442,37 +605,74 @@ class GAN_Database {
   }
   static function get_GAN_AD_VIEW_data($where) {
     global $wpdb;
-    return $wpdb->get_results("SELECT * FROM " . GAN_AD_STATS_TABLE_VIEW . $where . ' Order by Impressions', 'ARRAY_A');
+    if (GAN_Database::database_version() < 3.0) {
+      return $wpdb->get_results("SELECT * FROM " . GAN_AD_STATS_TABLE_VIEW . 
+				$where . ' Order by Impressions', 'ARRAY_A');
+    } else {
+      return $wpdb->get_results("SELECT id, id adid, LastRunDate, Impressions,".
+				" ImageHeight, ImageWidth, MerchantID,".
+				" enabled, StartDate, EndDate  FROM " . 
+				GAN_AD_TABLE . $where . 
+				' Order by Impressions', 'ARRAY_A');
+    }
   }
   static function get_GAN_AD_VIEW_row_count($where) {
     global $wpdb;
-    return $wpdb->get_var("SELECT count(*) FROM " . GAN_AD_STATS_TABLE_VIEW . $where);
+    if (GAN_Database::database_version() < 3.0) {
+      return $wpdb->get_var("SELECT count(*) FROM " . GAN_AD_STATS_TABLE_VIEW . $where);
+    } else {
+      return $wpdb->get_var("SELECT count(*) FROM " . GAN_AD_TABLE . $where);
+    }
   }
   static function zero_GAN_AD_STAT($id) {
     global $wpdb;
-    $sql = $wpdb->prepare("update " . GAN_AD_STATS_TABLE . " set Impressions=0,LastRunDate='1970-01-01' where id = %d",$id);
+    if (GAN_Database::database_version() < 3.0) {
+      $sql = $wpdb->prepare("update " . GAN_AD_STATS_TABLE . " set Impressions=0,LastRunDate='1970-01-01' where id = %d",$id);
+    } else {
+      $sql = $wpdb->prepare("update " . GAN_AD_TABLE . " set Impressions=0,LastRunDate='1970-01-01' where id = %d",$id);
+    }
     $wpdb->query($sql);
   }
   static function zero_GAN_AD_STATS($where) {
     global $wpdb;
-    $wpdb->query("update " . GAN_AD_STATS_TABLE . " set Impressions=0,LastRunDate='1970-01-01' ".$where);
+    if (GAN_Database::database_version() < 3.0) {
+      $wpdb->query("update " . GAN_AD_STATS_TABLE . " set Impressions=0,LastRunDate='1970-01-01' ".$where);
+    } else {
+      $wpdb->query("update " . GAN_AD_TABLE . " set Impressions=0,LastRunDate='1970-01-01' ".$where);
+    }
   }
   static function get_GAN_MERCH_STATS_data($where) {
     global $wpdb;
-    return $wpdb->get_results("SELECT * FROM " . GAN_MERCH_STATS_TABLE . $where . ' Order by Impressions', 'ARRAY_A');
+    if (GAN_Database::database_version() < 3.0) {
+      return $wpdb->get_results("SELECT * FROM " . GAN_MERCH_STATS_TABLE . $where . ' Order by Impressions', 'ARRAY_A');
+    } else {
+      return $wpdb->get_results("SELECT * FROM " . GAN_MERCH_TABLE . $where . ' Order by Impressions', 'ARRAY_A');
+    }
   }
   static function get_GAN_MERCH_STATS_row_count($where) {
     global $wpdb;
-    return $wpdb->get_var("SELECT count(*) FROM " . GAN_MERCH_STATS_TABLE . $where);
+    if (GAN_Database::database_version() < 3.0) {
+      return $wpdb->get_var("SELECT count(*) FROM " . GAN_MERCH_STATS_TABLE . $where);
+    } else {
+      return $wpdb->get_var("SELECT count(*) FROM " . GAN_MERCH_TABLE . $where);
+    }
   }
   static function zero_GAN_MERCH_STAT($id) {
     global $wpdb;
-    $sql = $wpdb->prepare("update " . GAN_MERCH_STATS_TABLE . " set Impressions=0,LastRunDate='1970-01-01'  where id = %d",$id);
+    if (GAN_Database::database_version() < 3.0) {
+      $sql = $wpdb->prepare("update " . GAN_MERCH_STATS_TABLE . " set Impressions=0,LastRunDate='1970-01-01'  where id = %d",$id);
+    } else {
+      $sql = $wpdb->prepare("update " . GAN_MERCH_TABLE . " set Impressions=0,LastRunDate='1970-01-01'  where id = %d",$id);
+    }
     $wpdb->query($sql);
   }
   static function zero_GAN_MERCH_STATS($where) {
     global $wpdb;
-    $wpdb->query("update " . GAN_MERCH_STATS_TABLE . " set Impressions=0,LastRunDate='1970-01-01' ".$where);
+    if (GAN_Database::database_version() < 3.0) {
+      $wpdb->query("update " . GAN_MERCH_STATS_TABLE . " set Impressions=0,LastRunDate='1970-01-01' ".$where);
+    } else {
+      $wpdb->query("update " . GAN_MERCH_TABLE . " set Impressions=0,LastRunDate='1970-01-01' ".$where);
+    }
   }
 }
 

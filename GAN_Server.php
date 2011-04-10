@@ -69,11 +69,6 @@ $instance = array( 'ulid' => $_GET['ulid'], 'maxads' => $_GET['maxads'] );
 
 if ((!isset($_GET['height']) || $_GET['height'] == "0") && 
     (!isset($_GET['width'])  || $_GET['width'] == "0") ) {
-	if ( $instance['ulid'] == 'GANright' ) {
-		$theside = 1;
-	} else {
-		$theside = 0;
-	}
 	$maxads = $instance['maxads'];
 	//echo "\n<!-- GAN_Widget::widget: \$maxads (1) = " . $maxads . " -->";
 	if (empty($maxads)) $maxads = 4;
@@ -110,11 +105,6 @@ if ((!isset($_GET['height']) || $_GET['height'] == "0") &&
 } else {	/* Serve image ads of the specificed size */
 	if (isset($_GET['height'])) {$instance['height'] = $_GET['height'];}
 	if (isset($_GET['width'])) {$instance['width'] = $_GET['width'];}
-	if ( $instance['ulid'] == 'GANright' ) {
-		$theside = 1;
-	} else {
-		$theside = 0;
-	}
 	$maxads = $instance['maxads'];
 	//echo "\n<!-- GAN_Widget::widget: \$maxads (1) = " . $maxads . " -->";
 	if (empty($maxads)) $maxads = 4;

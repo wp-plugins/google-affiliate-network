@@ -31,11 +31,6 @@ class GAN_Widget extends WP_Widget {
 
                 /* Extract ads from the database. */
                 global $wpdb;
-                if ( $instance['ulid'] == 'GANright' ) {
-                        $theside = 1;
-                } else {
-                        $theside = 0;
-                }
                 $maxads = $instance['maxads'];
                 //echo "\n<!-- GAN_Widget::widget: \$maxads (1) = " . $maxads . " -->";
                 if (empty($maxads)) $maxads = 4;
@@ -142,12 +137,12 @@ class GAN_Widget extends WP_Widget {
                         style="width:100%;" />
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id( 'ulid' ); ?>"><?php _e('Side:','gan'); ?></label>
+                <label for="<?php echo $this->get_field_id( 'ulid' ); ?>"><?php _e('Orientation:','gan'); ?></label>
                 <select id="<?php echo $this->get_field_id( 'ulid' ); ?>" 
                         name="<?php echo $this->get_field_name( 'ulid' ); ?>" 
                         class="widefat" style="width:100%;">
-                    <option value="GANright"  <?php if ( 'GANright' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('right','gan'); ?></option>
-                    <option value="GANleader" <?php if ( 'GANleader' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('leader','gan'); ?></option>
+                    <option value="GANright"  <?php if ( 'GANright' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('vertical','gan'); ?></option>
+                    <option value="GANleader" <?php if ( 'GANleader' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('horizontal','gan'); ?></option>
                 </select>
             </p>
             <p>
