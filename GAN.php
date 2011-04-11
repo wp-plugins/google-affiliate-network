@@ -993,7 +993,10 @@ class GAN_Plugin {
 	  if ( isset($_GET['saveoptions']) ) {
 	    $autoexpire = $_GET['gan_autoexpire'];
 	    update_option('wp_gan_autoexpire',$autoexpire);
-	    ?><div id="message"class="updated fade"><p>Options Saved</p></div><?php
+	    ?><div id="message"class="updated fade"><p><?php _e('Options Saved','gan'); ?></p></div><?php
+	  } else if ( isset($_GET['upgradedatabase']) ) {
+	    GAN_Database::upgrade_database();
+	    ?><div id="message"class="updated fade"><p><?php _e('Database Upgraded','gan'); ?></p></div><?php
 	  }
 	  /* Head of page, filter and screen options. */
 	  $autoexpire = get_option('wp_gan_autoexpire');
@@ -1015,8 +1018,10 @@ class GAN_Plugin {
 		</table>
 		<p>
 			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options','gan'); ?>">
-		</p>
-		</form></div><?php
+		</p><?php 
+		if (GAN_Database::database_version() < 3.0) {
+		  ?><p><?php _e('Your database needs to be upgraded.','gan'); ?>&nbsp;<input type="submit" name="upgradedatabase" class="button-primary" value="<?php _e('Upgrade Database','gan'); ?>"></p><?php
+		} ?></form></div><?php
 	}
 
 	/*

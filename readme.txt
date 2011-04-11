@@ -43,6 +43,9 @@ There are no Screenshots yet.
 
 == Changelog ==
 
+= 3.0 =
+* New database structure.
+
 = 2.4 =
 * Added in internationalization.
 * Improved the ad stats display (include additional database fields).
