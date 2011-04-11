@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version: google-affiliate-network 2.4 \n"
+"Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/google-affiliate-network\n"
-"POT-Creation-Date: 2011-04-02 18:33:51+00:00\n"
+"POT-Creation-Date: 2011-04-11 20:52:53+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,411 +12,35 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: GAN.php:86 GAN.php:196
-msgid "GAN Database"
+#: GAN_Widget.php:14
+msgid "Display Google Affiliate Network links"
 msgstr ""
 
-#: GAN.php:86
-msgid "GAN DB"
+#: GAN_Widget.php:20
+msgid "GAN Widget"
 msgstr ""
 
-#: GAN.php:90
-msgid "Add new GAN DB element"
-msgstr ""
-
-#: GAN.php:91
-msgid "Add new"
-msgstr ""
-
-#: GAN.php:94 GAN.php:782
-msgid "Ad Impression Statistics"
-msgstr ""
-
-#: GAN.php:95
-msgid "Ad Stats"
-msgstr ""
-
-#: GAN.php:98 GAN.php:923
-msgid "Merchant Impression Statistics"
-msgstr ""
-
-#: GAN.php:99
-msgid "Merchant Stats"
-msgstr ""
-
-#: GAN.php:102 GAN.php:1025
-msgid "Configure Options"
-msgstr ""
-
-#: GAN.php:103
-msgid "Configure"
-msgstr ""
-
-#: GAN.php:130 GAN.php:332 GAN.php:574 GAN.php:727 GAN.php:897 GAN.php:1016
-msgid "You do not have sufficient permissions to access this page."
-msgstr ""
-
-#: GAN.php:196
-msgid "Add New"
-msgstr ""
-
-#: GAN.php:200 GAN.php:318 GAN.php:786 GAN.php:888
-msgid "Filter"
-msgstr ""
-
-#: GAN.php:201 GAN.php:319 GAN.php:787 GAN.php:889 GAN.php:925 GAN.php:1008
-msgid "Rows per page"
-msgstr ""
-
-#: GAN.php:202 GAN.php:320 GAN.php:788 GAN.php:890 GAN.php:926 GAN.php:1009
-msgid "Apply"
-msgstr ""
-
-#: GAN.php:214 GAN.php:799 GAN.php:937
-msgid "&laquo;"
-msgstr ""
-
-#: GAN.php:215 GAN.php:800 GAN.php:938
-msgid "&raquo;"
-msgstr ""
-
-#: GAN.php:220 GAN.php:300 GAN.php:805 GAN.php:869 GAN.php:943 GAN.php:991
-msgid "Displaying %s&#8211;%s of %s"
-msgstr ""
-
-#: GAN.php:230
-msgid "Enable All"
-msgstr ""
-
-#: GAN.php:231
-msgid "Delete Expired"
-msgstr ""
-
-#: GAN.php:232
-msgid "Clean Stats Tables"
-msgstr ""
-
-#: GAN.php:236 GAN.php:246 GAN.php:819 GAN.php:828 GAN.php:957 GAN.php:962
-msgid "Advertiser"
-msgstr ""
-
-#: GAN.php:237 GAN.php:247 GAN.php:820 GAN.php:829
-msgid "Link ID"
-msgstr ""
-
-#: GAN.php:238 GAN.php:248 GAN.php:821 GAN.php:830
-msgid "Link Name"
-msgstr ""
-
-#: GAN.php:239 GAN.php:249 GAN.php:823 GAN.php:832
-msgid "Image Width"
-msgstr ""
-
-#: GAN.php:240 GAN.php:250
-msgid "Start Date"
-msgstr ""
-
-#: GAN.php:241 GAN.php:251 GAN.php:822 GAN.php:831
-msgid "End Date"
-msgstr ""
-
-#: GAN.php:242 GAN.php:252
-msgid "Side"
-msgstr ""
-
-#: GAN.php:243 GAN.php:253
-msgid "En?"
-msgstr ""
-
-#: GAN.php:273
-msgid "Delete"
-msgstr ""
-
-#: GAN.php:275
-msgid "Toggle&nbsp;Side"
-msgstr ""
-
-#: GAN.php:277
-msgid "Toggle&nbsp;Enabled"
-msgstr ""
-
-#: GAN.php:313 GAN.php:883 GAN.php:1005
-msgid "No matching entries found."
-msgstr ""
-
-#: GAN.php:334
-msgid "Add Element to GAN Database"
-msgstr ""
-
-#: GAN.php:381 GAN.php:624
-msgid "Advertiser:"
-msgstr ""
-
-#: GAN.php:387 GAN.php:630
-msgid "Link ID:"
-msgstr ""
-
-#: GAN.php:392 GAN.php:635
-msgid "Link Name:"
-msgstr ""
-
-#: GAN.php:398 GAN.php:641
-msgid "Merchandising Text:"
-msgstr ""
-
-#: GAN.php:403 GAN.php:646
-msgid "Alt Text:"
-msgstr ""
-
-#: GAN.php:408 GAN.php:651
-msgid "Start Date:"
-msgstr ""
-
-#: GAN.php:413 GAN.php:656
-msgid "End Date:"
-msgstr ""
-
-#: GAN.php:419 GAN.php:662
-msgid "Clickserver Link:"
-msgstr ""
-
-#: GAN.php:425 GAN.php:668
-msgid "ImageURL:"
-msgstr ""
-
-#: GAN.php:431 GAN.php:673
-msgid "ImageHeight:"
-msgstr ""
-
-#: GAN.php:437 GAN.php:679
-msgid "ImageWidth:"
-msgstr ""
-
-#: GAN.php:443 GAN.php:685
-msgid "LinkURL:"
-msgstr ""
-
-#: GAN.php:448 GAN.php:690
-msgid "PromoType:"
-msgstr ""
-
-#: GAN.php:453 GAN.php:695
-msgid "MerchantID:"
-msgstr ""
-
-#: GAN.php:459 GAN.php:701
-msgid "side:"
-msgstr ""
-
-#: GAN.php:462 GAN.php:704 GAN_ImageWidget.php:169 GAN_Widget.php:149
-msgid "right"
-msgstr ""
-
-#: GAN.php:463 GAN.php:705 GAN_ImageWidget.php:170 GAN_Widget.php:150
-msgid "leader"
-msgstr ""
-
-#: GAN.php:466 GAN.php:708
-msgid "enabled?"
-msgstr ""
-
-#: GAN.php:473
-msgid "Add Element"
-msgstr ""
-
-#: GAN.php:474 GAN.php:716
-msgid "Cancel"
-msgstr ""
-
-#: GAN.php:484
-msgid "Advertiser missing."
-msgstr ""
-
-#: GAN.php:488
-msgid "Link ID missing."
-msgstr ""
-
-#: GAN.php:492
-msgid "Link Name missing."
-msgstr ""
-
-#: GAN.php:496
-msgid "Start Date missing."
-msgstr ""
-
-#: GAN.php:502
-msgid "End Date missing."
-msgstr ""
-
-#: GAN.php:508
-msgid "Clickserver Link missing."
-msgstr ""
-
-#: GAN.php:512
-msgid "Merchant ID  missing."
-msgstr ""
-
-#: GAN.php:518
-msgid "Image Height should be a number."
-msgstr ""
-
-#: GAN.php:524
-msgid "Image Width should be a number."
-msgstr ""
-
-#: GAN.php:537
-msgid "The date %s is invalid: should be YYYY-MM-DD."
-msgstr ""
-
-#: GAN.php:546
-msgid "The date %s is invalid: month out of range, should be 1 to 12."
-msgstr ""
-
-#: GAN.php:550
-msgid "The date %s is invalid: date out of range, should be 1 to 31."
-msgstr ""
-
-#: GAN.php:618
-msgid "Edit Element to GAN Database"
-msgstr ""
-
-#: GAN.php:715
-msgid "Update Element"
-msgstr ""
-
-#: GAN.php:815 GAN.php:879 GAN.php:953 GAN.php:1001
-msgid "Zero Stats"
-msgstr ""
-
-#: GAN.php:824 GAN.php:833 GAN.php:958 GAN.php:963
-msgid "Impressions"
-msgstr ""
-
-#: GAN.php:825 GAN.php:834 GAN.php:959 GAN.php:964
-msgid "Last View"
-msgstr ""
-
-#: GAN.php:852 GAN.php:978
-msgid "Zero"
-msgstr ""
-
-#: GAN.php:1030
-msgid "Enable Autoexpire?"
-msgstr ""
-
-#: GAN.php:1035
-msgid "Yes"
-msgstr ""
-
-#: GAN.php:1039
-msgid "No"
-msgstr ""
-
-#: GAN.php:1042
-msgid "Save Options"
-msgstr ""
-
-#: GAN.php:1155
-msgid "Advertisers:"
-msgstr ""
-
-#: GAN.php:1159 GAN.php:1182
-msgid "All"
-msgstr ""
-
-#: GAN.php:1178
-msgid "Image Width:"
-msgstr ""
-
-#: GAN.php:1194
-msgid "GAN Database Stats"
-msgstr ""
-
-#: GAN.php:1195
-msgid "GAN Impression Stats"
-msgstr ""
-
-#: GAN.php:1209
-msgid "Total ads"
-msgstr ""
-
-#: GAN.php:1211
-msgid "Disabled"
-msgstr ""
-
-#: GAN.php:1213
-msgid "Advertisers"
-msgstr ""
-
-#: GAN.php:1215
-msgid "Widths"
-msgstr ""
-
-#: GAN.php:1227
-msgid "Merchants"
-msgstr ""
-
-#: GAN.php:1231 GAN.php:1285
-msgid "Maximum"
-msgstr ""
-
-#: GAN.php:1231 GAN.php:1285
-msgid "Minimum"
-msgstr ""
-
-#: GAN.php:1232 GAN.php:1286
-msgid "Average"
-msgstr ""
-
-#: GAN.php:1232 GAN.php:1286
-msgid "Std. Deviation"
-msgstr ""
-
-#: GAN.php:1233 GAN.php:1287
-msgid "Variance"
-msgstr ""
-
-#: GAN.php:1246
-msgid "Merchant"
-msgstr ""
-
-#: GAN.php:1247 GAN.php:1301
-msgid "Number of Impressions"
-msgstr ""
-
-#: GAN.php:1300
-msgid "Ad"
-msgstr ""
-
-#: GAN_ImageWidget.php:20
-msgid "Display Google Affiliate Network Image links"
-msgstr ""
-
-#: GAN_ImageWidget.php:26
-msgid "GAN Image Widget"
-msgstr ""
-
-#: GAN_ImageWidget.php:144 GAN_Widget.php:138
+#: GAN_Widget.php:133 GAN_ImageWidget.php:139
 msgid "Max ads:"
 msgstr ""
 
-#: GAN_ImageWidget.php:151
-msgid "Width:"
+#: GAN_Widget.php:140 GAN_ImageWidget.php:160
+msgid "Orientation:"
 msgstr ""
 
-#: GAN_ImageWidget.php:158
-msgid "Height:"
+#: GAN_Widget.php:144 GAN_ImageWidget.php:164
+msgid "vertical"
 msgstr ""
 
-#: GAN_ImageWidget.php:165 GAN_Widget.php:145
-msgid "Side:"
+#: GAN_Widget.php:145 GAN_ImageWidget.php:165
+msgid "horizontal"
 msgstr ""
 
-#: GAN_ImageWidget.php:174 GAN_Widget.php:154
+#: GAN_Widget.php:149 GAN_ImageWidget.php:169
 msgid "Ad frame width:"
 msgstr ""
 
-#: GAN_ImageWidget.php:181 GAN_Widget.php:161
+#: GAN_Widget.php:156 GAN_ImageWidget.php:176
 msgid "Ad frame height:"
 msgstr ""
 
@@ -432,10 +56,394 @@ msgid ""
 "from an iframe."
 msgstr ""
 
-#: GAN_Widget.php:14
-msgid "Display Google Affiliate Network links"
+#: GAN.php:88 GAN.php:196
+msgid "GAN Database"
 msgstr ""
 
-#: GAN_Widget.php:20
-msgid "GAN Widget"
+#: GAN.php:88
+msgid "GAN DB"
+msgstr ""
+
+#: GAN.php:92
+msgid "Add new GAN DB element"
+msgstr ""
+
+#: GAN.php:93
+msgid "Add new"
+msgstr ""
+
+#: GAN.php:96 GAN.php:757
+msgid "Ad Impression Statistics"
+msgstr ""
+
+#: GAN.php:97
+msgid "Ad Stats"
+msgstr ""
+
+#: GAN.php:100 GAN.php:898
+msgid "Merchant Impression Statistics"
+msgstr ""
+
+#: GAN.php:101
+msgid "Merchant Stats"
+msgstr ""
+
+#: GAN.php:104 GAN.php:1003
+msgid "Configure Options"
+msgstr ""
+
+#: GAN.php:105
+msgid "Configure"
+msgstr ""
+
+#: GAN.php:132 GAN.php:325 GAN.php:558 GAN.php:702 GAN.php:872 GAN.php:991
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: GAN.php:196
+msgid "Add New"
+msgstr ""
+
+#: GAN.php:200 GAN.php:311 GAN.php:761 GAN.php:863
+msgid "Filter"
+msgstr ""
+
+#: GAN.php:201 GAN.php:312 GAN.php:762 GAN.php:864 GAN.php:900 GAN.php:983
+msgid "Rows per page"
+msgstr ""
+
+#: GAN.php:202 GAN.php:313 GAN.php:763 GAN.php:865 GAN.php:901 GAN.php:984
+msgid "Apply"
+msgstr ""
+
+#: GAN.php:214 GAN.php:774 GAN.php:912
+msgid "&laquo;"
+msgstr ""
+
+#: GAN.php:215 GAN.php:775 GAN.php:913
+msgid "&raquo;"
+msgstr ""
+
+#: GAN.php:220 GAN.php:293 GAN.php:780 GAN.php:844 GAN.php:918 GAN.php:966
+msgid "Displaying %s&#8211;%s of %s"
+msgstr ""
+
+#: GAN.php:230
+msgid "Enable All"
+msgstr ""
+
+#: GAN.php:231
+msgid "Delete Expired"
+msgstr ""
+
+#: GAN.php:232
+msgid "Clean Stats Tables"
+msgstr ""
+
+#: GAN.php:236 GAN.php:245 GAN.php:794 GAN.php:803 GAN.php:932 GAN.php:937
+msgid "Advertiser"
+msgstr ""
+
+#: GAN.php:237 GAN.php:246 GAN.php:795 GAN.php:804
+msgid "Link ID"
+msgstr ""
+
+#: GAN.php:238 GAN.php:247 GAN.php:796 GAN.php:805
+msgid "Link Name"
+msgstr ""
+
+#: GAN.php:239 GAN.php:248 GAN.php:798 GAN.php:807
+msgid "Image Width"
+msgstr ""
+
+#: GAN.php:240 GAN.php:249
+msgid "Start Date"
+msgstr ""
+
+#: GAN.php:241 GAN.php:250 GAN.php:797 GAN.php:806
+msgid "End Date"
+msgstr ""
+
+#: GAN.php:242
+msgid "Enabled?"
+msgstr ""
+
+#: GAN.php:251
+msgid "En?"
+msgstr ""
+
+#: GAN.php:272
+msgid "Delete"
+msgstr ""
+
+#: GAN.php:274
+msgid "Toggle&nbsp;Enabled"
+msgstr ""
+
+#: GAN.php:306 GAN.php:858 GAN.php:980
+msgid "No matching entries found."
+msgstr ""
+
+#: GAN.php:327
+msgid "Add Element to GAN Database"
+msgstr ""
+
+#: GAN.php:372 GAN.php:606
+msgid "Advertiser:"
+msgstr ""
+
+#: GAN.php:378 GAN.php:612
+msgid "Link ID:"
+msgstr ""
+
+#: GAN.php:383 GAN.php:617
+msgid "Link Name:"
+msgstr ""
+
+#: GAN.php:389 GAN.php:623
+msgid "Merchandising Text:"
+msgstr ""
+
+#: GAN.php:394 GAN.php:628
+msgid "Alt Text:"
+msgstr ""
+
+#: GAN.php:399 GAN.php:633
+msgid "Start Date:"
+msgstr ""
+
+#: GAN.php:404 GAN.php:638
+msgid "End Date:"
+msgstr ""
+
+#: GAN.php:410 GAN.php:644
+msgid "Clickserver Link:"
+msgstr ""
+
+#: GAN.php:416 GAN.php:650
+msgid "ImageURL:"
+msgstr ""
+
+#: GAN.php:422 GAN.php:655
+msgid "ImageHeight:"
+msgstr ""
+
+#: GAN.php:428 GAN.php:661
+msgid "ImageWidth:"
+msgstr ""
+
+#: GAN.php:434 GAN.php:667
+msgid "LinkURL:"
+msgstr ""
+
+#: GAN.php:439 GAN.php:672
+msgid "PromoType:"
+msgstr ""
+
+#: GAN.php:444 GAN.php:677
+msgid "MerchantID:"
+msgstr ""
+
+#: GAN.php:450 GAN.php:683
+msgid "enabled?"
+msgstr ""
+
+#: GAN.php:457
+msgid "Add Element"
+msgstr ""
+
+#: GAN.php:458 GAN.php:691
+msgid "Cancel"
+msgstr ""
+
+#: GAN.php:468
+msgid "Advertiser missing."
+msgstr ""
+
+#: GAN.php:472
+msgid "Link ID missing."
+msgstr ""
+
+#: GAN.php:476
+msgid "Link Name missing."
+msgstr ""
+
+#: GAN.php:480
+msgid "Start Date missing."
+msgstr ""
+
+#: GAN.php:486
+msgid "End Date missing."
+msgstr ""
+
+#: GAN.php:492
+msgid "Clickserver Link missing."
+msgstr ""
+
+#: GAN.php:496
+msgid "Merchant ID  missing."
+msgstr ""
+
+#: GAN.php:502
+msgid "Image Height should be a number."
+msgstr ""
+
+#: GAN.php:508
+msgid "Image Width should be a number."
+msgstr ""
+
+#: GAN.php:521
+msgid "The date %s is invalid: should be YYYY-MM-DD."
+msgstr ""
+
+#: GAN.php:530
+msgid "The date %s is invalid: month out of range, should be 1 to 12."
+msgstr ""
+
+#: GAN.php:534
+msgid "The date %s is invalid: date out of range, should be 1 to 31."
+msgstr ""
+
+#: GAN.php:600
+msgid "Edit Element to GAN Database"
+msgstr ""
+
+#: GAN.php:690
+msgid "Update Element"
+msgstr ""
+
+#: GAN.php:790 GAN.php:854 GAN.php:928 GAN.php:976
+msgid "Zero Stats"
+msgstr ""
+
+#: GAN.php:799 GAN.php:808 GAN.php:933 GAN.php:938
+msgid "Impressions"
+msgstr ""
+
+#: GAN.php:800 GAN.php:809 GAN.php:934 GAN.php:939
+msgid "Last View"
+msgstr ""
+
+#: GAN.php:827 GAN.php:953
+msgid "Zero"
+msgstr ""
+
+#: GAN.php:996
+msgid "Options Saved"
+msgstr ""
+
+#: GAN.php:999
+msgid "Database Upgraded"
+msgstr ""
+
+#: GAN.php:1008
+msgid "Enable Autoexpire?"
+msgstr ""
+
+#: GAN.php:1013
+msgid "Yes"
+msgstr ""
+
+#: GAN.php:1017
+msgid "No"
+msgstr ""
+
+#: GAN.php:1020
+msgid "Save Options"
+msgstr ""
+
+#: GAN.php:1023
+msgid "Your database needs to be upgraded."
+msgstr ""
+
+#: GAN.php:1023
+msgid "Upgrade Database"
+msgstr ""
+
+#: GAN.php:1135
+msgid "Advertisers:"
+msgstr ""
+
+#: GAN.php:1139 GAN.php:1162
+msgid "All"
+msgstr ""
+
+#: GAN.php:1158
+msgid "Image Width:"
+msgstr ""
+
+#: GAN.php:1174
+msgid "GAN Database Stats"
+msgstr ""
+
+#: GAN.php:1175
+msgid "GAN Impression Stats"
+msgstr ""
+
+#: GAN.php:1189
+msgid "Total ads"
+msgstr ""
+
+#: GAN.php:1191
+msgid "Disabled"
+msgstr ""
+
+#: GAN.php:1193
+msgid "Advertisers"
+msgstr ""
+
+#: GAN.php:1195
+msgid "Widths"
+msgstr ""
+
+#: GAN.php:1207
+msgid "Merchants"
+msgstr ""
+
+#: GAN.php:1211 GAN.php:1265
+msgid "Maximum"
+msgstr ""
+
+#: GAN.php:1211 GAN.php:1265
+msgid "Minimum"
+msgstr ""
+
+#: GAN.php:1212 GAN.php:1266
+msgid "Average"
+msgstr ""
+
+#: GAN.php:1212 GAN.php:1266
+msgid "Std. Deviation"
+msgstr ""
+
+#: GAN.php:1213 GAN.php:1267
+msgid "Variance"
+msgstr ""
+
+#: GAN.php:1226
+msgid "Merchant"
+msgstr ""
+
+#: GAN.php:1227 GAN.php:1281
+msgid "Number of Impressions"
+msgstr ""
+
+#: GAN.php:1280
+msgid "Ad"
+msgstr ""
+
+#: GAN_ImageWidget.php:20
+msgid "Display Google Affiliate Network Image links"
+msgstr ""
+
+#: GAN_ImageWidget.php:26
+msgid "GAN Image Widget"
+msgstr ""
+
+#: GAN_ImageWidget.php:146
+msgid "Width:"
+msgstr ""
+
+#: GAN_ImageWidget.php:153
+msgid "Height:"
 msgstr ""
