@@ -172,7 +172,7 @@ proc insert_GAN {Advertiser LinkID LinkName MerchandisingText AltText
       puts "-- DB Result: $result"
     }
     set q [::mysql::query $DB "SELECT count(*) from $GAN_MERCH_TABLE Where MerchantID = [db_quote $MerchantID]"]
-    set c [::mysql::::mysql::fetch $q]
+    set c [::mysql::fetch $q]
     ::mysql::endquery $q
     if {$c == 0} {
       set sqlstatement "insert into $GAN_MERCH_TABLE (Advertiser, MerchantID) \
