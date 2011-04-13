@@ -20,7 +20,7 @@ margin: 0pt;
 }
 ul#GANleader li:before {display:none;}
 ul#GANleader li {
-display:inline;
+display:table-cell;
 text-align:left;
 padding:0px 3px;
 overflow:hidden;
@@ -52,7 +52,7 @@ list-style-image:none;
 list-style:none;
 display:compact;
 text-align:left;
-padding:0px 6px;
+padding:0px 12px;
 font-size: 9px;
 font-family: helvetica, sans-serif;
 font-weight: 900;
