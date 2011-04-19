@@ -181,8 +181,6 @@ class GAN_Plugin {
 	    GAN_Database::enableall($where);
 	  } else if ( isset($_GET['deleteexpired']) ) {
 	    GAN_Database::deleteexpired($wand);
-	  } else if ( isset($_GET['cleanstats']) ) {	// This can go
-	    GAN_Database::clean_stats_tables();
 	  }
 	  /* Handle pagenation. */
 	  if ( isset($_GET['pagenum']) ) {
@@ -232,9 +230,7 @@ class GAN_Plugin {
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
 	<input type="submit" name="enableall" class="button" value="<?php _e('Enable All','gan'); ?>" />
-	<input type="submit" name="deleteexpired" class="button" value="<?php _e('Delete Expired','gan'); ?>" />
-	<?php /* This can go */ ?>
-	<input type="submit" name="cleanstats" class="button" value="<?php _e('Clean Stats Tables','gan'); ?>" /></div>
+	<input type="submit" name="deleteexpired" class="button" value="<?php _e('Delete Expired','gan'); ?>" /></div>
 	<br class="clear" /></div>
 	     <table class="widefat page fixed" cellspacing="2">
 		<thead>
@@ -303,9 +299,7 @@ class GAN_Plugin {
 	); echo $page_links_text; ?></div>
 	<div class="alignleft actions">
 	<input type="submit" name="enableall" class="button" value="Enable All" />
-	<input type="submit" name="deleteexpired" class="button" value="Delete Expired" />
-	<?php /* This can go */ ?>
-	<input type="submit" name="cleanstats" class="button" value="Clean Stats Tables" /></div>
+	<input type="submit" name="deleteexpired" class="button" value="Delete Expired" /></div>
 	<br class="clear" /></div></form>
 	<?php
 	  } else {
