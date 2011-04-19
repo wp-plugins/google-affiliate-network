@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 3.0
+ * Version: 3.1
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -93,6 +93,10 @@ class GAN_Plugin {
 		    __('Add new','gan'), 
 		    'manage_options', 'gan-database-add-element', 
 		    array($this,'admin_add_element'));
+	  add_submenu_page( 'gan-database-page', __('Add new GAN DB elements in bulk','gan'), 
+		    __('Add new bulk','gan'), 
+		    'manage_options', 'gan-database-add-element-bulk', 
+		    array($this,'admin_add_element_bulk'));
 	  add_submenu_page( 'gan-database-page', __('Ad Impression Statistics','gan'),
 	  	    __('Ad Stats','gan'),
 		    'manage_options', 'gan-database-ad-impstats',
@@ -177,7 +181,7 @@ class GAN_Plugin {
 	    GAN_Database::enableall($where);
 	  } else if ( isset($_GET['deleteexpired']) ) {
 	    GAN_Database::deleteexpired($wand);
-	  } else if ( isset($_GET['cleanstats']) ) {
+	  } else if ( isset($_GET['cleanstats']) ) {	// This can go
 	    GAN_Database::clean_stats_tables();
 	  }
 	  /* Handle pagenation. */
@@ -229,6 +233,7 @@ class GAN_Plugin {
 	<div class="alignleft actions">
 	<input type="submit" name="enableall" class="button" value="<?php _e('Enable All','gan'); ?>" />
 	<input type="submit" name="deleteexpired" class="button" value="<?php _e('Delete Expired','gan'); ?>" />
+	<?php /* This can go */ ?>
 	<input type="submit" name="cleanstats" class="button" value="<?php _e('Clean Stats Tables','gan'); ?>" /></div>
 	<br class="clear" /></div>
 	     <table class="widefat page fixed" cellspacing="2">
@@ -299,6 +304,7 @@ class GAN_Plugin {
 	<div class="alignleft actions">
 	<input type="submit" name="enableall" class="button" value="Enable All" />
 	<input type="submit" name="deleteexpired" class="button" value="Delete Expired" />
+	<?php /* This can go */ ?>
 	<input type="submit" name="cleanstats" class="button" value="Clean Stats Tables" /></div>
 	<br class="clear" /></div></form>
 	<?php
@@ -461,6 +467,69 @@ class GAN_Plugin {
 	  </form></div><?php
 	}
 
+        /* Add elements in bulk (from a TSV file) to ad database */
+	function admin_add_element_bulk() {
+	  if ( isset($_GET['Cancel']) ) {
+	    $this->admin_database_page();
+	    return;
+	  }
+	  //must check that the user has the required capability 
+	  if (!current_user_can('manage_options'))
+	  {
+	    wp_die( __('You do not have sufficient permissions to access this page.','gan') );
+	  }
+	  if ( isset($_FILES['gan-tsv-file']) ) {
+	    $fp = fopen($_FILES['gan-tsv-file']['tmp_name'], 'r');
+	    $count = 0;
+	    ?><div id="message"class="updated fade"><p><?php
+	    while ($line = fgets($fp)) {
+	      $line = trim($line,"\n");
+	      if (preg_match('/^"Id"[[:space:]]*"Name"/',$line)) {break;}
+	    }
+            while ($line = fgets($fp)) {
+	      $line = trim($line,"\n");
+	      $rawelts = explode("\t",$line);
+	      if (count($rawelts) < 16) {continue;}
+	      $Advertizer = $this->tsv_unquote($rawelts[3]);
+	      $LinkID     = $this->tsv_unquote($rawelts[0]);
+	      $LinkName   = $this->tsv_unquote($rawelts[1]);
+	      $MerchandisingText = $this->tsv_unquote($rawelts[15]);
+	      $AltText    = '';
+	      $StartDate = $this->fixdate(trim($this->tsv_unquote($rawelts[8])));
+	      $EndDate = $this->fixdate(trim($this->tsv_unquote($rawelts[9])));
+	      if ($EndDate == 'none' || $EndDate == '') {$EndDate = "2099-12-31";}
+	      $ClickserverURL = $this->tsv_unquote($rawelts[4]);
+	      $ImageURL = $this->tsv_unquote($rawelts[5]);
+	      $width = 0;
+	      $height = 0;
+	      if (preg_match('/^"([[:digit:]]*)x([[:digit:]]*)"$/',$rawelts[6],$matches) ) {
+		$width = $matches[1];
+		$height = $matches[2];
+	      }
+	      $LinkURL = '';
+	      $PromoType = $this->tsv_unquote($rawelts[12]);
+	      $MerchantID = $this->tsv_unquote($rawelts[2]);
+	      if (preg_match("/^[[:digit:]]/",$LinkID)) {$LinkID = 'J'.$LinkID;}
+	      if (preg_match("/^[[:digit:]]/",$MerchantID)) {$MerchantID = 'K'.$MerchantID;}
+	      GAN_Database::insert_GAN($Advertizer,$LinkID,$LinkName,
+					$MerchandisingText,$AltText,$StartDate,
+					$EndDate,$ClickserverURL,$ImageURL,
+					$height,$width,$LinkURL,$PromoType,
+					$MerchantID,1);
+	      $count++;
+	      printf(__('Inserted %s (%s) into ad database.','gan'),$LinkID,$LinkName); ?><br /><?php
+	    }
+	    fclose($fp);
+	    printf(__('Inserted %d ads into ad database.','gan'),$count); ?></p></div><?php
+	  }
+	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Elements in bulk to GAN Database','gan'); ?></h2>
+          <form method="post" action="<?php echo admin_url('admin.php').'?page=gan-database-add-element-bulk'; ?>" enctype="multipart/form-data" >
+	    <p><label for="gan-tsv-file"><?php _e('Select TSV File:','gan'); ?></label><input type='file' name="gan-tsv-file" size="40" /></p>
+	    <p><input type="submit" name="bulkadd" class="button-primary" value="<?php _e('Upload file','gan'); ?>" /></p>
+	  </form></div><?php
+	}
+
+
 	/* Check for a validly filled in add or edit ad form */
 	function add_element_checkvalid() {
 	  $result = true;
@@ -511,6 +580,26 @@ class GAN_Plugin {
 	  return $result;
 	}
 
+	function fixdate ($date) {
+	  if (preg_match('@^([[:digit:]]*)/([[:digit:]]*)/([[:digit:]]*)$@',$date,$matches)) {
+	    $m = $matches[1];
+	    $d = $matches[2];
+	    $y = $matches[3];
+	    if (strlen($y) < 4) {$y = '20'.$y;}
+	    return sprintf('%04d-%02d-%02d',$y,$m,$d);
+	  } else {
+	    return $date;
+	  }
+	}
+
+	function tsv_unquote ($s) {
+	  if (preg_match('/^"(.*)"$/',$s,$matches)) {
+	    $q = $matches[1];
+	    return preg_replace('/""/','"',$q);
+	  } else {
+	    return $s;
+	  }
+	}
 	/*
 	 * Validate dates
 	 */
@@ -1017,7 +1106,7 @@ class GAN_Plugin {
 			?> /><?php _e('No','gan'); ?></td></tr>
 		</table>
 		<p>
-			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options','gan'); ?>">
+			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options','gan'); ?>" />
 		</p><?php 
 		if (GAN_Database::database_version() < 3.0) {
 		  ?><p><?php _e('Your database needs to be upgraded.','gan'); ?>&nbsp;<input type="submit" name="upgradedatabase" class="button-primary" value="<?php _e('Upgrade Database','gan'); ?>"></p><?php
