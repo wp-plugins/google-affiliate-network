@@ -80,7 +80,9 @@ class GAN_Plugin {
 	/* Initialize our widgets */
 	function widgets_init() {
 	  register_widget( 'GAN_Widget' );        /* Text links */
+	  add_shortcode('GAN_Text', array('GAN_Widget','shortcode'));
 	  register_widget( 'GAN_ImageWidget' );   /* Image links */
+	  add_shortcode('GAN_Image', array('GAN_ImageWidget','shortcode'));
 	}
 
 	/* Add in our Admin Menu */

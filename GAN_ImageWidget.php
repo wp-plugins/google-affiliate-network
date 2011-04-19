@@ -61,6 +61,39 @@ class GAN_ImageWidget extends WP_Widget {
                 echo $after_widget;
         }
 
+	static function shortcode ($atts, $content=null, $code="") {
+	  extract( shortcode_atts ( array(
+	    'orientation' => 'vertical',
+	    'maxads' => 4,
+	    'width' => 120, 
+	    'height' => 60,
+	    'ifwidth' => '',
+	    'ifheight' => ''), $atts ) );
+	  
+	  switch ($orientation) {
+	    case 'horizontal': $ulid = 'GANleader'; break;
+	    case 'vertical': 
+	    default:           $ulid = 'GANright'; break;
+	  }
+	  $framew=''; $frameh='';
+	  if ( $ulid == 'GANleader' ) {
+	    $framew=' width="100%" ';
+	  }
+	  if ($ifwidth > 0) {
+	    $framew=' width="'.$ifwidth.'" ';
+	  }
+	  if ($ifheight > 0) {
+	    $frameh=' height="'.$ifheight.'" ';
+	  }
+	  $frameattrs=$framew.$frameh;
+	  $result  = '<iframe scrolling="auto" class="'.$ulid.'" '.
+			'src="'.add_query_arg(
+				array('ulid' => $ulid, 'maxads' => $maxads,
+				      'height' => $height, 'width' => $width),
+				GAN_PLUGIN_URL.'/GAN_Server.php').'" '.
+			'frameborder="0" '.$frameattrs.'></iframe>';
+	  return $result;
+	}
 	
 	/**
 	 * How to display the widget on the screen. (Non IFrame version)
