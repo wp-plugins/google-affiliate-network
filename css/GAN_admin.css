@@ -22,6 +22,10 @@
 	background: transparent url(../images/GANicons32.png) no-repeat -269px -5px;
 }
 
+#icon-gan-help {
+	background: transparent url(../images/GANicons32.png) no-repeat -315px -5px;
+}
+
 table.ganstats {
 width:100%;
 font-size:200%;

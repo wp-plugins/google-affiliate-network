@@ -111,6 +111,10 @@ class GAN_Plugin {
 			    __('Configure','gan'),'manage_options', 
 			    'gan-database-options',
 			    array($this,'admin_configure_options'));
+	  add_submenu_page( 'gan-database-page', __('Help Using the Google Affliate Network Plugin','gan'),
+	  		    __('Help','gan'),'read',
+			    'gan-database-help',
+			    array($this,'admin_help')); 
 	}
 
 	/* Front side head action: load our style sheet */
@@ -197,7 +201,7 @@ class GAN_Plugin {
 	  }
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
-	  ?><div class="wrap"><div id="icon-gan-db" class="icon32"><br /></div><h2><?php _e('GAN Database','gan'); ?> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element"; ?>" class="button add-new-h2"><?php _e('Add New','gan'); ?></a></h2>
+	  ?><div class="wrap"><div id="icon-gan-db" class="icon32"><br /></div><h2><?php _e('GAN Database','gan'); ?> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element"; ?>" class="button add-new-h2"><?php _e('Add New','gan'); ?></a> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element-bulk"; ?>" class="button add-new-h2"><?php _e('Add New in Bulk','gan'); ?></a></h2>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-page" />
 		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
@@ -521,7 +525,10 @@ class GAN_Plugin {
 	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Elements in bulk to GAN Database','gan'); ?></h2>
           <form method="post" action="<?php echo admin_url('admin.php').'?page=gan-database-add-element-bulk'; ?>" enctype="multipart/form-data" >
 	    <p><label for="gan-tsv-file"><?php _e('Select TSV File:','gan'); ?></label><input type='file' name="gan-tsv-file" size="40" /></p>
-	    <p><input type="submit" name="bulkadd" class="button-primary" value="<?php _e('Upload file','gan'); ?>" /></p>
+	    <p><input type="submit" name="bulkadd" class="button-primary" value="<?php _e('Upload file','gan'); ?>" />
+		<a href="<?php $this->cancel_page_query(); ?>"><?php _e('Cancel','gan'); ?></a>
+	    </p>
+	    <?php $this->hidden_filter_fields(); ?>
 	  </form></div><?php
 	}
 
@@ -1107,6 +1114,10 @@ class GAN_Plugin {
 		if (GAN_Database::database_version() < 3.0) {
 		  ?><p><?php _e('Your database needs to be upgraded.','gan'); ?>&nbsp;<input type="submit" name="upgradedatabase" class="button-primary" value="<?php _e('Upgrade Database','gan'); ?>"></p><?php
 		} ?></form></div><?php
+	}
+
+	function admin_help () {
+	  require_once(GAN_DIR.'/GAN_Help.php');
 	}
 
 	/*
