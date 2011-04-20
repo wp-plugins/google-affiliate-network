@@ -43,6 +43,11 @@ There are no Screenshots yet.
 
 == Changelog ==
 
+= 3.1 =
+* Add new in bulk (from TSV file) 
+* Removed extrainous (obsolute) button 
+* Added short codes 
+
 = 3.0 =
 * New database structure.
 * Minor changes to the stylesheets.
