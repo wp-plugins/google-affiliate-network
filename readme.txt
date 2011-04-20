@@ -47,6 +47,7 @@ There are no Screenshots yet.
 * Add new in bulk (from TSV file) 
 * Removed extrainous (obsolute) button 
 * Added short codes 
+* Added help page
 
 = 3.0 =
 * New database structure.
