@@ -1,3 +1,8 @@
+#gan_donate {
+	vertical-align: text-top;
+	float: right;
+}
+
 #icon-gan-db {
         background: transparent url(../images/GANicons32.png) no-repeat -12px -5px;
 }

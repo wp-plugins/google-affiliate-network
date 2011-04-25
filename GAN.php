@@ -117,6 +117,11 @@ class GAN_Plugin {
 			    array($this,'admin_help')); 
 	}
 
+
+	function InsertPayPalDonateButton() {
+	  ?><div id="gan_donate"><form action="https://www.paypal.com/cgi-bin/webscr" method="post"><?php _e('Donate to Goggle Affiliate Network plugin software effort.','gan'); ?><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="B34MW48SVGBYE"><input type="image" src="https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_US/i/scr/pixel.gif" width="1" height="1"></form></div><br clear="all" /><?php
+	}
+
 	/* Front side head action: load our style sheet */
 	function wp_head() {
 	  $path = GAN_PLUGIN_CSS_URL . '/GAN.css';
@@ -202,6 +207,7 @@ class GAN_Plugin {
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
 	  ?><div class="wrap"><div id="icon-gan-db" class="icon32"><br /></div><h2><?php _e('GAN Database','gan'); ?> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element"; ?>" class="button add-new-h2"><?php _e('Add New','gan'); ?></a> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element-bulk"; ?>" class="button add-new-h2"><?php _e('Add New in Bulk','gan'); ?></a></h2>
+	    <?php $this->InsertPayPalDonateButton(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-page" />
 		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
@@ -331,6 +337,7 @@ class GAN_Plugin {
 	    wp_die( __('You do not have sufficient permissions to access this page.','gan') );
 	  }
 	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Element to GAN Database','gan'); ?></h2><?php
+          $this->InsertPayPalDonateButton();	    
 	  $defaults = array( 'Advertiser' => '', 'LinkID' => '', 'LinkName' => '' ,
 			     'MerchandisingText' => '', 'AltText' => '', 
 			     'StartDate' => '', 'EndDate' => '', 
@@ -523,6 +530,7 @@ class GAN_Plugin {
 	    printf(__('Inserted %d ads into ad database.','gan'),$count); ?></p></div><?php
 	  }
 	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Elements in bulk to GAN Database','gan'); ?></h2>
+	  <?php $this->InsertPayPalDonateButton(); ?>
           <form method="post" action="<?php echo admin_url('admin.php').'?page=gan-database-add-element-bulk'; ?>" enctype="multipart/form-data" >
 	    <p><label for="gan-tsv-file"><?php _e('Select TSV File:','gan'); ?></label><input type='file' name="gan-tsv-file" size="40" /></p>
 	    <p><input type="submit" name="bulkadd" class="button-primary" value="<?php _e('Upload file','gan'); ?>" />
@@ -690,6 +698,7 @@ class GAN_Plugin {
 	    return true;
 	  }
 	  ?><div class="wrap"><div id="icon-gan-edit-db" class="icon32"><br /></div><h2><?php _e('Edit Element to GAN Database','gan'); ?></h2>
+	  <?php $this->InsertPayPalDonateButton(); ?>
 	  <form name="edit-GAN-element" method="GET" action="<?php echo admin_url('admin.php'); ?>">
 	  <input type="hidden" name="page" value="gan-database-page">
 	  <input type="hidden" value="<?php echo $id; ?>" name="id">
@@ -847,6 +856,7 @@ class GAN_Plugin {
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
 	  ?><div class="wrap"><div id="icon-gan-ad-imp" class="icon32"><br /></div><h2><?php _e('Ad Impression Statistics','gan'); ?></h2>
+	    <?php $this->InsertPayPalDonateButton(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-ad-impstats" />
 		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
@@ -988,6 +998,7 @@ class GAN_Plugin {
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
 	  ?><div class="wrap"><div id="icon-gan-merch-imp" class="icon32"><br /></div><h2><?php _e('Merchant Impression Statistics','gan'); ?></h2>
+	    <?php $this->InsertPayPalDonateButton(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<label for="gan-rows-per-page"><?php _e('Rows per page','gan'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
 	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply','gan'); ?>" /></form><?php
@@ -1093,6 +1104,7 @@ class GAN_Plugin {
 	  /* Head of page, filter and screen options. */
 	  $autoexpire = get_option('wp_gan_autoexpire');
 	  ?><div class="wrap"><div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?></h2>
+	    <?php $this->InsertPayPalDonateButton(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 	    	<input type="hidden" name="page" value="gan-database-options" />
 		<table class="form-table">
