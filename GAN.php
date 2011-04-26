@@ -889,7 +889,10 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-ad-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats','gan'); ?>" /></div>
+	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats','gan'); ?>" />
+	<a href="<?php echo add_query_arg(array('mode' => 'ad','where' => $where),
+				     GAN_PLUGIN_URL.'/GAN_ExportStats.php'); ?>"
+	   class="button-primary"><?php _e('Download CSV','gan'); ?></a></div>
 	<br class="clear" /></div>
 	     	     <table class="widefat page fixed" cellspacing="2">
 		<thead>
@@ -953,7 +956,10 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-ad-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats','gan'); ?>" /></div>
+	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats','gan'); ?>" />
+	<a href="<?php echo add_query_arg(array('mode' => 'ad','where' => $where),
+				     GAN_PLUGIN_URL.'/GAN_ExportStats.php'); ?>"
+	   class="button-primary"><?php _e('Download CSV','gan'); ?></a></div>
 	<br class="clear" /></div></form>
 	<?php
 	  } else {
@@ -1028,7 +1034,10 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-merch-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats','gan'); ?>" /></div>
+	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats','gan'); ?>" />
+	<a href="<?php echo add_query_arg(array('mode' => 'merch'),
+				     GAN_PLUGIN_URL.'/GAN_ExportStats.php'); ?>"
+	   class="button-primary"><?php _e('Download CSV','gan'); ?></a></div>
 	<br class="clear" /></div>
 	     	     <table class="widefat page fixed" cellspacing="2">
 		<thead>
@@ -1076,7 +1085,10 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-merch-impstats" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
-	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats','gan'); ?>" /></div>
+	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats','gan'); ?>" />
+	<a href="<?php echo add_query_arg(array('mode' => 'merch'),
+				     GAN_PLUGIN_URL.'/GAN_ExportStats.php'); ?>"
+	   class="button-primary"><?php _e('Download CSV','gan'); ?></a></div>
 	<br class="clear" /></div></form>
 	<?php
 	  } else {

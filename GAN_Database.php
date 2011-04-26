@@ -586,9 +586,9 @@ class GAN_Database {
       $sql = $wpdb->prepare("SELECT DISTINCT Advertiser FROM ".GAN_MERCH_TABLE.
 			  " WHERE MerchantID = %s",$merchid);
     }
-    file_put_contents("php://stderr","*** GAN_Database::get_merch_name: sql = ".$sql."\n");
+    //file_put_contents("php://stderr","*** GAN_Database::get_merch_name: sql = ".$sql."\n");
     $adv = $wpdb->get_var($sql);
-    file_put_contents("php://stderr","*** GAN_Database::get_merch_name: adv = ".$adv."\n");
+    //file_put_contents("php://stderr","*** GAN_Database::get_merch_name: adv = ".$adv."\n");
     return $adv;
   }
   static function get_link_name($id) {
