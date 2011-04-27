@@ -1,23 +1,24 @@
 === Google Affiliate Network ===
 Contributors: Robert Heller
 Donate link: http://www.deepsoft.com/GAN
-Tags: gan,affiliate,widget,google,plugin,ads
+Tags: gan,affiliate,widget,google,plugin,ads,shortcode
 Requires at least: 2.7
-Tested up to: 3.1
-Stable tag: 3.1
+Tested up to: 3.1.1
+Stable tag: 3.2
 
-A Widget plugin to display Google Affiliate Network ads.  Both text
-links and image ads can be displayed.  The widgets are parameterized.
+A Widget / shortcode plugin to display Google Affiliate Network ads. 
+Both text links and image ads can be displayed.  The widgets and
+shortcodes are parameterized.
 
 == Description ==
 
-A Widget plugin to display Google Affiliate Network ads.  Both text
-links and image ads can be displayed.  The widgets are parameterized.
-There is backend access to the database table of links.  Links can be
-added and/or edited by hand.  A Tcl script is included to insert
-E-Mailed links (link subscriptions).  The Widgets are parameterized for
-both sidebar display (vertical layout) as well as leader/footer display
-(horizontal layout).
+A Widget / shortcode plugin to display Google Affiliate Network ads. 
+Both text links and image ads can be displayed.  The widgets are
+parameterized. There is backend access to the database table of links. 
+Links can be added and/or edited by hand.  A Tcl script is included to
+insert E-Mailed links (link subscriptions).  The Widgets and shortcodes
+are parameterized for both sidebar display (vertical layout) as well as
+leader/footer display (horizontal layout).
 
 == Installation ==
 
@@ -25,7 +26,8 @@ Unpack the plugin archive under the wp-content/plugins directory and
 then activate the plugin.
 
 You can then add the widgets to your sidebar(s) and start adding in
-links with the database manager.
+links with the database manager. You can also use the shortcodes to
+insert ad frames into posts or pages.
 
 The link subscription handling script should be copied somewhere and
 edited as needed (database access information).  You'll need to have Tcl
@@ -42,6 +44,10 @@ There are no Frequently Asked Questions yet.
 There are no Screenshots yet.
 
 == Changelog ==
+
+= 3.2 =
+* Added donate button
+* Added stats download (as CSV)
 
 = 3.1 =
 * Add new in bulk (from TSV file) 
