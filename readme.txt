@@ -4,7 +4,7 @@ Donate link: http://www.deepsoft.com/GAN
 Tags: gan,affiliate,widget,google,plugin,ads,shortcode
 Requires at least: 2.7
 Tested up to: 3.1.1
-Stable tag: 3.2
+Stable tag: 3.2.1
 
 A Widget / shortcode plugin to display Google Affiliate Network ads. 
 Both text links and image ads can be displayed.  The widgets and
@@ -44,6 +44,9 @@ There are no Frequently Asked Questions yet.
 There are no Screenshots yet.
 
 == Changelog ==
+
+= 3.2.1 =
+* Add target="_top" to links.
 
 = 3.2 =
 * Added donate button

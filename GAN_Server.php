@@ -92,7 +92,7 @@ if ((!isset($_GET['height']) || $_GET['height'] == "0") &&
 		  $GANAd = GAN_Database::get_ad($adlist[0]);
 		  GAN_Database::bump_counts($adlist[0]);
 		  ?><li style="margin:0px;padding:0px"><a href="<?php echo $GANAd['ClickserverLink']; 
-		  ?>"><?php echo $GANAd['LinkName']; 
+		  ?>" target="_top"><?php echo $GANAd['LinkName']; 
 		  ?></a> <?php echo $GANAd['MerchandisingText']; 
 		  ?></li><?php
 		  $numads++;
@@ -123,7 +123,7 @@ if ((!isset($_GET['height']) || $_GET['height'] == "0") &&
 		  $GANAd = GAN_Database::get_ad($adlist[0]);
 		  GAN_Database::bump_counts($adlist[0]);
 		  ?><li style="margin:0px;padding:0px"><a href="<?php echo $GANAd['ClickserverLink']; 
-		  ?>"><img src="<?php echo $GANAd['ImageURL']; ?>"
+		  ?>" target="_top"><img src="<?php echo $GANAd['ImageURL']; ?>"
 		      width="<?php echo $GANAd['ImageWidth']; ?>"
 		      height="<?php echo $GANAd['ImageHeight']; ?>"
 		      alt="<?php echo $GANAd['AltText']; ?>">
