@@ -45,6 +45,9 @@ There are no Screenshots yet.
 
 == Changelog ==
 
+= 3.3
+* Add target option to widgets and shortcodes.
+
 = 3.2.1 =
 * Add target="_top" to links.
 

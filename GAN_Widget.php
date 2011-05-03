@@ -95,7 +95,8 @@ class GAN_Widget extends WP_Widget {
 		echo '<iframe scrolling="auto" class="'.$instance['ulid'].'" '.
 			'src="'.add_query_arg(
 				array('ulid' => $instance['ulid'],
-				      'maxads' => $instance['maxads']),
+				      'maxads' => $instance['maxads'],
+				      'target' => $instance['target']),
 				GAN_PLUGIN_URL.'/GAN_Server.php').'" '.
 			'frameborder="0" '.$ifwidth.$ifheight.'></iframe>';
 
@@ -108,14 +109,20 @@ class GAN_Widget extends WP_Widget {
 	    'orientation' => 'vertical',
 	    'maxads' => 4,
 	    'ifwidth' => '',
-	    'ifheight' => ''), $atts ) );
+	    'ifheight' => '',
+	    'target' => 'same'), $atts ) );
 	  
 	  switch ($orientation) {
 	    case 'horizontal': $ulid = 'GANleader'; break;
 	    case 'vertical': 
 	    default:           $ulid = 'GANright'; break;
 	  }
-	  $framew=''; $frameh='';
+	  switch ($target) {
+	    case 'new' : $thetarget='_blank'; break;
+	    case 'same': 
+	    default:	 $thetarget='_top'; break;
+	  }
+ 	  $framew=''; $frameh='';
 	  if ( $ulid == 'GANleader' ) {
 	    $framew=' width="100%" ';
 	  }
@@ -128,7 +135,8 @@ class GAN_Widget extends WP_Widget {
 	  $frameattrs=$framew.$frameh;
 	  $result  = '<iframe scrolling="auto" class="'.$ulid.'" '.
 			'src="'.add_query_arg(
-				array('ulid' => $ulid, 'maxads' => $maxads),
+				array('ulid' => $ulid, 'maxads' => $maxads,
+					'target' => $thetarget),
 				GAN_PLUGIN_URL.'/GAN_Server.php').'" '.
 			'frameborder="0" '.$frameattrs.'></iframe>';
 	  return $result;
@@ -145,6 +153,7 @@ class GAN_Widget extends WP_Widget {
                 $instance['maxads'] = $new_instance['maxads'];
                 $instance['ifwidth'] = $new_instance['ifwidth'];
                 $instance['ifheight'] = $new_instance['ifheight'];
+		$instance['target'] = $new_instance['target'];
 
                 return $instance;
         }
@@ -158,7 +167,8 @@ class GAN_Widget extends WP_Widget {
 
             /* Set up some default widget settings. */
             $defaults = array( 'ulid' => 'GANright', 'maxads' => 4, 
-				'ifwidth' => 728, 'ifheight' => 90 );
+				'ifwidth' => 728, 'ifheight' => 90,
+				'target' => '_top' );
             $instance = wp_parse_args( (array) $instance, $defaults ); ?>
             <p>
                 <label for="<?php echo $this->get_field_id( 'maxads' ); ?>"><?php _e('Max ads:','gan'); ?></label>
@@ -174,6 +184,15 @@ class GAN_Widget extends WP_Widget {
                         class="widefat" style="width:100%;">
                     <option value="GANright"  <?php if ( 'GANright' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('vertical','gan'); ?></option>
                     <option value="GANleader" <?php if ( 'GANleader' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('horizontal','gan'); ?></option>
+                </select>
+            </p>
+            <p>
+                <label for="<?php echo $this->get_field_id( 'target' ); ?>"><?php _e('Target:','gan'); ?></label>
+                <select id="<?php echo $this->get_field_id( 'target' ); ?>" 
+                        name="<?php echo $this->get_field_name( 'target' ); ?>" 
+                        class="widefat" style="width:100%;">
+                    <option value="_top"  <?php if ( '_top' == $instance['target'] ) echo 'selected="selected"'; ?>><?php _e('Same Window','gan'); ?></option>
+                    <option value="_blank" <?php if ( '_blank' == $instance['target'] ) echo 'selected="selected"'; ?>><?php _e('New Window or Tab','gan'); ?></option>
                 </select>
             </p>
             <p>

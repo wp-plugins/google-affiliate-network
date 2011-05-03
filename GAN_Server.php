@@ -61,6 +61,11 @@ if (!isset($_GET['ulid']) && !isset($_GET['maxads']) ) {
 
 /* Load parameters */
 $instance = array( 'ulid' => $_GET['ulid'], 'maxads' => $_GET['maxads'] );
+if ( isset($_GET['target']) ) {
+  $instance['target'] = $_GET['target'];
+} else {
+  $instance['target'] = '_top';
+}
 
 ?><div style="margin:0px;padding:0px"><?php
 
@@ -92,7 +97,7 @@ if ((!isset($_GET['height']) || $_GET['height'] == "0") &&
 		  $GANAd = GAN_Database::get_ad($adlist[0]);
 		  GAN_Database::bump_counts($adlist[0]);
 		  ?><li style="margin:0px;padding:0px"><a href="<?php echo $GANAd['ClickserverLink']; 
-		  ?>" target="_top"><?php echo $GANAd['LinkName']; 
+		  ?>" target="<?php echo $instance['target']; ?>"><?php echo $GANAd['LinkName']; 
 		  ?></a> <?php echo $GANAd['MerchandisingText']; 
 		  ?></li><?php
 		  $numads++;
@@ -123,7 +128,7 @@ if ((!isset($_GET['height']) || $_GET['height'] == "0") &&
 		  $GANAd = GAN_Database::get_ad($adlist[0]);
 		  GAN_Database::bump_counts($adlist[0]);
 		  ?><li style="margin:0px;padding:0px"><a href="<?php echo $GANAd['ClickserverLink']; 
-		  ?>" target="_top"><img src="<?php echo $GANAd['ImageURL']; ?>"
+		  ?>" target="<?php echo $instance['target']; ?>"><img src="<?php echo $GANAd['ImageURL']; ?>"
 		      width="<?php echo $GANAd['ImageWidth']; ?>"
 		      height="<?php echo $GANAd['ImageHeight']; ?>"
 		      alt="<?php echo $GANAd['AltText']; ?>">
