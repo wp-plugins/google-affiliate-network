@@ -3,6 +3,13 @@
 	float: right;
 }
 
+#gan_version {
+	float: right;
+	font-style: italic;
+	color: #808080;
+	font-size: 60%;
+}
+
 #icon-gan-db {
         background: transparent url(../images/GANicons32.png) no-repeat -12px -5px;
 }

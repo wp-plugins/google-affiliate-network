@@ -43,6 +43,8 @@ require_once(GAN_DIR . "/GAN_Database.php");
 /* Main plugin class. Implements the basic admin functions of the plugin. */
 class GAN_Plugin {
 
+	public $version = "3.3";
+
 	/* Constructor: register our activation and deactivation hooks and then
 	 * add in our actions.
          */
@@ -60,6 +62,15 @@ class GAN_Plugin {
 		add_option('wp_gan_autoexpire','yes');
 		load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',
 					  basename(GAN_DIR).'/languages/');
+		//$fp = fopen(GAN_FILE,'r');
+		//while ($line = fgets($fp)) {
+		//  $line = trim($line,"\n");
+		//  if (preg_match('/Version:[[:space:]]*(.*)$/',$line,$matches) ) {
+		//    $version = trim($matches[1]);
+		//    break;
+		//  }
+		//}
+		//fclose($fp);
 	}
 	/* Activation hook: create database tables. */
 	function install() {
@@ -206,7 +217,7 @@ class GAN_Plugin {
 	  }
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
-	  ?><div class="wrap"><div id="icon-gan-db" class="icon32"><br /></div><h2><?php _e('GAN Database','gan'); ?> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element"; ?>" class="button add-new-h2"><?php _e('Add New','gan'); ?></a> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element-bulk"; ?>" class="button add-new-h2"><?php _e('Add New in Bulk','gan'); ?></a></h2>
+	  ?><div class="wrap"><div id="icon-gan-db" class="icon32"><br /></div><h2><?php _e('GAN Database','gan'); ?> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element"; ?>" class="button add-new-h2"><?php _e('Add New','gan'); ?></a> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element-bulk"; ?>" class="button add-new-h2"><?php _e('Add New in Bulk','gan'); ?></a><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->InsertPayPalDonateButton(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-page" />
@@ -336,7 +347,7 @@ class GAN_Plugin {
 	  {
 	    wp_die( __('You do not have sufficient permissions to access this page.','gan') );
 	  }
-	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Element to GAN Database','gan'); ?></h2><?php
+	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Element to GAN Database','gan'); ?><?php $this->InsertVersion(); ?></h2><?php
           $this->InsertPayPalDonateButton();	    
 	  $defaults = array( 'Advertiser' => '', 'LinkID' => '', 'LinkName' => '' ,
 			     'MerchandisingText' => '', 'AltText' => '', 
@@ -529,7 +540,7 @@ class GAN_Plugin {
 	    fclose($fp);
 	    printf(__('Inserted %d ads into ad database.','gan'),$count); ?></p></div><?php
 	  }
-	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Elements in bulk to GAN Database','gan'); ?></h2>
+	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Elements in bulk to GAN Database','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	  <?php $this->InsertPayPalDonateButton(); ?>
           <form method="post" action="<?php echo admin_url('admin.php').'?page=gan-database-add-element-bulk'; ?>" enctype="multipart/form-data" >
 	    <p><label for="gan-tsv-file"><?php _e('Select TSV File:','gan'); ?></label><input type='file' name="gan-tsv-file" size="40" /></p>
@@ -697,7 +708,7 @@ class GAN_Plugin {
 				      $_GET['enabled'] );
 	    return true;
 	  }
-	  ?><div class="wrap"><div id="icon-gan-edit-db" class="icon32"><br /></div><h2><?php _e('Edit Element to GAN Database','gan'); ?></h2>
+	  ?><div class="wrap"><div id="icon-gan-edit-db" class="icon32"><br /></div><h2><?php _e('Edit Element to GAN Database','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	  <?php $this->InsertPayPalDonateButton(); ?>
 	  <form name="edit-GAN-element" method="GET" action="<?php echo admin_url('admin.php'); ?>">
 	  <input type="hidden" name="page" value="gan-database-page">
@@ -855,7 +866,7 @@ class GAN_Plugin {
 	  }
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
-	  ?><div class="wrap"><div id="icon-gan-ad-imp" class="icon32"><br /></div><h2><?php _e('Ad Impression Statistics','gan'); ?></h2>
+	  ?><div class="wrap"><div id="icon-gan-ad-imp" class="icon32"><br /></div><h2><?php _e('Ad Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->InsertPayPalDonateButton(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-ad-impstats" />
@@ -1003,7 +1014,7 @@ class GAN_Plugin {
 	  }
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
-	  ?><div class="wrap"><div id="icon-gan-merch-imp" class="icon32"><br /></div><h2><?php _e('Merchant Impression Statistics','gan'); ?></h2>
+	  ?><div class="wrap"><div id="icon-gan-merch-imp" class="icon32"><br /></div><h2><?php _e('Merchant Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->InsertPayPalDonateButton(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<label for="gan-rows-per-page"><?php _e('Rows per page','gan'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
@@ -1115,7 +1126,7 @@ class GAN_Plugin {
 	  }
 	  /* Head of page, filter and screen options. */
 	  $autoexpire = get_option('wp_gan_autoexpire');
-	  ?><div class="wrap"><div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?></h2>
+	  ?><div class="wrap"><div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->InsertPayPalDonateButton(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 	    	<input type="hidden" name="page" value="gan-database-options" />
@@ -1144,6 +1155,9 @@ class GAN_Plugin {
 	  require_once(GAN_DIR.'/GAN_Help.php');
 	}
 
+	function InsertVersion() {
+	  ?><span id="gan_version"><?php printf(__('Version: %s','gan'),$this->version) ?></span><?php
+	}
 	/*
 	 * Build an action link
 	 */
