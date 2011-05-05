@@ -607,13 +607,14 @@ class GAN_Database {
     global $wpdb;
     if (GAN_Database::database_version() < 3.0) {
       return $wpdb->get_results("SELECT * FROM " . GAN_AD_STATS_TABLE_VIEW . 
-				$where . ' Order by Impressions', 'ARRAY_A');
+				$where . ' Order by Impressions, EndDate', 
+				'ARRAY_A');
     } else {
       return $wpdb->get_results("SELECT id, id adid, LastRunDate, Impressions,".
 				" ImageHeight, ImageWidth, MerchantID,".
 				" enabled, StartDate, EndDate  FROM " . 
 				GAN_AD_TABLE . $where . 
-				' Order by Impressions', 'ARRAY_A');
+				' Order by Impressions, EndDate', 'ARRAY_A');
     }
   }
   static function get_GAN_AD_VIEW_row_count($where) {
