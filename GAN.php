@@ -133,6 +133,9 @@ class GAN_Plugin {
 	  ?><div id="gan_donate"><form action="https://www.paypal.com/cgi-bin/webscr" method="post"><?php _e('Donate to Goggle Affiliate Network plugin software effort.','gan'); ?><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="B34MW48SVGBYE"><input type="image" src="https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_US/i/scr/pixel.gif" width="1" height="1"></form></div><br clear="all" /><?php
 	}
 
+	function InsertH2AffiliateLoginButton() {
+	  ?><a target="_blank" href="http://www.connectcommerce.com/global/login.html" class="button add-new-h2"><?php _e('Login into Google Affiliate Network','gan'); ?></a><?php
+	}
 	/* Front side head action: load our style sheet */
 	function wp_head() {
 	  $path = GAN_PLUGIN_CSS_URL . '/GAN.css';
@@ -347,7 +350,7 @@ class GAN_Plugin {
 	  {
 	    wp_die( __('You do not have sufficient permissions to access this page.','gan') );
 	  }
-	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Element to GAN Database','gan'); ?><?php $this->InsertVersion(); ?></h2><?php
+	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Element to GAN Database','gan'); ?><?php $this->InsertVersion(); ?><?php $this->InsertH2AffiliateLoginButton(); ?></h2><?php
           $this->InsertPayPalDonateButton();	    
 	  $defaults = array( 'Advertiser' => '', 'LinkID' => '', 'LinkName' => '' ,
 			     'MerchandisingText' => '', 'AltText' => '', 
@@ -540,7 +543,7 @@ class GAN_Plugin {
 	    fclose($fp);
 	    printf(__('Inserted %d ads into ad database.','gan'),$count); ?></p></div><?php
 	  }
-	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Elements in bulk to GAN Database','gan'); ?><?php $this->InsertVersion(); ?></h2>
+	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Elements in bulk to GAN Database','gan'); ?><?php $this->InsertVersion(); ?><?php $this->InsertH2AffiliateLoginButton(); ?></h2>
 	  <?php $this->InsertPayPalDonateButton(); ?>
           <form method="post" action="<?php echo admin_url('admin.php').'?page=gan-database-add-element-bulk'; ?>" enctype="multipart/form-data" >
 	    <p><label for="gan-tsv-file"><?php _e('Select TSV File:','gan'); ?></label><input type='file' name="gan-tsv-file" size="40" /></p>
