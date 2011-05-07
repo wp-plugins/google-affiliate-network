@@ -1,14 +1,13 @@
 === Google Affiliate Network ===
-Contributors: Robert Heller
+Contributors: RobertPHeller
 Donate link: http://www.deepsoft.com/GAN
 Tags: gan,affiliate,widget,google,plugin,ads,shortcode
 Requires at least: 2.7
 Tested up to: 3.1.1
-Stable tag: 3.3
+Stable tag: 3.4
 
 A Widget / shortcode plugin to display Google Affiliate Network ads. 
-Both text links and image ads can be displayed.  The widgets and
-shortcodes are parameterized.
+Both text links and image ads can be displayed.
 
 == Description ==
 
@@ -41,11 +40,18 @@ There are no Frequently Asked Questions yet.
 
 == Screenshots ==
 
-There are no Screenshots yet.
+1. View of ad stats: screenshots/AdStats.png
+1. View of merchant stats: screenshots/MerchStats.png
+1. View of ad database listing: screenshots/GANDatabase.png
+1. Front side view, showing both textual ads and banner ads: screenshots/FrontSide.png
 
 == Changelog ==
 
-= 3.3
+= 3.4 =
+* Updated readme.txt
+* Added screenshots
+
+= 3.3 =
 * Added target option to widgets and shortcodes.
 * Added button to log into your Google Affiliate Network page
 
@@ -114,6 +120,12 @@ There are no Screenshots yet.
 * First official release.
 
 == Upgrade Notice ==
+
+= 3.4 =
+Updated readme.txt, added screenshots.
+
+= 3.2.1 =
+Important bug fixes, see change log for details.
 
 = 2.2 =
 Important bug fixes, see change log for details.
