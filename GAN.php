@@ -135,10 +135,10 @@ class GAN_Plugin {
 	}
 
 	function PluginSponsor() {
-	  if (/* get_option('wp_gan_disablesponsor') == 'yes' */ true) {
-	    $this->InsertH2AffiliateLoginButton();
+	  if (/*get_option('wp_gan_disablesponsor') == 'yes'*/ true) {
+	    $this->InsertPayPalDonateButton();
 	  } else {
-	    /* PluginSponsor <script></script> */
+	    ?><script></script><?php
 	  }
 	}
 	function InsertH2AffiliateLoginButton() {
