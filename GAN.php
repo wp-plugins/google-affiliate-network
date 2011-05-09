@@ -60,6 +60,7 @@ class GAN_Plugin {
 		add_action('wp_dashboard_setup', array($this,'wp_dashboard_setup'));
 		add_action('gan_daily_event',array($this,'check_autoexpire'));
 		add_option('wp_gan_autoexpire','yes');
+	        /* add_option('wp_gan_disablesponsor','no'); */
 		load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',
 					  basename(GAN_DIR).'/languages/');
 		//$fp = fopen(GAN_FILE,'r');
@@ -133,6 +134,13 @@ class GAN_Plugin {
 	  ?><div id="gan_donate"><form action="https://www.paypal.com/cgi-bin/webscr" method="post"><?php _e('Donate to Google Affiliate Network plugin software effort.','gan'); ?><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="B34MW48SVGBYE"><input type="image" src="https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_US/i/scr/pixel.gif" width="1" height="1"></form></div><br clear="all" /><?php
 	}
 
+	function PluginSponsor() {
+	  if (/* get_option('wp_gan_disablesponsor') == 'yes' */ true) {
+	    $this->InsertH2AffiliateLoginButton();
+	  } else {
+	    /* PluginSponsor <script></script> */
+	  }
+	}
 	function InsertH2AffiliateLoginButton() {
 	  ?><a target="_blank" href="http://www.connectcommerce.com/global/login.html" class="button add-new-h2"><?php _e('Login into Google Affiliate Network','gan'); ?></a><?php
 	}
@@ -221,7 +229,7 @@ class GAN_Plugin {
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
 	  ?><div class="wrap"><div id="icon-gan-db" class="icon32"><br /></div><h2><?php _e('GAN Database','gan'); ?> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element"; ?>" class="button add-new-h2"><?php _e('Add New','gan'); ?></a> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element-bulk"; ?>" class="button add-new-h2"><?php _e('Add New in Bulk','gan'); ?></a><?php $this->InsertVersion(); ?></h2>
-	    <?php $this->InsertPayPalDonateButton(); ?>
+	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-page" />
 		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
@@ -351,7 +359,7 @@ class GAN_Plugin {
 	    wp_die( __('You do not have sufficient permissions to access this page.','gan') );
 	  }
 	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Element to GAN Database','gan'); ?><?php $this->InsertVersion(); ?><?php $this->InsertH2AffiliateLoginButton(); ?></h2><?php
-          $this->InsertPayPalDonateButton();	    
+          $this->PluginSponsor();	    
 	  $defaults = array( 'Advertiser' => '', 'LinkID' => '', 'LinkName' => '' ,
 			     'MerchandisingText' => '', 'AltText' => '', 
 			     'StartDate' => '', 'EndDate' => '', 
@@ -544,7 +552,7 @@ class GAN_Plugin {
 	    printf(__('Inserted %d ads into ad database.','gan'),$count); ?></p></div><?php
 	  }
 	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br /></div><h2><?php _e('Add Elements in bulk to GAN Database','gan'); ?><?php $this->InsertVersion(); ?><?php $this->InsertH2AffiliateLoginButton(); ?></h2>
-	  <?php $this->InsertPayPalDonateButton(); ?>
+	  <?php $this->PluginSponsor(); ?>
           <form method="post" action="<?php echo admin_url('admin.php').'?page=gan-database-add-element-bulk'; ?>" enctype="multipart/form-data" >
 	    <p><label for="gan-tsv-file"><?php _e('Select TSV File:','gan'); ?></label><input type='file' name="gan-tsv-file" size="40" /></p>
 	    <p><input type="submit" name="bulkadd" class="button-primary" value="<?php _e('Upload file','gan'); ?>" />
@@ -712,7 +720,7 @@ class GAN_Plugin {
 	    return true;
 	  }
 	  ?><div class="wrap"><div id="icon-gan-edit-db" class="icon32"><br /></div><h2><?php _e('Edit Element to GAN Database','gan'); ?><?php $this->InsertVersion(); ?></h2>
-	  <?php $this->InsertPayPalDonateButton(); ?>
+	  <?php $this->PluginSponsor(); ?>
 	  <form name="edit-GAN-element" method="GET" action="<?php echo admin_url('admin.php'); ?>">
 	  <input type="hidden" name="page" value="gan-database-page">
 	  <input type="hidden" value="<?php echo $id; ?>" name="id">
@@ -870,7 +878,7 @@ class GAN_Plugin {
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
 	  ?><div class="wrap"><div id="icon-gan-ad-imp" class="icon32"><br /></div><h2><?php _e('Ad Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
-	    <?php $this->InsertPayPalDonateButton(); ?>
+	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-ad-impstats" />
 		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
@@ -1018,7 +1026,7 @@ class GAN_Plugin {
 	  $skiprecs = ($pagenum - 1) * $per_page;
 	  /* Head of page, filter and screen options. */
 	  ?><div class="wrap"><div id="icon-gan-merch-imp" class="icon32"><br /></div><h2><?php _e('Merchant Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
-	    <?php $this->InsertPayPalDonateButton(); ?>
+	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<label for="gan-rows-per-page"><?php _e('Rows per page','gan'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
 	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply','gan'); ?>" /></form><?php
@@ -1122,6 +1130,8 @@ class GAN_Plugin {
 	  if ( isset($_GET['saveoptions']) ) {
 	    $autoexpire = $_GET['gan_autoexpire'];
 	    update_option('wp_gan_autoexpire',$autoexpire);
+	    /* $disablesponsor = $_GET['gan_disablesponsor'];
+	       update_option('wp_gan_disablesponsor',$disablesponsor); */
 	    ?><div id="message"class="updated fade"><p><?php _e('Options Saved','gan'); ?></p></div><?php
 	  } else if ( isset($_GET['upgradedatabase']) ) {
 	    GAN_Database::upgrade_database();
@@ -1129,8 +1139,9 @@ class GAN_Plugin {
 	  }
 	  /* Head of page, filter and screen options. */
 	  $autoexpire = get_option('wp_gan_autoexpire');
+	  /* $disablesponsor = get_option('wp_gan_disablesponsor'); */
 	  ?><div class="wrap"><div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?><?php $this->InsertVersion(); ?></h2>
-	    <?php $this->InsertPayPalDonateButton(); ?>
+	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 	    	<input type="hidden" name="page" value="gan-database-options" />
 		<table class="form-table">
@@ -1145,6 +1156,17 @@ class GAN_Plugin {
 				  echo ' checked="checked" ';
 				}
 			?> /><?php _e('No','gan'); ?></td></tr>
+		  <!-- <tr valign="top">
+		    <th scope="row"><label for="gan_disablesponsor" style="width:20%;"><?php _e('Disable sponsor messages?','gan'); ?></label></th>
+		    <td><input type="radio" name="gan_disablesponsor" value="yes"<?php
+				if ($disablesponsor == 'yes') {
+				  echo ' checked="checked" ';
+				} 
+			?> /><?php _e('Yes','gan'); ?>&nbsp;<input type="radio" name="gan_disablesponsor" value="no"<?php
+				if ($disablesponsor == 'no') {
+				  echo ' checked="checked" ';
+				}
+			?> /><?php _e('No','gan'); ?></td></tr> -->
 		</table>
 		<p>
 			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options','gan'); ?>" />
