@@ -9,7 +9,7 @@ define('GAN_PLUGIN_NAME', 'GAN_Plugin'); /* Name of the plugin */
 define('GAN_DIR', dirname(__FILE__));    /* The Plugin directory */
 define('GAN_VERSION', '2.0');		 /* The Plug in version */
 /* Plug in display name */
-define('GAN_DISPLAY_NAME', 'Goggle Affiliate Network Plugin');
+define('GAN_DISPLAY_NAME', 'Google Affiliate Network Plugin');
 /* Base URL of the plug in */
 define('GAN_PLUGIN_URL', get_bloginfo('wpurl') . '/wp-content/plugins/' . basename(GAN_DIR));
 /* URL of the Plugin's CSS dir */
