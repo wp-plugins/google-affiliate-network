@@ -214,6 +214,14 @@ class GAN_Plugin {
 	    GAN_Database::enableall($where);
 	  } else if ( isset($_GET['deleteexpired']) ) {
 	    GAN_Database::deleteexpired($wand);
+	  } else if ( isset($_GET['deleteselected']) ) {
+	    foreach ( $_GET['checked'] as $itemid ) {
+	      GAN_Database::delete_ad_by_id($itemid);
+	    }
+	  } else if ( isset($_GET['togenselected']) ) {
+	    foreach ( $_GET['checked'] as $itemid ) {
+	      GAN_Database::toggle_enabled($itemid);
+	    }
 	  }
 	  /* Handle pagenation. */
 	  if ( isset($_GET['pagenum']) ) {
@@ -263,23 +271,27 @@ class GAN_Plugin {
 	<input type="hidden" name="page" value="gan-database-page" />
 	<?php $this->hidden_filter_fields(); ?>
 	<div class="alignleft actions">
+	<input type="submit" name="deleteselected" class="button" value="<?php _e('Delete Selected','gan'); ?>" />
+	<input type="submit" name="togenselected" class="button" value="<?php _e('Toggle Enable Selected','gan'); ?>" />
 	<input type="submit" name="enableall" class="button" value="<?php _e('Enable All','gan'); ?>" />
 	<input type="submit" name="deleteexpired" class="button" value="<?php _e('Delete Expired','gan'); ?>" /></div>
 	<br class="clear" /></div>
 	     <table class="widefat page fixed" cellspacing="2">
 		<thead>
-		<tr><th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
+		<tr><th align="left" width="10%" scope="col" class="manage-column check-column"><input type="checkbox" id="gan-select-all" /></th>
+		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
 		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Link ID','gan'); ?></th>
-		    <th align="left" width="40%" scope="col" class="manage-column"><?php _e('Link Name','gan'); ?></th>
+		    <th align="left" width="30%" scope="col" class="manage-column"><?php _e('Link Name','gan'); ?></th>
 		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Image Width','gan'); ?></th>
 		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Start Date','gan'); ?></th>
 		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('End Date','gan'); ?></th>
 		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Enabled?','gan'); ?></th></tr>
 		</thead>
 		<tfoot>
-		<tr><th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
+		<tr><th align="left" width="10%" scope="col" class="manage-column check-column"><input type="checkbox" id="gan-select-all-2" /></th>
+		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
 		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Link ID','gan'); ?></th>
-		    <th align="left" width="40%" scope="col" class="manage-column"><?php _e('Link Name','gan'); ?></th>
+		    <th align="left" width="30%" scope="col" class="manage-column"><?php _e('Link Name','gan'); ?></th>
 		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Image Width','gan'); ?></th>
 		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Start Date','gan'); ?></th>
 		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('End Date','gan'); ?></th>
@@ -294,11 +306,12 @@ class GAN_Plugin {
 		        if ($index >  ($skiprecs+$per_page)) {break;} /* Next pages. */
 		        $id = $GANRow['id'];	/* Id for row actions. */
 			//echo "<!-- GANRow: ";print_r($GANRow);echo " -->\n";
-		        ?><tr class="<?php echo $alt; ?> iedit"><td valign="top" width="10%" align="left"><?php 
+		        ?><tr class="<?php echo $alt; ?> iedit"><th scope='row' class='check-column'><input type='checkbox' name='checked[]' value='<?php echo($id); ?>' /></th>
+			<td valign="top" width="10%" align="left"><?php 
 			  echo GAN_Database::get_merch_name($GANRow['MerchantID']); /* Advertiser name */
 		        ?></td><td valign="top" width="10%" align="left" ><?php 
 			  echo $GANRow['LinkID'];     /* Link ID */
-		        ?></td><td valign="top" width="40%" align="left" ><?php 
+		        ?></td><td valign="top" width="30%" align="left" ><?php 
 			  echo $GANRow['LinkName'];   /* Link name */
 		        ?><br /><a href="<?php 
 			  $this->make_page_query('gan-database-page',$id, 'editrow' );	/* Edit link */
@@ -332,6 +345,8 @@ class GAN_Plugin {
 	        $page_links
 	); echo $page_links_text; ?></div>
 	<div class="alignleft actions">
+	<input type="submit" name="deleteselected" class="button" value="<?php _e('Delete Selected','gan'); ?>" />
+	<input type="submit" name="togenselected" class="button" value="<?php _e('Toggle Enable Selected','gan'); ?>" />
 	<input type="submit" name="enableall" class="button" value="Enable All" />
 	<input type="submit" name="deleteexpired" class="button" value="Delete Expired" /></div>
 	<br class="clear" /></div></form>
