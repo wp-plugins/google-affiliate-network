@@ -124,7 +124,7 @@ class GAN_Plugin {
 			    'gan-database-options',
 			    array($this,'admin_configure_options'));
 	  add_submenu_page( 'gan-database-page', __('Help Using the Google Affliate Network Plugin','gan'),
-	  		    __('Help','gan'),'read',
+	  		    __('Help','gan'),'manage_options',
 			    'gan-database-help',
 			    array($this,'admin_help')); 
 	}
