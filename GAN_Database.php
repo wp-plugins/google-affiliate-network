@@ -199,11 +199,28 @@ class GAN_Database {
   /* Get a specified ad by its id. The complete ad's row is returned as an
    * associative array.
    */
-  static function get_ad($id) {
+  static function get_ad($id,$format = 'ARRAY_A') {
     global $wpdb;
     $sql = $wpdb->prepare("SELECT * FROM ".GAN_AD_TABLE.
 			  " WHERE ID = %d",$id);
-    return $wpdb->get_row($sql, 'ARRAY_A' );
+    $result = $wpdb->get_row($sql, $format );
+    if ($format == 'ARRAY_A' && !isset($result['Advertiser'])) {
+      $result['Advertiser'] = GAN_Database::get_merch_name($result['MerchantID']);
+    } else if (!isset($result->Advertiser)) {
+      $result->Advertiser = GAN_Database::get_merch_name($result->MerchantID);
+    }
+    return $result;
+  }
+  static function get_blank_ad() {
+    return (object) array(
+	'Advertiser' => '', 'LinkID' => '', 'LinkName' => '',
+	'MerchandisingText' => '', 'AltText' => '',
+	'StartDate' => date('n/j/Y',time()), 
+	'EndDate' => date('n/j/Y',time()+60*60*24*7),
+	'ClickserverLink' => '', 'ImageURL' => '',
+	'ImageHeight' => 0, 'ImageWidth' => 0,
+	'LinkURL' => '', 'PromoType' => '', 'MerchantID' => '',
+	'enabled' => 0);
   }
   static function init_counts($id) {
     if (GAN_Database::database_version() >= 3.0) return;
@@ -363,7 +380,8 @@ class GAN_Database {
 				       'enabled' => $enabled),
 				array("%s","%s","%s","%s","%s","%s","%s","%s",
 				      "%s","%s","%s","%s","%s","%s","%d"));
-      GAN_Database::init_counts($wpdb->insert_id);
+      $newid = $wpdb->insert_id;
+      GAN_Database::init_counts($newid);
     } else {
       $wpdb->insert(GAN_AD_TABLE,array('LinkID' => $LinkID,
 				       'LinkName' => $LinkName,
@@ -381,6 +399,7 @@ class GAN_Database {
 				       'enabled' => $enabled),
 				array("%s","%s","%s","%s","%s","%s","%s",
 				      "%s","%s","%s","%s","%s","%s","%d"));
+      $newid = $wpdb->insert_id;
       $c = $wpdb->get_var($wpdb->prepare('SELECT count(*) from '.
 				GAN_MERCH_TABLE.
 				    ' Where MerchantID = %s',$MerchantID));
@@ -399,6 +418,7 @@ class GAN_Database {
 	}
       }
     }
+    return $newid;
   }
   static function update_GAN($id,$Advertiser,$LinkID,$LinkName,$MerchandisingText,
 			     $AltText,$StartDate,$EndDate,$ClickserverLink,
