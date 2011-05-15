@@ -38,6 +38,23 @@
 	background: transparent url(../images/GANicons32.png) no-repeat -315px -5px;
 }
 
+.column-LinkName {
+   width: 40%;
+}
+
+.column-ImageWidth {
+   width: 5%;
+}
+
+.column-Enabled {
+   width: 7%;
+}
+
+.check-column {
+   width: 3%;
+}
+
+
 table.ganstats {
 width:100%;
 font-size:200%;

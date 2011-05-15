@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 3.4.1
+ * Version: 4.0
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -43,7 +43,9 @@ require_once(GAN_DIR . "/GAN_Database.php");
 /* Main plugin class. Implements the basic admin functions of the plugin. */
 class GAN_Plugin {
 
-	public $version = "3.4.1";
+	var $gan_db_list_table;
+	var $ad_stats_list_table;
+	var $merch_stats_list_table;
 
 	/* Constructor: register our activation and deactivation hooks and then
 	 * add in our actions.
@@ -99,26 +101,30 @@ class GAN_Plugin {
 
 	/* Add in our Admin Menu */
 	function admin_menu() {
-	  add_menu_page( __('GAN Database','gan'), __('GAN DB','gan'), 'manage_options', 
+	  $screen_id = add_menu_page( __('GAN Database','gan'), __('GAN DB','gan'), 'manage_options', 
 		 'gan-database-page', array($this,'admin_database_page'), 
 		 GAN_PLUGIN_IMAGE_URL.'/GAN_menu.png');
-
-	  add_submenu_page( 'gan-database-page', __('Add new GAN DB element','gan'), 
+	  add_action("load-$screen_id", array($this,'_init_db_list_table') );
+	  $screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN DB element','gan'), 
 		    __('Add new','gan'), 
 		    'manage_options', 'gan-database-add-element', 
 		    array($this,'admin_add_element'));
-	  add_submenu_page( 'gan-database-page', __('Add new GAN DB elements in bulk','gan'), 
+	  add_action("load-$screen_id", array($this,'_init_db_list_table') );
+	  $screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN DB elements in bulk','gan'), 
 		    __('Add new bulk','gan'), 
 		    'manage_options', 'gan-database-add-element-bulk', 
 		    array($this,'admin_add_element_bulk'));
-	  add_submenu_page( 'gan-database-page', __('Ad Impression Statistics','gan'),
+	  add_action("load-$screen_id", array($this,'_init_db_list_table') );
+	  $screen_id = add_submenu_page( 'gan-database-page', __('Ad Impression Statistics','gan'),
 	  	    __('Ad Stats','gan'),
 		    'manage_options', 'gan-database-ad-impstats',
 		    array($this,'admin_ad_impstats'));
-	  add_submenu_page( 'gan-database-page', __('Merchant Impression Statistics','gan'),
+	  add_action("load-$screen_id", array($this,'_init_ad_stats_list_table') );
+	  $screen_id = add_submenu_page( 'gan-database-page', __('Merchant Impression Statistics','gan'),
 	  	    __('Merchant Stats','gan'),
 		    'manage_options', 'gan-database-merch-impstats',
 		    array($this,'admin_merch_impstats'));
+	  add_action("load-$screen_id", array($this,'_init_merch_stats_list_table') );
 	  add_submenu_page( 'gan-database-page', __('Configure Options','gan'),
 			    __('Configure','gan'),'manage_options', 
 			    'gan-database-options',
@@ -128,8 +134,57 @@ class GAN_Plugin {
 			    'gan-database-help',
 			    array($this,'admin_help')); 
 	}
-
-
+	function _init_db_list_table() {
+	  add_screen_option('per_page',array('label' => __('Rows','gan')) );
+	  $this->register_List_Table('GAN_DB_List_Table');
+	  if (! isset($this->gan_db_list_table) ) {
+	    $this->gan_db_list_table = new GAN_DB_List_Table();
+	    $this->gan_db_list_table->set_row_actions(
+		array( 'Edit' => add_query_arg(
+					array('page' => 'gan-database-add-element',
+					      'mode' => 'edit'),
+					admin_url('admin.php')),
+		       'View' => add_query_arg(
+					array('page' => 'gan-database-add-element',
+					      'mode' => 'view'),
+					admin_url('admin.php')),
+		       'Delete' => add_query_arg(
+					array('page' => 'gan-database-page',
+					      'action' => 'delete'),
+					admin_url('admin.php')),
+		       'Toggle Enable' => add_query_arg(
+					array('page' => 'gan-database-page',
+					      'action' => 'enabletoggle'),
+					admin_url('admin.php')) ));
+	  }					      
+	}
+	function _init_ad_stats_list_table() {
+	  add_screen_option('per_page',array('label' => __('Rows','gan')));
+	  $this->register_List_Table('Ad_Stats_List_Table');
+	  if (! isset($this->ad_stats_list_table) ) {
+	    $this->ad_stats_list_table = new Ad_Stats_List_Table();
+	  }
+	}
+	function _init_merch_stats_list_table() {
+	  add_screen_option('per_page',array('label' => __('Rows','gan') ));
+	  $this->register_List_Table('Merch_Stats_List_Table');
+	  if (! isset($this->ad_stats_list_table) ) {
+	    $this->ad_stats_list_table = new Merch_Stats_List_Table();
+	  }
+	}
+        function register_List_Table($class) {
+	  switch ($class) {
+	    case 'GAN_DB_List_Table':
+		require_once GAN_DIR . '/GAN_DB_List_Table.php';
+		return $class;
+	    case 'Ad_Stats_List_Table':
+		require_once GAN_DIR . '/Ad_Stats_List_Table.php';
+		return $class;
+	    case 'Merch_Stats_List_Table':
+		require_once GAN_DIR . '/Merch_Stats_List_Table.php';
+		return $class;
+	  }
+	}	
 	function InsertPayPalDonateButton() {
 	  ?><div id="gan_donate"><form action="https://www.paypal.com/cgi-bin/webscr" method="post"><?php _e('Donate to Google Affiliate Network plugin software effort.','gan'); ?><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="hosted_button_id" value="B34MW48SVGBYE"><input type="image" src="https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!"><img alt="" border="0" src="https://www.paypalobjects.com/WEBSCR-640-20110401-1/en_US/i/scr/pixel.gif" width="1" height="1"></form></div><br clear="all" /><?php
 	}
@@ -160,206 +215,15 @@ class GAN_Plugin {
 
 	/* Main admin page.  List the ads in the database */
 	function admin_database_page() {
-	  if( isset($_GET['Update']) && isset($_GET['id']) ) { 
-	    if ( !$this->admin_database_editrow ($_GET['id']) ) return;
-	  }
-	  //must check that the user has the required capability 
-	  if (!current_user_can('manage_options'))
-	  {
-	    wp_die( __('You do not have sufficient permissions to access this page.','gan') );
-	  }
-	  global $wpdb;
-	  /* Filters: merchant id and image width (0 == text ad). */
-	  if ( isset($_GET['merchid']) ) {
-	    $merchid = $_GET['merchid'];
-	  } else {
-	    $merchid = "";
-	  }
-	  if ( isset($_GET['imwidth']) ) {
-	    $imwidth = $_GET['imwidth'];
-	  } else {
-	    $imwidth = -1;
-	  }
-	  /* Build where clause. */
-	  if ( $merchid != "" || $imwidth != -1 ) {
-	    $wclause = ""; $and = "";
-	    if ($merchid != "") {
-		$wclause = $wpdb->prepare($wclause . " MerchantID = %s",
-					  $merchid);
-		$and = " && ";
-	    }
-	    if ($imwidth != -1) $wclause = $wpdb->prepare($wclause . $and . 
-							  " ImageWidth = %d",
-							  $imwidth);
-	    $where = " where " . $wclause . " ";
-	    $wand  = " && " . $wclause . " ";
-	  } else {
-	    $wand = " ";
-	    $where = " ";
-	  }
-	  /* Handle row action links: */
-	  if ( isset($_GET['id']) && isset($_GET['action']) ) {
-	    $id     = $_GET['id'];
-	    $action = $_GET['action'];
-	    if( $action == 'delete' ) {
-	      GAN_Database::delete_ad_by_id($id);
-	    } else if ( $action == 'enabledtoggle' ) {
-	      GAN_Database::toggle_enabled($id);
-	    } else if ( $action == 'editrow' ) {
-	      $this->admin_database_editrow ( $id );
-	      return;
-	    }
-	  /* Global actions: */
-	  } else if ( isset($_GET['enableall']) ) {
-	    GAN_Database::enableall($where);
-	  } else if ( isset($_GET['deleteexpired']) ) {
-	    GAN_Database::deleteexpired($wand);
-	  } else if ( isset($_GET['deleteselected']) ) {
-	    foreach ( $_GET['checked'] as $itemid ) {
-	      GAN_Database::delete_ad_by_id($itemid);
-	    }
-	  } else if ( isset($_GET['togenselected']) ) {
-	    foreach ( $_GET['checked'] as $itemid ) {
-	      GAN_Database::toggle_enabled($itemid);
-	    }
-	  }
-	  /* Handle pagenation. */
-	  if ( isset($_GET['pagenum']) ) {
-	    $pagenum = $_GET['pagenum'];
-	  } else {
-	    $pagenum = 1;
-	  }
-	  if ( isset($_GET['GAN_rows_per_page']) ) {
-	    $per_page = $_GET['GAN_rows_per_page'];
-	  } else {
-	    $per_page = 20;
-	  }
-	  $skiprecs = ($pagenum - 1) * $per_page;
+	  $this->gan_db_list_table->prepare_items();
 	  /* Head of page, filter and screen options. */
-	  ?><div class="wrap"><div id="icon-gan-db" class="icon32"><br /></div><h2><?php _e('GAN Database','gan'); ?> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element"; ?>" class="button add-new-h2"><?php _e('Add New','gan'); ?></a> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element-bulk"; ?>" class="button add-new-h2"><?php _e('Add New in Bulk','gan'); ?></a><?php $this->InsertVersion(); ?></h2>
+	  ?><div class="wrap"><div id="icon-gan-db" class="icon32"><br /></div>
+	    <h2><?php _e('GAN Database','gan'); ?> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element"; ?>" class="button add-new-h2"><?php _e('Add New','gan'); ?></a> <a href="<?php echo admin_url('admin.php') . "?page=gan-database-add-element-bulk"; ?>" class="button add-new-h2"><?php _e('Add New in Bulk','gan'); ?></a><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-page" />
-		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
-		<input type="submit" name="filter" class="button" value="<?php _e('Filter','gan'); ?>" />
-		<label for="gan-rows-per-page"><?php _e('Rows per page','gan'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
-	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply','gan'); ?>" /></form><?php
-	  /* Get database rows */
-	  $GANData = GAN_Database::get_GAN_data($where);
-	  if ( ! empty($GANData) ) { 
-	     /* Non empty results.  Get row count. */
-	     $GANDataRowCount = GAN_Database::get_GAN_row_count($where);
-	     /* Figure page count. */
-	     $num_pages = ceil($GANDataRowCount / $per_page);
-	     /* Build page links. */
-	     $page_links = paginate_links( array(
-	        'base' => add_query_arg( array ('pagenum' => '%#%', 'GAN_rows_per_page' => $per_page ) ),
-	        'format' => '',
-	        'prev_text' => __('&laquo;','gan'),
-	        'next_text' => __('&raquo;','gan'),
-	        'total' => $num_pages,
-	        'current' => $pagenum
-	     )); ?>
-	<div class="tablenav">
-	<div class="tablenav-pages"><?php $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s&#8211;%s of %s','gan' ) . '</span>%s',
-	        number_format_i18n( ( $pagenum - 1 ) * $per_page + 1 ),
-	        number_format_i18n( min( $pagenum * $per_page, $GANDataRowCount ) ),
-	        number_format_i18n( $GANDataRowCount ),
-	        $page_links
-	); echo $page_links_text; ?></div>
-	<form method="get" action="<?php echo admin_url('admin.php'); ?>">
-	<input type="hidden" name="page" value="gan-database-page" />
-	<?php $this->hidden_filter_fields(); ?>
-	<div class="alignleft actions">
-	<input type="submit" name="deleteselected" class="button" value="<?php _e('Delete Selected','gan'); ?>" />
-	<input type="submit" name="togenselected" class="button" value="<?php _e('Toggle Enable Selected','gan'); ?>" />
-	<input type="submit" name="enableall" class="button" value="<?php _e('Enable All','gan'); ?>" />
-	<input type="submit" name="deleteexpired" class="button" value="<?php _e('Delete Expired','gan'); ?>" /></div>
-	<br class="clear" /></div>
-	     <table class="widefat page fixed" cellspacing="2">
-		<thead>
-		<tr><th align="left" width="10%" scope="col" class="manage-column check-column"><input type="checkbox" id="gan-select-all" /></th>
-		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
-		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Link ID','gan'); ?></th>
-		    <th align="left" width="30%" scope="col" class="manage-column"><?php _e('Link Name','gan'); ?></th>
-		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Image Width','gan'); ?></th>
-		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Start Date','gan'); ?></th>
-		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('End Date','gan'); ?></th>
-		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Enabled?','gan'); ?></th></tr>
-		</thead>
-		<tfoot>
-		<tr><th align="left" width="10%" scope="col" class="manage-column check-column"><input type="checkbox" id="gan-select-all-2" /></th>
-		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
-		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Link ID','gan'); ?></th>
-		    <th align="left" width="30%" scope="col" class="manage-column"><?php _e('Link Name','gan'); ?></th>
-		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Image Width','gan'); ?></th>
-		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('Start Date','gan'); ?></th>
-		    <th align="left" width="10%" scope="col" class="manage-column"><?php _e('End Date','gan'); ?></th>
-		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('En?','gan'); ?></th></tr>
-		</tfoot>
-	        <tbody>
-		<?php /* Display each row. */
-		      $index = 0; $alt = 'alternate';
-		      foreach ((array)$GANData as $GANRow) {
-		        $index++;	/* count record. */
-		        if ($index <= $skiprecs) {continue;}	/* Previous pages. */
-		        if ($index >  ($skiprecs+$per_page)) {break;} /* Next pages. */
-		        $id = $GANRow['id'];	/* Id for row actions. */
-			//echo "<!-- GANRow: ";print_r($GANRow);echo " -->\n";
-		        ?><tr class="<?php echo $alt; ?> iedit"><th scope='row' class='check-column'><input type='checkbox' name='checked[]' value='<?php echo($id); ?>' /></th>
-			<td valign="top" width="10%" align="left"><?php 
-			  echo GAN_Database::get_merch_name($GANRow['MerchantID']); /* Advertiser name */
-		        ?></td><td valign="top" width="10%" align="left" ><?php 
-			  echo $GANRow['LinkID'];     /* Link ID */
-		        ?></td><td valign="top" width="30%" align="left" ><?php 
-			  echo $GANRow['LinkName'];   /* Link name */
-		        ?><br /><a href="<?php 
-			  $this->make_page_query('gan-database-page',$id, 'editrow' );	/* Edit link */
-			?>">Edit</a> <a href="<?php 
-			  $this->make_page_query('gan-database-page',$id, 'delete' );  /* Delete link */
-			?>"><?php _e('Delete','gan'); ?></a> <a href="<?php
-			  $this->make_page_query('gan-database-page',$id, 'enabledtoggle' ); /* Enable toggle link */
-			?>"><?php _e('Toggle&nbsp;Enabled','gan'); ?></a></td><td valign="top" width="10%" align="left" ><?php 
-			  echo $GANRow['ImageWidth'];	/* Image width (0 = text) */
-		        ?></td><td valign="top" width="10%" align="left" ><?php 
-			  echo $GANRow['StartDate'];	/* Start date */
-		        ?></td><td valign="top" width="10%" align="left" ><?php 
-			  echo $GANRow['EndDate'];	/* End date */
-		        ?></td><td valign="top" width="10%" align="left" ><?php 
-			  /* Enabled */
-			  if ($GANRow['Enabled'] == 1) {echo 'yes';} 
-			  else {echo 'no';} ?></td></tr>
-			<?php
-			/* Toggle row backgrounds */
-		        if ($alt == '') {
-			  $alt = 'alternate';
-			} else {
-			  $alt = '';
-			}
-		      } ?></tbody>
-	     </table><div class="tablenav">
-	<div class="tablenav-pages"><?php $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s&#8211;%s of %s', 'gan' ) . '</span>%s',
-	        number_format_i18n( ( $pagenum - 1 ) * $per_page + 1 ),
-	        number_format_i18n( min( $pagenum * $per_page, $GANDataRowCount ) ),
-	        number_format_i18n( $GANDataRowCount ),
-	        $page_links
-	); echo $page_links_text; ?></div>
-	<div class="alignleft actions">
-	<input type="submit" name="deleteselected" class="button" value="<?php _e('Delete Selected','gan'); ?>" />
-	<input type="submit" name="togenselected" class="button" value="<?php _e('Toggle Enable Selected','gan'); ?>" />
-	<input type="submit" name="enableall" class="button" value="Enable All" />
-	<input type="submit" name="deleteexpired" class="button" value="Delete Expired" /></div>
-	<br class="clear" /></div></form>
-	<?php
-	  } else {
-	  ?><h4><?php _e('No matching entries found.','gan'); ?></h4><?php
-	  }
-	  ?><form method="get" action="<?php echo admin_url('admin.php'); ?>">
-		<input type="hidden" name="page" value="gan-database-page" />
-		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
-		<input type="submit" name="filter" class="button" value="<?php _e('Filter','gan'); ?>" />
-		<label for="gan-rows-per-page"><?php _e('Rows per page','gan'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
-		<input type="submit" name="screenopts" class="button" value="<?php _e('Apply','gan'); ?>" /></form></div><?php 
+		<?php $this->gan_db_list_table->views();
+		      $this->gan_db_list_table->display(); ?></form></div><?php
 	}
 
 	/* Add element to ad database */
@@ -896,7 +760,7 @@ class GAN_Plugin {
 	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-ad-impstats" />
-		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
+		<?php GAN_Database::merchdropdown($merchid) ?>&nbsp;<?php GAN_Database::imwidthdropdown($imwidth); ?>
 		<input type="submit" name="filter" class="button" value="<?php _e('Filter','gan'); ?>" />
 		<label for="gan-rows-per-page"><?php _e('Rows per page','gan'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
 	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply','gan'); ?>" /></form><?php
@@ -1004,7 +868,7 @@ class GAN_Plugin {
 	  }
 	  ?><form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-ad-impstats" />
-		<?php $this->merchdropdown($merchid) ?>&nbsp;<?php $this->imwidthdropdown($imwidth); ?>
+		<?php GAN_Database::merchdropdown($merchid) ?>&nbsp;<?php GAN_Database::imwidthdropdown($imwidth); ?>
 		<input type="submit" name="filter" class="button" value="<?php _e('Filter','gan'); ?>" />
 		<label for="gan-rows-per-page"><?php _e('Rows per page','gan'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
 	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply','gan'); ?>" /></form><?php
@@ -1196,7 +1060,7 @@ class GAN_Plugin {
 	}
 
 	function InsertVersion() {
-	  ?><span id="gan_version"><?php printf(__('Version: %s','gan'),$this->version) ?></span><?php
+	  ?><span id="gan_version"><?php printf(__('Version: %s','gan'),GAN_VERSION) ?></span><?php
 	}
 	/*
 	 * Build an action link
@@ -1297,50 +1161,6 @@ class GAN_Plugin {
 		  <input type="hidden" name="pagenum" value="<?php echo $pagenum; ?>" />
 		  <input type="hidden" name="merchid" value="<?php echo $merchid; ?>" />
 		  <input type="hidden" name="imwidth" value="<?php echo $imwidth; ?>" /><?php
-	}
-
-	/*
-	 * Create merchant dropdown list
-	 */
-
-	function merchdropdown ($merchid) {
-	  $GANMerchants = GAN_Database::get_merchants();
-	
-	  ?><label for="gan-merchid"><?php _e('Advertisers:','gan'); ?></label>
-	    <select name="merchid" id="gan-merchid" maxlength="20">
-	    <option value="" <?php 
-		if ( $merchid == "" ) echo 'selected="selected"'; 
-		?>><?php _e('All','gan'); ?></option><?php
-	  foreach ((array)$GANMerchants as $GANMerchant) {
-	    $shortadvert = substr($GANMerchant['Advertiser'],0,25);
-	    ?><option value="<?php echo $GANMerchant['MerchantID']; ?>" <?php 
-		if ( $merchid == $GANMerchant['MerchantID'] ) 
-			echo 'selected="selected"'; 
-		?> label="<?php echo $GANMerchant['Advertiser']; 
-		?>"><?php echo $shortadvert; ?></option><?php 
-	  }
-	  ?></select><?php
-	}
-
-	/*
-	 * Make a image width dropdown list
-	 */
-
-	function imwidthdropdown ($imwidth) {
-	  $GANImageWidths = GAN_Database::get_imagewidths();
-	
-	  ?><label for="gan-imwidth"><?php _e('Image Width:','gan'); ?></label>
-	    <select name="imwidth" id="gan-imwidth" maxlength="4">
-	    <option value="-1" <?php 
-		if ( $imwidth == "-1" ) echo 'selected="selected"'; 
-		?>><?php _e('All','gan'); ?></option><?php
-	  foreach ((array)$GANImageWidths as $GANImageWidth) {
-	    ?><option value="<?php echo $GANImageWidth['ImageWidth']; ?>" <?php 
-		if ( $imwidth == $GANImageWidth['ImageWidth'] ) 
-			echo 'selected="selected"'; 
-		?>><?php echo $GANImageWidth['ImageWidth']; ?></option><?php 
-	  }
-	  ?></select><?php
 	}
 
 	/* Set up dashboard widgets */

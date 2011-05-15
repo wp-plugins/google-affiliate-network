@@ -330,9 +330,9 @@ class GAN_Database {
       GAN_Database::delete_ad_by_id($id);
     }
   }
-  static function get_GAN_data($where) {
+  static function get_GAN_data($where,$format = 'ARRAY_A') {
     global $wpdb;
-    return $wpdb->get_results("SELECT id,MerchantID,LinkID,ImageWidth,LinkName,StartDate,EndDate,Enabled FROM " . GAN_AD_TABLE . $where . ' Order by EndDate', 'ARRAY_A');
+    return $wpdb->get_results("SELECT id,MerchantID,LinkID,ImageWidth,LinkName,StartDate,EndDate,Enabled FROM " . GAN_AD_TABLE . $where . ' Order by EndDate', $format);
   }
   static function get_GAN_row_count($where) {
     global $wpdb;
@@ -674,6 +674,49 @@ class GAN_Database {
     } else {
       $wpdb->query("update " . GAN_MERCH_TABLE . " set Impressions=0,LastRunDate='1970-01-01' ".$where);
     }
+  }
+  /*
+   * Create merchant dropdown list
+   */
+
+  static function merchdropdown ($merchid,$name='merchid') {
+    $GANMerchants = GAN_Database::get_merchants();
+	
+    ?><label for="gan-merchid"><?php _e('Advertisers:','gan'); ?></label>
+      <select name="<?php echo $name; ?>" id="gan-merchid" maxlength="20">
+      <option value="" <?php 
+	if ( $merchid == "" ) echo 'selected="selected"'; 
+	?>><?php _e('All','gan'); ?></option><?php
+      foreach ((array)$GANMerchants as $GANMerchant) {
+        $shortadvert = substr($GANMerchant['Advertiser'],0,25);
+        ?><option value="<?php echo $GANMerchant['MerchantID']; ?>" <?php 
+	if ( $merchid == $GANMerchant['MerchantID'] ) 
+		echo 'selected="selected"'; 
+	?> label="<?php echo $GANMerchant['Advertiser']; 
+	?>"><?php echo $shortadvert; ?></option><?php 
+      }
+    ?></select><?php
+  }
+
+  /*
+   * Make a image width dropdown list
+   */
+
+  function imwidthdropdown ($imwidth,$name = 'imwidth') {
+    $GANImageWidths = GAN_Database::get_imagewidths();
+  
+    ?><label for="gan-imwidth"><?php _e('Image Width:','gan'); ?></label>
+      <select name="<?php echo $name; ?>" id="gan-imwidth" maxlength="4">
+      <option value="-1" <?php 
+    if ( $imwidth == "-1" ) echo 'selected="selected"'; 
+    ?>><?php _e('All','gan'); ?></option><?php
+    foreach ((array)$GANImageWidths as $GANImageWidth) {
+      ?><option value="<?php echo $GANImageWidth['ImageWidth']; ?>" <?php 
+    if ( $imwidth == $GANImageWidth['ImageWidth'] ) 
+      echo 'selected="selected"'; 
+    ?>><?php echo $GANImageWidth['ImageWidth']; ?></option><?php 
+    }
+    ?></select><?php
   }
 }
 
