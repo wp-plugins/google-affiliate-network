@@ -9,6 +9,7 @@
 <li><a href="#EditingAds">Editing Ads</a></li>
 <li><a href="#AdSubsriptions">Ad Subsriptions</a></li>
 <li><a href="#Statisics">Statisics</a></li>
+<li><a href="<?php echo GAN_PLUGIN_URL . '/doc/gan_manual.pdf'; ?>">Download printable manual</a></li>
 </ul>
 <a name="Installation"></a><h3>Installation</h3> 
 <p>Installation is just a matter of installing from the new plugin
@@ -74,7 +75,7 @@ the two shortcodes (GAN_Text or GAN_Image).  The widgets of course need
 to go into a 'sidebar' that supports widgets.  The shortcodes can go
 into any post or page.</p> 
 <h4>GAN Widget</h4> 
-<p>The GAN Widget has four parameters:
+<p>The GAN Widget has five parameters:
 <ul>
 <li><strong>Max ads:</strong> The maximum number of ads to display.</li>
 <li><strong>Orientation:</strong> The orientation of the ads. Horizontal
@@ -82,12 +83,14 @@ means the ads are arranged side by side like one row of a table and
 vertical means the ads are arranged in a vertical list. Typically the
 horizontal orientation is suitable for a wide but short ad frame and the
 vertical orientation is suitable for skyscrapper type ad unit.</li>
+<li><strong>Target:</strong> The link target to use. Can be either Same 
+Window or New Window or Tab.</li>
 <li><strong>Ad frame width:</strong> The width of the ad frame. A value
 of zero will cause the frame to use all of the available space.</li>
 <li><strong>Ad frame height:</strong> The height of the ad frame.</li>
 </ul></p>
 <h4>GAN Image Widget</h4>
-<p>The GAN Image Widget has six parameters:
+<p>The GAN Image Widget has seven parameters:
 <ul>
 <li><strong>Max ads:</strong> The maximum number of ads to display.</li>
 <li><strong>Width:</strong> The image width of the image ads.</li>
@@ -97,38 +100,58 @@ means the ads are arranged side by side like one row of a table and
 vertical means the ads are arranged in a vertical list. Typically the
 horizontal orientation is suitable for a wide but short ad frame and the
 vertical orientation is suitable for skyscrapper type ad unit.</li>
+<li><strong>Target:</strong> The link target to use. Can be either Same 
+Window or New Window or Tab.</li>
 <li><strong>Ad frame width:</strong> The width of the ad frame. A value
 of zero will cause the frame to use all of the available space.</li>
 <li><strong>Ad frame height:</strong> The height of the ad frame.</li>
 </ul></p>
 <h4>GAN_Text shortcode</h4>
-<p>The GAN_Text shortcode has same four parameters as the GAN
+<p>The GAN_Text shortcode has same five parameters as the GAN
 Widget:
-<ul><li><strong>maxads</strong> The maximum number of ads to display.</li>
-<li><strong>orientation</strong> The orientation of the ads. Horizontal
-means the ads are arranged side by side like one row of a table and     
-vertical means the ads are arranged in a vertical list. Typically the
-horizontal orientation is suitable for a wide but short ad frame and the
-vertical orientation is suitable for skyscrapper type ad unit.</li>
+<ul><li><strong>maxads</strong> An integer, with the default being 4.
+The maximum number of ads to display.</li>
+<li><strong>orientation</strong> The orientation of the ads, one of
+'vertical' (the default) or 'horizontal'. Horizontal means the ads are
+arranged side by side like one row of a table and      vertical means
+the ads are arranged in a vertical list. Typically the horizontal
+orientation is suitable for a wide but short ad frame and the vertical
+orientation is suitable for skyscrapper type ad unit.</li>
+<li><strong>target</strong> The link target to use, one of 'same' (the
+default) or 'new'.</li>
 <li><strong>ifwidth</strong> The width of the ad frame. A value
 of zero will cause the frame to use all of the available space.</li>
 <li><strong>ifheight</strong> The height of the ad frame.</li>
 </ul></p>
+<p>Here is an example -- 5 text ads arranged horizontally in a 798x70 frame:<br />
+<pre>
+[GAN_Text maxads=5 orientation='horizontal' ifwidth=798 ifheight=70]
+</pre></p>
 <h4>GAN_Image shortcode</h4>
-<p>The GAN_Image shortcode has same six parameters as the GAN Image
+<p>The GAN_Image shortcode has same seven parameters as the GAN Image
 Widget.
-<ul><li><strong>maxads</strong> The maximum number of ads to display.</li>
-<li><strong>orientation</strong> The orientation of the ads. Horizontal
-means the ads are arranged side by side like one row of a table and     
-vertical means the ads are arranged in a vertical list. Typically the
-horizontal orientation is suitable for a wide but short ad frame and the
-vertical orientation is suitable for skyscrapper type ad unit.</li>
-<li><strong>width</strong> The image width of the image ads.</li>
-<li><strong>height</strong> The image height of the image ads.</li>
+<ul><li><strong>maxads</strong> An integer, with the default being 4.
+The maximum number of ads to display.</li>
+<li><strong>orientation</strong> The orientation of the ads, one of
+'vertical' (the default) or 'horizontal'. Horizontal means the ads are
+arranged side by side like one row of a table and      vertical means
+the ads are arranged in a vertical list. Typically the horizontal
+orientation is suitable for a wide but short ad frame and the vertical
+orientation is suitable for skyscrapper type ad unit.</li>
+<li><strong>target</strong> The link target to use, one of 'same' (the
+default) or 'new'.</li>
+<li><strong>width</strong> The image width of the image ads. The
+default is 120.</li>
+<li><strong>height</strong> The image height of the image ads. The
+default is 60.</li>
 <li><strong>ifwidth</strong> The width of the ad frame. A value
 of zero will cause the frame to use all of the available space.</li>
 <li><strong>ifheight</strong> The height of the ad frame.</li>
 </ul></p>
+<p>Here is an example -- 2 468x60 banners arranged vertically in a 473x65 frame:<br />
+<pre>
+[GAN_Image maxads=2 orientation='vertical' ifwidth=473 ifheight=65 width=468 height=60]
+</pre></p>
 <a name="EditingAds"></a><h3>Editing Ads</h3>
 <p>When displaying the data on the main admin page, links are provided
 to edit, delete, or toggle the enabled flag for each ad. The ads are
