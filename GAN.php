@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 4.0.1
+ * Version: 4.0.2
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -197,7 +197,7 @@ class GAN_Plugin {
 	  }
 	}
 	function InsertH2AffiliateLoginButton() {
-	  ?><a target="_blank" href="http://www.connectcommerce.com/global/login.html" class="button add-new-h2"><?php _e('Login into Google Affiliate Network','gan'); ?></a><?php
+	  ?><p><a target="_blank" href="http://www.connectcommerce.com/global/login.html" class="button"><?php _e('Login into Google Affiliate Network','gan'); ?></a></p><?php
 	}
 	/* Front side head action: load our style sheet */
 	function wp_head() {
@@ -238,7 +238,10 @@ class GAN_Plugin {
 	function admin_add_element() {
 	  $message = $this->gan_db_list_table->prepare_one_item();
 	  ?><div class="wrap"><div id="<?php echo $this->gan_db_list_table->add_item_icon(); ?>" class="icon32"><br />
-	    </div><h2><?php echo $this->gan_db_list_table->add_item_h2(); ?></h2>
+	    </div><h2><?php echo $this->gan_db_list_table->add_item_h2(); ?><?php   
+				     $this->InsertVersion(); ?></h2>
+	    <?php $this->PluginSponsor(); 
+		  $this->InsertH2AffiliateLoginButton(); ?>
 	    <?php if ($message != '') {
 		?><div id="message" class="update fade"><?php echo $message; ?></div><?php
 		} ?>
@@ -251,7 +254,10 @@ class GAN_Plugin {
 	function admin_add_element_bulk() {
 	  $message = $this->gan_db_list_table->process_bulk_upload();
 	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br />
-	    </div><h2><?php _e('Add Elements in bulk to the GAN Database','gan'); ?></h2>
+	    </div><h2><?php _e('Add Elements in bulk to the GAN Database','gan'); ?><?php   
+                                     $this->InsertVersion(); ?></h2>
+	    <?php $this->PluginSponsor(); 
+		  $this->InsertH2AffiliateLoginButton(); ?>
 	    <?php if ($message != '') {
 		?><div id="message" class="update fade"><?php echo $message; ?></div><?php
 		} ?>
