@@ -140,19 +140,19 @@ class GAN_Plugin {
 	  if (! isset($this->gan_db_list_table) ) {
 	    $this->gan_db_list_table = new GAN_DB_List_Table();
 	    $this->gan_db_list_table->set_row_actions(
-		array( 'Edit' => add_query_arg(
+		array( __('Edit','gan') => add_query_arg(
 					array('page' => 'gan-database-add-element',
 					      'mode' => 'edit'),
 					admin_url('admin.php')),
-		       'View' => add_query_arg(
+		       __('View','gan') => add_query_arg(
 					array('page' => 'gan-database-add-element',
 					      'mode' => 'view'),
 					admin_url('admin.php')),
-		       'Delete' => add_query_arg(
+		       __('Delete','gan') => add_query_arg(
 					array('page' => 'gan-database-page',
 					      'action' => 'delete'),
 					admin_url('admin.php')),
-		       'Toggle Enable' => add_query_arg(
+		       __('Toggle Enable','gan') => add_query_arg(
 					array('page' => 'gan-database-page',
 					      'action' => 'enabletoggle'),
 					admin_url('admin.php')) ));
@@ -168,8 +168,8 @@ class GAN_Plugin {
 	function _init_merch_stats_list_table() {
 	  add_screen_option('per_page',array('label' => __('Rows','gan') ));
 	  $this->register_List_Table('Merch_Stats_List_Table');
-	  if (! isset($this->ad_stats_list_table) ) {
-	    $this->ad_stats_list_table = new Merch_Stats_List_Table();
+	  if (! isset($this->merch_stats_list_table) ) {
+	    $this->merch_stats_list_table = new Merch_Stats_List_Table();
 	  }
 	}
         function register_List_Table($class) {
@@ -231,8 +231,7 @@ class GAN_Plugin {
 	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-page" />
-		<?php $this->gan_db_list_table->views();
-		      $this->gan_db_list_table->display(); ?></form></div><?php
+		<?php $this->gan_db_list_table->display(); ?></form></div><?php
 	}
 
 	/* Add element to ad database */
@@ -261,361 +260,23 @@ class GAN_Plugin {
 	    <?php $this->gan_db_list_table->display_bulk_upload_form(add_query_arg(array('page' => 'gan-database-page'))); ?></form></div><?php
 	}
 	function admin_ad_impstats() {
-	  //must check that the user has the required capability 
-	  if (!current_user_can('manage_options'))
-	  {
-	    wp_die( __('You do not have sufficient permissions to access this page.','gan') );
-	  }
-	  global $wpdb;
-	  /* Filters: merchant id and image width (0 == text ad). */
-	  if ( isset($_GET['merchid']) ) {
-	    $merchid = $_GET['merchid'];
-	  } else {
-	    $merchid = "";
-	  }
-	  if ( isset($_GET['imwidth']) ) {
-	    $imwidth = $_GET['imwidth'];
-	  } else {
-	    $imwidth = -1;
-	  }
-	  /* Build where clause. */
-	  if ( $merchid != "" || $imwidth != -1 ) {
-	    $wclause = ""; $and = "";
-	    if ($merchid != "") {
-		$wclause = $wpdb->prepare($wclause . " MerchantID = %s",
-					  $merchid);
-		$and = " && ";
-	    }
-	    if ($imwidth != -1) $wclause = $wpdb->prepare($wclause . $and . 
-							  " ImageWidth = %d",
-							  $imwidth);
-	    $where = " where " . $wclause . " ";
-	    $wand  = " && " . $wclause . " ";
-	  } else {
-	    $wand = " ";
-	    $where = " ";
-	  }
-	  /* Handle row action links: */
-	  if ( isset($_GET['id']) && isset($_GET['action']) ) {
-	    $id     = $_GET['id'];
-	    $action = $_GET['action'];
-	    if( $action == 'zero' ) {
-	      GAN_Database::zero_GAN_AD_STAT($id);
-	    }
-	  /* Global actions: */
-	  } else if ( isset($_GET['zerostats']) ) {
-	    GAN_Database::zero_GAN_AD_STATS($where);
-	  }
-	  /* Handle pagenation. */
-	  if ( isset($_GET['pagenum']) ) {
-	    $pagenum = $_GET['pagenum'];
-	  } else {
-	    $pagenum = 1;
-	  }
-	  if ( isset($_GET['GAN_rows_per_page']) ) {
-	    $per_page = $_GET['GAN_rows_per_page'];
-	  } else {
-	    $per_page = 20;
-	  }
-	  $skiprecs = ($pagenum - 1) * $per_page;
+	  $this->ad_stats_list_table->prepare_items();
 	  /* Head of page, filter and screen options. */
 	  ?><div class="wrap"><div id="icon-gan-ad-imp" class="icon32"><br /></div><h2><?php _e('Ad Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
-		<input type="hidden" name="page" value="gan-database-ad-impstats" />
-		<?php GAN_Database::merchdropdown($merchid) ?>&nbsp;<?php GAN_Database::imwidthdropdown($imwidth); ?>
-		<input type="submit" name="filter" class="button" value="<?php _e('Filter','gan'); ?>" />
-		<label for="gan-rows-per-page"><?php _e('Rows per page','gan'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
-	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply','gan'); ?>" /></form><?php
-	  /* Get database rows */
-	  $ADStatsData = GAN_Database::get_GAN_AD_VIEW_data($where);
-	  if ( ! empty($ADStatsData) ) {
-	    /* Non empty results.  Get row count. */
-	    $ADStatsDataRowCount = GAN_Database::get_GAN_AD_VIEW_row_count($where);
-	    $num_pages = ceil($ADStatsDataRowCount / $per_page);
-	    /* Build page links. */
-	     $page_links = paginate_links( array(
-	        'base' => add_query_arg( array ('pagenum' => '%#%', 'GAN_rows_per_page' => $per_page ) ),
-	        'format' => '',
-	        'prev_text' => __('&laquo;','gan'),
-	        'next_text' => __('&raquo;','gan'),
-	        'total' => $num_pages,
-	        'current' => $pagenum
-	     )); ?>
-	<div class="tablenav">
-	<div class="tablenav-pages"><?php $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s&#8211;%s of %s', 'gan' ) . '</span>%s',
-	        number_format_i18n( ( $pagenum - 1 ) * $per_page + 1 ),
-	        number_format_i18n( min( $pagenum * $per_page, $ADStatsDataRowCount ) ),
-	        number_format_i18n( $ADStatsDataRowCount ),
-	        $page_links
-	); echo $page_links_text; ?></div>
-	<form method="get" action="<?php echo admin_url('admin.php'); ?>">
-	<input type="hidden" name="page" value="gan-database-ad-impstats" />
-	<?php $this->hidden_filter_fields(); ?>
-	<div class="alignleft actions">
-	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats','gan'); ?>" />
-	<a href="<?php echo add_query_arg(array('mode' => 'ad','where' => $where),
-				     GAN_PLUGIN_URL.'/GAN_ExportStats.php'); ?>"
-	   class="button-primary"><?php _e('Download CSV','gan'); ?></a></div>
-	<br class="clear" /></div>
-	     	     <table class="widefat page fixed" cellspacing="2">
-		<thead>
-		<tr><th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
-		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Link ID','gan'); ?></th>
-		    <th align="left" width="40%" scope="col" class="manage-column"><?php _e('Link Name','gan'); ?></th>
-		    <th align="right" width="10%" scope="col" class="manage-column"><?php _e('End Date','gan'); ?></th>
-		    <th align="right" width="8%"  scope="col" class="manage-column"><?php _e('Image Width','gan'); ?></th>
-		    <th align="right" width="12%"  scope="col" class="manage-column"><?php _e('Impressions','gan'); ?></th>
-		    <th align="right" width="10%"  scope="col" class="manage-column"><?php _e('Last View','gan'); ?></th></tr>
-		</thead>
-		<tfoot>
-		<tr><th align="left" width="10%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
-		    <th align="left" width="10%"  scope="col" class="manage-column"><?php _e('Link ID','gan'); ?></th>
-		    <th align="left" width="40%" scope="col" class="manage-column"><?php _e('Link Name','gan'); ?></th>
-		    <th align="right" width="10%" scope="col" class="manage-column"><?php _e('End Date','gan'); ?></th>
-		    <th align="right" width="8%"  scope="col" class="manage-column"><?php _e('Image Width','gan'); ?></th>
-		    <th align="right" width="12%"  scope="col" class="manage-column"><?php _e('Impressions','gan'); ?></th>
-		    <th align="right" width="10%"  scope="col" class="manage-column"><?php _e('Last View','gan'); ?></th></tr>
-		</tfoot>
-		<tbody>
-		<?php /* Display each row. */
-		      $index = 0; $alt = 'alternate';
-		      foreach ((array)$ADStatsData as $ADStatRow) {
-			$index++;       /* count record. */ 
-			if ($index <= $skiprecs) {continue;}	/* Previous pages. */
-		        if ($index >  ($skiprecs+$per_page)) {break;} /* Next pages. */
-			$id = $ADStatRow['id'];    /* Id for row actions. */
-			?><tr class="<?php echo $alt; ?> iedit"><td valign="top" width="10%" align="left"><?php
-			  echo GAN_Database::get_merch_name($ADStatRow['MerchantID']);  /* Advertiser name */
-			?></td><td valign="top" width="10%" align="left"><?php
-			  echo GAN_Database::get_link_id($ADStatRow['adid']);   /* Link ID */
-			?></td><td valign="top" width="40%" align="left" ><?php 
-			  echo GAN_Database::get_link_name($ADStatRow['adid']);   /* Link name */
-		        ?><br /><a href="<?php 
-			  $this->make_page_query('gan-database-ad-impstats',$id,'zero');  /* zero stat */
-			?>"><?php _e('Zero','gan'); ?></a></td><td valign="top" width="10%" align="right" ><?php
-			  echo $ADStatRow['EndDate']; /* End Date */
-			?></a></td><td valign="top" width="8%" align="right" ><?php 
-			  echo $ADStatRow['ImageWidth']; /* Image Width */
-		        ?></td><td valign="top" width="12%" align="right" ><?php 
-			  echo $ADStatRow['Impressions']; /* Impressions */
-		        ?></td><td valign="top" width="10%" align="right" ><?php 
-			  echo $ADStatRow['LastRunDate']; /* Last Run Data */
-			?></td></tr><?php
-			/* Toggle row backgrounds */
-			if ($alt == '') {
-			  $alt = 'alternate';
-			} else {
-			  $alt = '';
-			}
-		      } ?></tbody>
-		</table><div class="tablenav">
-	<div class="tablenav-pages"><?php $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s&#8211;%s of %s', 'gan' ) . '</span>%s',
-	        number_format_i18n( ( $pagenum - 1 ) * $per_page + 1 ),
-	        number_format_i18n( min( $pagenum * $per_page, $ADStatsDataRowCount ) ),
-	        number_format_i18n( $ADStatsDataRowCount ),
-	        $page_links
-	); echo $page_links_text; ?></div>
-	<form method="get" action="<?php echo admin_url('admin.php'); ?>">
-	<input type="hidden" name="page" value="gan-database-ad-impstats" />
-	<?php $this->hidden_filter_fields(); ?>
-	<div class="alignleft actions">
-	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats','gan'); ?>" />
-	<a href="<?php echo add_query_arg(array('mode' => 'ad','where' => $where),
-				     GAN_PLUGIN_URL.'/GAN_ExportStats.php'); ?>"
-	   class="button-primary"><?php _e('Download CSV','gan'); ?></a></div>
-	<br class="clear" /></div></form>
-	<?php
-	  } else {
-	  ?><h4><?php _e('No matching entries found.','gan'); ?></h4><?php
-	  }
-	  ?><form method="get" action="<?php echo admin_url('admin.php'); ?>">
-		<input type="hidden" name="page" value="gan-database-ad-impstats" />
-		<?php GAN_Database::merchdropdown($merchid) ?>&nbsp;<?php GAN_Database::imwidthdropdown($imwidth); ?>
-		<input type="submit" name="filter" class="button" value="<?php _e('Filter','gan'); ?>" />
-		<label for="gan-rows-per-page"><?php _e('Rows per page','gan'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
-	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply','gan'); ?>" /></form><?php
+	    	<input type="hidden" name="page" value="gan-database-ad-impstats" />
+		<?php $this->ad_stats_list_table->display(); ?></form></div><?php
 	}
 
 	function admin_merch_impstats() {
-	  //must check that the user has the required capability 
-	  if (!current_user_can('manage_options'))
-	  {
-	    wp_die( __('You do not have sufficient permissions to access this page.', 'gan') );
-	  }
-	  /* Handle row action links: */
-	  if ( isset($_GET['id']) && isset($_GET['action']) ) {
-	    $id     = $_GET['id'];
-	    $action = $_GET['action'];
-	    if( $action == 'zero' ) {
-	      GAN_Database::zero_GAN_MERCH_STAT($id);
-	    }
-	  /* Global actions: */
-	  } else if ( isset($_GET['zerostats']) ) {
-	    GAN_Database::zero_GAN_MERCH_STATS('');
-	  }
-	  /* Handle pagenation. */
-	  if ( isset($_GET['pagenum']) ) {
-	    $pagenum = $_GET['pagenum'];
-	  } else {
-	    $pagenum = 1;
-	  }
-	  if ( isset($_GET['GAN_rows_per_page']) ) {
-	    $per_page = $_GET['GAN_rows_per_page'];
-	  } else {
-	    $per_page = 20;
-	  }
-	  $skiprecs = ($pagenum - 1) * $per_page;
+	  $this->merch_stats_list_table->prepare_items();
 	  /* Head of page, filter and screen options. */
 	  ?><div class="wrap"><div id="icon-gan-merch-imp" class="icon32"><br /></div><h2><?php _e('Merchant Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
-		<label for="gan-rows-per-page"><?php _e('Rows per page','gan'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
-	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply','gan'); ?>" /></form><?php
-	  /* Get database rows */
-	  $MerchStatsData = GAN_Database::get_GAN_MERCH_STATS_data('');
-	  if ( ! empty($MerchStatsData) ) {
-	    /* Non empty results.  Get row count. */
-	    $MerchStatsDataRowCount = GAN_Database::get_GAN_MERCH_STATS_row_count('');
-	    $num_pages = ceil($MerchStatsDataRowCount / $per_page);
-	    /* Build page links. */
-	     $page_links = paginate_links( array(
-	        'base' => add_query_arg( array ('pagenum' => '%#%', 'GAN_rows_per_page' => $per_page ) ),
-	        'format' => '',
-	        'prev_text' => __('&laquo;', 'gan'),
-	        'next_text' => __('&raquo;', 'gan'),
-	        'total' => $num_pages,
-	        'current' => $pagenum
-	     )); ?>
-	<div class="tablenav">
-	<div class="tablenav-pages"><?php $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s&#8211;%s of %s','gan' ) . '</span>%s',
-	        number_format_i18n( ( $pagenum - 1 ) * $per_page + 1 ),
-	        number_format_i18n( min( $pagenum * $per_page, $MerchStatsDataRowCount ) ),
-	        number_format_i18n( $MerchStatsDataRowCount ),
-	        $page_links
-	); echo $page_links_text; ?></div>
-	<form method="get" action="<?php echo admin_url('admin.php'); ?>">
-	<input type="hidden" name="page" value="gan-database-merch-impstats" />
-	<?php $this->hidden_filter_fields(); ?>
-	<div class="alignleft actions">
-	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats','gan'); ?>" />
-	<a href="<?php echo add_query_arg(array('mode' => 'merch'),
-				     GAN_PLUGIN_URL.'/GAN_ExportStats.php'); ?>"
-	   class="button-primary"><?php _e('Download CSV','gan'); ?></a></div>
-	<br class="clear" /></div>
-	     	     <table class="widefat page fixed" cellspacing="2">
-		<thead>
-		<tr><th align="left" width="75%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
-		    <th align="right" width="15%"  scope="col" class="manage-column"><?php _e('Impressions','gan'); ?></th>
-		    <th align="right" width="10%"  scope="col" class="manage-column"><?php _e('Last View','gan'); ?></th></tr>
-		</thead>
-		<tfoot>
-		<tr><th align="left" width="75%" scope="col" class="manage-column"><?php _e('Advertiser','gan'); ?></th>
-		    <th align="right" width="15%"  scope="col" class="manage-column"><?php _e('Impressions','gan'); ?></th>
-		    <th align="right" width="10%"  scope="col" class="manage-column"><?php _e('Last View','gan'); ?></th></tr>
-		</tfoot>
-		<tbody>
-		<?php /* Display each row. */
-		      $index = 0; $alt = 'alternate';
-		      foreach ((array)$MerchStatsData as $MerchStatRow) {
-			$index++;       /* count record. */ 
-			if ($index <= $skiprecs) {continue;}	/* Previous pages. */
-		        if ($index >  ($skiprecs+$per_page)) {break;} /* Next pages. */
-			$id = $MerchStatRow['id'];    /* Id for row actions. */
-			?><tr class="<?php echo $alt; ?> iedit"><td valign="top" width="75%" align="left"><?php
-			  echo GAN_Database::get_merch_name($MerchStatRow['MerchantID']);  /* Advertiser name */
-		        ?><br /><a href="<?php 
-			  $this->make_page_query('gan-database-merch-impstats',$id,'zero');  /* Zero stat */
-			?>"><?php _e('Zero','gan'); ?></a></td><td valign="top" width="15%" align="right" ><?php 
-			  echo $MerchStatRow['Impressions']; /* Impressions */
-		        ?></td><td valign="top" width="10%" align="right" ><?php 
-			  echo $MerchStatRow['LastRunDate']; /* Last Run Data */
-			?></td></tr><?php
-			/* Toggle row backgrounds */
-			if ($alt == '') {
-			  $alt = 'alternate';
-			} else {
-			  $alt = '';
-			}
-		      } ?></tbody>
-		</table><div class="tablenav">
-	<div class="tablenav-pages"><?php $page_links_text = sprintf( '<span class="displaying-num">' . __( 'Displaying %s&#8211;%s of %s', 'gan' ) . '</span>%s',
-	        number_format_i18n( ( $pagenum - 1 ) * $per_page + 1 ),
-	        number_format_i18n( min( $pagenum * $per_page, $MerchStatsDataRowCount ) ),
-	        number_format_i18n( $MerchStatsDataRowCount ),
-	        $page_links
-	); echo $page_links_text; ?></div>
-	<form method="get" action="<?php echo admin_url('admin.php'); ?>">
-	<input type="hidden" name="page" value="gan-database-merch-impstats" />
-	<?php $this->hidden_filter_fields(); ?>
-	<div class="alignleft actions">
-	<input type="submit" name="zerostats" class="button" value="<?php _e('Zero Stats','gan'); ?>" />
-	<a href="<?php echo add_query_arg(array('mode' => 'merch'),
-				     GAN_PLUGIN_URL.'/GAN_ExportStats.php'); ?>"
-	   class="button-primary"><?php _e('Download CSV','gan'); ?></a></div>
-	<br class="clear" /></div></form>
-	<?php
-	  } else {
-	  ?><h4><?php _e('No matching entries found.','gan'); ?></h4><?php
-	  }
-	  ?><form method="get" action="<?php echo admin_url('admin.php'); ?>">
-		<label for="gan-rows-per-page"><?php _e('Rows per page','gan'); ?></label><input type="text" class="screen-per-page" name="GAN_rows_per_page" id="rows-per-page" maxlength="3" value="<?php echo $per_page; ?>" />
-	        <input type="submit" name="screenopts" class="button" value="<?php _e('Apply','gan'); ?>" /></form><?php
-	}
-
-	function admin_configure_options() {
-	  //must check that the user has the required capability 
-	  if (!current_user_can('manage_options'))
-	  {
-	    wp_die( __('You do not have sufficient permissions to access this page.', 'gan') );
-	  }
-	  if ( isset($_GET['saveoptions']) ) {
-	    $autoexpire = $_GET['gan_autoexpire'];
-	    update_option('wp_gan_autoexpire',$autoexpire);
-	    /* $disablesponsor = $_GET['gan_disablesponsor'];
-	       update_option('wp_gan_disablesponsor',$disablesponsor); */
-	    ?><div id="message"class="updated fade"><p><?php _e('Options Saved','gan'); ?></p></div><?php
-	  } else if ( isset($_GET['upgradedatabase']) ) {
-	    GAN_Database::upgrade_database();
-	    ?><div id="message"class="updated fade"><p><?php _e('Database Upgraded','gan'); ?></p></div><?php
-	  }
-	  /* Head of page, filter and screen options. */
-	  $autoexpire = get_option('wp_gan_autoexpire');
-	  /* $disablesponsor = get_option('wp_gan_disablesponsor'); */
-	  ?><div class="wrap"><div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?><?php $this->InsertVersion(); ?></h2>
-	    <?php $this->PluginSponsor(); ?>
-	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
-	    	<input type="hidden" name="page" value="gan-database-options" />
-		<table class="form-table">
-		  <tr valign="top">
-		    <th scope="row"><label for="gan_autoexpire" style="width:20%;"><?php _e('Enable Autoexpire?','gan'); ?></label></th>
-		    <td><input type="radio" name="gan_autoexpire" value="yes"<?php
-				if ($autoexpire == 'yes') {
-				  echo ' checked="checked" ';
-				} 
-			?> /><?php _e('Yes','gan'); ?>&nbsp;<input type="radio" name="gan_autoexpire" value="no"<?php
-				if ($autoexpire == 'no') {
-				  echo ' checked="checked" ';
-				}
-			?> /><?php _e('No','gan'); ?></td></tr>
-		  <!-- <tr valign="top">
-		    <th scope="row"><label for="gan_disablesponsor" style="width:20%;"><?php _e('Disable sponsor messages?','gan'); ?></label></th>
-		    <td><input type="radio" name="gan_disablesponsor" value="yes"<?php
-				if ($disablesponsor == 'yes') {
-				  echo ' checked="checked" ';
-				} 
-			?> /><?php _e('Yes','gan'); ?>&nbsp;<input type="radio" name="gan_disablesponsor" value="no"<?php
-				if ($disablesponsor == 'no') {
-				  echo ' checked="checked" ';
-				}
-			?> /><?php _e('No','gan'); ?></td></tr> -->
-		</table>
-		<p>
-			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options','gan'); ?>" />
-		</p><?php 
-		if (GAN_Database::database_version() < 3.0) {
-		  ?><p><?php _e('Your database needs to be upgraded.','gan'); ?>&nbsp;<input type="submit" name="upgradedatabase" class="button-primary" value="<?php _e('Upgrade Database','gan'); ?>"></p><?php
-		} ?></form></div><?php
+		<input type="hidden" name="page" value="gan-database-merch-impstats" />
+		<?php $this->merch_stats_list_table->display(); ?></form></div><?php
 	}
 
 	function admin_help () {

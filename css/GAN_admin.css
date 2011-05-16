@@ -46,7 +46,15 @@
    width: 40%;
 }
 
+.column-MerchantID_wide {
+   width: 75%;
+}
+
 .column-ImageWidth {
+   width: 5%;
+}
+
+.column-Impressions {
    width: 5%;
 }
 

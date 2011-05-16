@@ -108,16 +108,37 @@ if (headers_sent()) {
   wp_die(__('The headers have been sent by another plugin - there may be a plugin conflict.','gan'));
 }
   
-if (isset($_GET['mode']) && in_array(strtolower($_GET['mode']),array('ad','merch')) ) {
-  $mode = strtolower($_GET['mode']);
+if (isset($_REQUEST['mode']) && in_array(strtolower($_REQUEST['mode']),array('ad','merch')) ) {
+  $mode = strtolower($_REQUEST['mode']);
 } else {
   $mode = 'ad';
 }
 
-if (isset($_GET['where']) ) {
-  $where = stripslashes($_GET['where']);
+if ( isset($_REQUEST['merchid']) ) {
+  $merchid = $_REQUEST['merchid'];
 } else {
-  $where = '';
+  $merchid = '';
+}
+if ( isset($_REQUEST['imwidth']) ) {
+  $imwidth = $_REQUEST['imwidth'];
+} else {
+  $imwidth = -1;
+}
+/* Build where clause */
+global $wpdb;
+if ( $merchid != '' || $imwidth != -1 ) {
+  $wclause = ''; $and = '';
+  if ($merchid != '') {
+    $wclause = $wpdb->prepare(' MerchantID = %s',$merchid);
+    $and = ' && ';
+  }
+  if ($imwidth != -1) {
+    $wclause = $wpdb->prepare($wclause . $and . 
+				' ImageWidth = %d',$imwidth);
+  }
+  $where = ' where ' . $wclause . ' ';
+} else {
+  $where = ' ';
 }
 
 $csv = '';

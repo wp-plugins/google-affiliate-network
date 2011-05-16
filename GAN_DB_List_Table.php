@@ -8,7 +8,6 @@ class GAN_DB_List_Table extends WP_List_Table {
 
 	var $merchid = '';
 	var $imwidth = -1;
-	var $_per_page;
 	function GAN_DB_List_Table() {
 		parent::WP_List_Table( array ('items') );
 	}
@@ -16,13 +15,13 @@ class GAN_DB_List_Table extends WP_List_Table {
 	function get_columns() {
 		return array (
 			'cb' => '<input type="checkbox" />',
-			'MerchantID' => 'Advertiser',
-			'LinkID' => 'Link ID',
-			'LinkName' => 'Link Name',
-			'ImageWidth' => 'Image Width',
-			'StartDate' => 'Start Date',
-			'EndDate' => 'End Date',
-			'Enabled' => 'Enabled?');
+			'MerchantID' => __('Advertiser','gan'),
+			'LinkID' => __('Link ID','gan'),
+			'LinkName' => __('Link Name','gan'),
+			'ImageWidth' => __('Image Width','gan'),
+			'StartDate' => __('Start Date','gan'),
+			'EndDate' => __('End Date','gan'),
+			'Enabled' => __('Enabled?','gan'));
 	}
 	function get_items_per_page ($option, $default = 20) {
 	  if ( isset($_REQUEST['screen-options-apply']) &&
@@ -34,7 +33,7 @@ class GAN_DB_List_Table extends WP_List_Table {
 	  return (int) apply_filters( $option, $per_page );
 	}	
 	function prepare_items() {
-	  file_put_contents("php://stderr","*** GAN_DB_List_Table::prepare_items _REQUEST is ".print_r($_REQUEST,true)."\n");
+	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::prepare_items _REQUEST is ".print_r($_REQUEST,true)."\n");
 	  if ( isset($_REQUEST['merchid']) ) {
 	    $this->merchid = $_REQUEST['merchid'];
 	  } else {
@@ -119,11 +118,11 @@ class GAN_DB_List_Table extends WP_List_Table {
 	  }
 	  $all_items = GAN_Database::get_GAN_data($where,'OBJECT');
 	  $screen = get_current_screen();
-	  file_put_contents("php://stderr","*** GAN_DB_List_Table::prepare_items: screen = ".print_r($screen,true)."\n");
+	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::prepare_items: screen = ".print_r($screen,true)."\n");
 	  $option = str_replace( '-', '_', $screen->id . '_per_page' );
-	  file_put_contents("php://stderr","*** GAN_DB_List_Table::prepare_items: option = $option\n");
+	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::prepare_items: option = $option\n");
 	  $per_page = $this->get_items_per_page( $option );
-	  file_put_contents("php://stderr","*** GAN_DB_List_Table::prepare_items: per_page = $per_page\n");
+	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::prepare_items: per_page = $per_page\n");
 
 	  $total_items = count($all_items);
 	  $this->set_pagination_args( array (
@@ -145,8 +144,8 @@ class GAN_DB_List_Table extends WP_List_Table {
 	  }
 	}
 	function get_bulk_actions() {
-	  return array ('delete' => 'Delete', 
-			'enabletoggle' => 'Toggle Enabled' );
+	  return array ('delete' => __('Delete','gan'), 
+			'enabletoggle' => __('Toggle Enabled','gan') );
 	}
 	function extra_tablenav( $which ) {
 	  if ($which == 'top') {
@@ -157,6 +156,7 @@ class GAN_DB_List_Table extends WP_List_Table {
 	  GAN_Database::merchdropdown($this->merchid,'merchid_'.$which);
 	  echo '&nbsp;';
 	  GAN_Database::imwidthdropdown($this->imwidth,'imwidth_'.$which);
+	  echo '&nbsp;';
 	  submit_button(__( 'Filter','gan'), 'secondary', 'filter_'.$which, 
 			false, array( 'id' => 'post-query-submit') );
 	  echo ' ';
@@ -228,7 +228,7 @@ class GAN_DB_List_Table extends WP_List_Table {
 	}
 	/* Add/View/Edit page */
 	function prepare_one_item() {
-	  file_put_contents("php://stderr","*** GAN_DB_List_Table::prepare_items _REQUEST is ".print_r($_REQUEST,true)."\n");
+	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::prepare_items _REQUEST is ".print_r($_REQUEST,true)."\n");
 	  if ( isset($_REQUEST['merchid']) ) {
 	    $this->merchid = $_REQUEST['merchid'];
 	  } else {
@@ -241,7 +241,7 @@ class GAN_DB_List_Table extends WP_List_Table {
 	  }
 	  $message = '';
 	  if ( isset($_REQUEST['addad']) ) {
-	    $message = $this->checkitemfromform();
+	    $message = $this->checkiteminform(0);
 	    $item    = $this->getitemfromform();
 	    if ($message == '') {
 	      $newid = GAN_Database::insert_GAN($item->Advertiser,
@@ -270,7 +270,7 @@ class GAN_DB_List_Table extends WP_List_Table {
 	      $this->viewitem = $item;
 	    }
 	  } else if ( isset($_REQUEST['updatead']) && isset($_REQUEST['id']) ) {
-	    $message = $this->checkitemfromform();
+	    $message = $this->checkiteminform($_REQUEST['id']);
 	    $item    = $this->getitemfromform();
 	    $item->id = $_REQUEST['id'];
 	    if ($message == '') {
@@ -320,13 +320,15 @@ class GAN_DB_List_Table extends WP_List_Table {
 	  }
 	  return $message;
 	}
-	function checkiteminform() {
+	function checkiteminform($id) {
 	  $result = '';
 	  if ( empty($_REQUEST['Advertiser']) ) {
 	    $result .= '<p>'.__('Advertiser missing.','gan').'</p>';
 	  }
 	  if ( empty($_REQUEST['LinkID']) ) {
 	    $result .= '<p>'.__('Link ID missing.','gan').'</p>';
+	  } else if ($id != GAN_Database::find_ad_by_LinkID($_REQUEST['LinkID'])) {
+	    $result .= '<p>'.__('Duplicate Link ID.','gan').'</p>';
 	  }
 	  if ( empty($_REQUEST['LinkName']) ) {
 	    $result .= '<p>'.__('Link Name missing.','gan').'</p>';
@@ -577,8 +579,11 @@ class GAN_DB_List_Table extends WP_List_Table {
 	      $LinkURL = '';
 	      $PromoType = $this->tsv_unquote($rawelts[12]);
 	      $MerchantID = $this->tsv_unquote($rawelts[2]);
-	      if (preg_match("/^[[:digit:]]/",$LinkID)) {$LinkID = 'J'.$LinkID;}
-	      if (preg_match("/^[[:digit:]]/",$MerchantID)) {$MerchantID = 'K'.$MerchantID;}
+	      if (GAN_Database::find_ad_by_LinkID($LinkID) != 0) {
+		$message .= sprintf(__('Duplicate Link ID $s (%s). Ad not inserted into database.','gan'),$LinkID,$LinkName);
+		$message .= "<br />\n";
+	        continue;
+	      }
 	      GAN_Database::insert_GAN($Advertizer,$LinkID,$LinkName,
 					$MerchandisingText,$AltText,$StartDate,
 					$EndDate,$ClickserverURL,$ImageURL,
