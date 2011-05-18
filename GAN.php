@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 4.0.3
+ * Version: 4.0.4
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -113,13 +113,13 @@ class GAN_Plugin {
 		    __('Add new','gan'), 
 		    'manage_options', 'gan-database-add-element', 
 		    array($this,'admin_add_element'));
-	  add_action("load-$this->add_db_screen_id", array($this,'_init_db_list_table') );
+	  add_action("load-$this->add_db_screen_id", array($this,'_init_add_db_list_table') );
 	  $this->add_contentualhelp($this->add_db_screen_id,'gan-database-add-element');
 	  $this->add_db_bulk_screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN DB elements in bulk','gan'), 
 		    __('Add new bulk','gan'), 
 		    'manage_options', 'gan-database-add-element-bulk', 
 		    array($this,'admin_add_element_bulk'));
-	  add_action("load-$this->add_db_bulk_screen_id", array($this,'_init_db_list_table') );
+	  add_action("load-$this->add_db_bulk_screen_id", array($this,'_init_add_db_list_table') );
 	  $this->add_contentualhelp($this->add_db_bulk_screen_id,'gan-database-add-element-bulk');
 	  $screen_id = add_submenu_page( 'gan-database-page', __('Ad Impression Statistics','gan'),
 	  	    __('Ad Stats','gan'),
@@ -144,9 +144,10 @@ class GAN_Plugin {
 			    array($this,'admin_help')); 
 	}
 	function _init_db_list_table() {
-	  if (get_current_screen() == $this->database_screen_id) {
-	    add_screen_option('per_page',array('label' => __('Rows','gan')) );
-	  }
+	  add_screen_option('per_page',array('label' => __('Rows','gan')) );
+	  $this->_init_add_db_list_table();
+	}
+	function _init_add_db_list_table() {
 	  $this->register_List_Table('GAN_DB_List_Table');
 	  if (! isset($this->gan_db_list_table) ) {
 	    $this->gan_db_list_table = new GAN_DB_List_Table();
