@@ -36,7 +36,17 @@ ganlinksToDB.tcl file carefully.
 
 == Frequently Asked Questions ==
 
-There are no Frequently Asked Questions yet.
+= Something does not work. What should I do? =
+
+Submit a bug at [Deepwoods Software's Bugzilla][bug report].
+
+= I have another question that is not listed here. What should I do? =
+
+Submit one on [Deepwoods Software's Support page][support]. You can also submit
+a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
+
+[bug report]: http://bugzilla.deepsoft.com/enter_bug.cgi?product=Google%20Affilliate%20Network%20Plugin%20for%20WordPress "Deepwoods Software Bugzilla"
+[support]: http://www.deepsoft.com/support/ "Deepwoods Software's Support page"
 
 == Screenshots ==
 
