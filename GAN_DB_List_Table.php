@@ -212,12 +212,12 @@ class GAN_DB_List_Table extends WP_List_Table {
 	}
 	function column_StartDate($item) {
 	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::column_StartDate(".print_r($item,true).")\n");
-	  /*return mysql2date('F j, Y',$item->StartDate);*/
+	  /*return mysql2date('F j, Y',$item->StartDate.' 00:00:00');*/
 	  return $item->StartDate;
 	}
 	function column_EndDate($item) {
 	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::column_EndDate(".print_r($item,true).")\n");
-	  /*return mysql2date('F j, Y',$item->EndDate);*/
+	  /*return mysql2date('F j, Y',$item->EndDate.' 00:00:00');*/
 	  return $item->EndDate;
 	}
 	function column_Enabled($item) {
