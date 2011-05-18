@@ -111,7 +111,8 @@ class Merch_Stats_List_Table extends WP_List_Table {
 	  return $item->Impressions;
 	}
 	function column_LastRunDate($item) {
-	  return mysql2date('F j, Y',$item->LastRunDate);
+	  //return mysql2date('F j, Y',$item->LastRunDate);
+	  return $item->LastRunDate;
 	}
 	function column_default($item, $column_name) {
 	  return apply_filters( 'manage_items_custom_column','',$column_name,$item->id);
