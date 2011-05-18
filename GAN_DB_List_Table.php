@@ -494,35 +494,35 @@ class GAN_DB_List_Table extends WP_List_Table {
 			name="ClickserverLink" 
 			style="width:75%;"<?php if ($this->viewmode == 'view') echo ' readonly="readonly"'; ?> /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-ImageURL" style="width:20%;"><?php _e('ImageURL:','gan'); ?></label></th>
+		<th scope="row"><label for="GAN-ImageURL" style="width:20%;"><?php _e('Image URL:','gan'); ?></label></th>
 		<td><input id="GAN-ImageURL" 
 			value="<?php echo $this->viewitem->ImageURL; ?>" name="ImageURL" 
 			style="width:75%;"<?php if ($this->viewmode == 'view') echo ' readonly="readonly"'; ?> />
 	    </tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-ImageHeight" style="width:20%;"><?php _e('ImageHeight:','gan'); ?></label></th>
+		<th scope="row"><label for="GAN-ImageHeight" style="width:20%;"><?php _e('Image Height:','gan'); ?></label></th>
 		<td><input id="GAN-ImageHeight" 
 			value="<?php echo $this->viewitem->ImageHeight; ?>" 
 			name="ImageHeight" 
 			style="width:75%;"<?php if ($this->viewmode == 'view') echo ' readonly="readonly"'; ?> /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-ImageWidth" style="width:20%;"><?php _e('ImageWidth:','gan'); ?></label></th>
+		<th scope="row"><label for="GAN-ImageWidth" style="width:20%;"><?php _e('Image Width:','gan'); ?></label></th>
 		<td><input id="GAN-ImageWidth" 
 			value="<?php echo $this->viewitem->ImageWidth; ?>" 
 			name="ImageWidth" 
 			style="width:75%;"<?php if ($this->viewmode == 'view') echo ' readonly="readonly"'; ?> /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-LinkURL" style="width:20%;"><?php _e('LinkURL:','gan'); ?></label></th>
+		<th scope="row"><label for="GAN-LinkURL" style="width:20%;"><?php _e('Link URL:','gan'); ?></label></th>
 		<td><input id="GAN-LinkURL" 
 			value="<?php echo $this->viewitem->LinkURL; ?>" name="LinkURL" 
 			style="width:75%;"<?php if ($this->viewmode == 'view') echo ' readonly="readonly"'; ?> /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-PromoType" style="width:20%;"><?php _e('PromoType:','gan'); ?></label></th>
+		<th scope="row"><label for="GAN-PromoType" style="width:20%;"><?php _e('Promo Type:','gan'); ?></label></th>
 		<td><input id="GAN-PromoType" 
 			value="<?php echo $this->viewitem->PromoType; ?>" name="PromoType" 
 			style="width:75%;"<?php if ($this->viewmode == 'view') echo ' readonly="readonly"'; ?> /></td></tr>
 	    <tr valign="top">
-		<th scope="row"><label for="GAN-MerchantID" style="width:20%;"><?php _e('MerchantID:','gan'); ?></label></th>
+		<th scope="row"><label for="GAN-MerchantID" style="width:20%;"><?php _e('Merchant ID:','gan'); ?></label></th>
 		<td><input id="GAN-MerchantID" 
 			value="<?php echo $this->viewitem->MerchantID; ?>" 
 			name="MerchantID" 

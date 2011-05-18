@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 4.0.2
+ * Version: 4.0.3
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -44,6 +44,9 @@ require_once(GAN_DIR . "/GAN_Database.php");
 class GAN_Plugin {
 
 	var $gan_db_list_table;
+	var $database_screen_id;
+	var $add_db_screen_id;
+	var $add_db_bulk_screen_id;
 	var $ad_stats_list_table;
 	var $merch_stats_list_table;
 
@@ -101,41 +104,49 @@ class GAN_Plugin {
 
 	/* Add in our Admin Menu */
 	function admin_menu() {
-	  $screen_id = add_menu_page( __('GAN Database','gan'), __('GAN DB','gan'), 'manage_options', 
+	  $this->database_screen_id = add_menu_page( __('GAN Database','gan'), __('GAN DB','gan'), 'manage_options', 
 		 'gan-database-page', array($this,'admin_database_page'), 
 		 GAN_PLUGIN_IMAGE_URL.'/GAN_menu.png');
-	  add_action("load-$screen_id", array($this,'_init_db_list_table') );
-	  $screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN DB element','gan'), 
+	  add_action("load-$this->database_screen_id", array($this,'_init_db_list_table') );
+	  $this->add_contentualhelp($this->database_screen_id,'gan-database-page');
+	  $this->add_db_screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN DB element','gan'), 
 		    __('Add new','gan'), 
 		    'manage_options', 'gan-database-add-element', 
 		    array($this,'admin_add_element'));
-	  add_action("load-$screen_id", array($this,'_init_db_list_table') );
-	  $screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN DB elements in bulk','gan'), 
+	  add_action("load-$this->add_db_screen_id", array($this,'_init_db_list_table') );
+	  $this->add_contentualhelp($this->add_db_screen_id,'gan-database-add-element');
+	  $this->add_db_bulk_screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN DB elements in bulk','gan'), 
 		    __('Add new bulk','gan'), 
 		    'manage_options', 'gan-database-add-element-bulk', 
 		    array($this,'admin_add_element_bulk'));
-	  add_action("load-$screen_id", array($this,'_init_db_list_table') );
+	  add_action("load-$this->add_db_bulk_screen_id", array($this,'_init_db_list_table') );
+	  $this->add_contentualhelp($this->add_db_bulk_screen_id,'gan-database-add-element-bulk');
 	  $screen_id = add_submenu_page( 'gan-database-page', __('Ad Impression Statistics','gan'),
 	  	    __('Ad Stats','gan'),
 		    'manage_options', 'gan-database-ad-impstats',
 		    array($this,'admin_ad_impstats'));
 	  add_action("load-$screen_id", array($this,'_init_ad_stats_list_table') );
+	  $this->add_contentualhelp($screen_id,'gan-database-ad-impstats');
 	  $screen_id = add_submenu_page( 'gan-database-page', __('Merchant Impression Statistics','gan'),
 	  	    __('Merchant Stats','gan'),
 		    'manage_options', 'gan-database-merch-impstats',
 		    array($this,'admin_merch_impstats'));
 	  add_action("load-$screen_id", array($this,'_init_merch_stats_list_table') );
-	  add_submenu_page( 'gan-database-page', __('Configure Options','gan'),
+	  $this->add_contentualhelp($screen_id,'gan-database-merch-impstats');
+	  $screen_id = add_submenu_page( 'gan-database-page', __('Configure Options','gan'),
 			    __('Configure','gan'),'manage_options', 
 			    'gan-database-options',
 			    array($this,'admin_configure_options'));
+	  $this->add_contentualhelp($screen_id,'gan-database-options');
 	  add_submenu_page( 'gan-database-page', __('Help Using the Google Affliate Network Plugin','gan'),
 	  		    __('Help','gan'),'manage_options',
 			    'gan-database-help',
 			    array($this,'admin_help')); 
 	}
 	function _init_db_list_table() {
-	  add_screen_option('per_page',array('label' => __('Rows','gan')) );
+	  if (get_current_screen() == $this->database_screen_id) {
+	    add_screen_option('per_page',array('label' => __('Rows','gan')) );
+	  }
 	  $this->register_List_Table('GAN_DB_List_Table');
 	  if (! isset($this->gan_db_list_table) ) {
 	    $this->gan_db_list_table = new GAN_DB_List_Table();
@@ -283,6 +294,47 @@ class GAN_Plugin {
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-merch-impstats" />
 		<?php $this->merch_stats_list_table->display(); ?></form></div><?php
+	}
+
+	function admin_configure_options() {
+	  //must check that the user has the required capability 
+	  if (!current_user_can('manage_options'))
+	  {
+	    wp_die( __('You do not have sufficient permissions to access this page.', 'gan') );
+	  }
+	  if ( isset($_GET['saveoptions']) ) {
+	    $autoexpire = $_GET['gan_autoexpire'];
+	    update_option('wp_gan_autoexpire',$autoexpire);
+	    ?><div id="message"class="updated fade"><p><?php _e('Options Saved','gan'); ?></p></div><?php
+	  } else if ( isset($_GET['upgradedatabase']) ) {
+	    GAN_Database::upgrade_database();
+	    ?><div id="message"class="updated fade"><p><?php _e('Database Upgraded','gan'); ?></p></div><?php
+	  }
+	  /* Head of page, filter and screen options. */
+	  $autoexpire = get_option('wp_gan_autoexpire');
+	  ?><div class="wrap"><div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?><?php $this->InsertVersion(); ?></h2>
+	    <?php $this->InsertPayPalDonateButton(); ?>
+	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
+	    	<input type="hidden" name="page" value="gan-database-options" />
+		<table class="form-table">
+		  <tr valign="top">
+		    <th scope="row"><label for="gan_autoexpire" style="width:20%;"><?php _e('Enable Autoexpire?','gan'); ?></label></th>
+		    <td><input type="radio" name="gan_autoexpire" value="yes"<?php
+				if ($autoexpire == 'yes') {
+				  echo ' checked="checked" ';
+				} 
+			?> /><?php _e('Yes','gan'); ?>&nbsp;<input type="radio" name="gan_autoexpire" value="no"<?php
+				if ($autoexpire == 'no') {
+				  echo ' checked="checked" ';
+				}
+			?> /><?php _e('No','gan'); ?></td></tr>
+		</table>
+		<p>
+			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options','gan'); ?>" />
+		</p><?php 
+		if (GAN_Database::database_version() < 3.0) {
+		  ?><p><?php _e('Your database needs to be upgraded.','gan'); ?>&nbsp;<input type="submit" name="upgradedatabase" class="button-primary" value="<?php _e('Upgrade Database','gan'); ?>"></p><?php
+		} ?></form></div><?php
 	}
 
 	function admin_help () {
@@ -537,6 +589,159 @@ class GAN_Plugin {
 	  if (get_option('wp_gan_autoexpire') == 'yes') {
 	    GAN_Database::deleteexpired('');
 	  }
+	}
+	function add_contentualhelp($screenid,$thepage) {
+	  $helppageURL = add_query_arg(array('page' => 'gan-database-help'));
+	  $help = '';
+	  switch ($thepage) {
+	    case 'gan-database-page':
+		$help .= '<h4>'.__('Main GAN Database page','gan').'</h4>';
+		$help .= '<p>'.__('This is the main ad database page. It '.
+				  'contains a listing of the advertisments in '.
+				  'the database.  The columns in the listing '.
+				  'include the name of the advertiser, the '.
+				  '(unique) Link ID, the Link Name, the '.
+				  'Image Width (0 means a text ad), the '.
+				  'Start and End dates, and the Enabled '.
+				  'flag.  The table is sorted by End Date. '.
+				  'The listing can be filtered by advertiser '.
+				  'and/or the Image Width. Items in the '.
+				  'database can be either deleted or have '.
+				  'their Enabled flag toggled in bulk, and '.
+				  'can be individually edited, views, '.
+				  'deleted, or enable toggled.','gan').'</p>';
+		break;
+	    case 'gan-database-add-element':
+		$help .= '<h4>'.__('Add/Edit/View GAN Database page','gan').
+			'</h4>';
+		$help .= '<p>'.__('This is the Add, Edit, and View page, '.
+				  'where advertisments can be individually '.
+				  'added, edited, or viewed.  The fields '.
+				  'in the database are as follows:','gan');
+		$help .= '<dl>';
+		$help .= '<dt>'.__('Advertiser:','gan').'</dt>';
+		$help .= '<dd>'.__('This is the name of the advertiser.',
+					'gan').'</dd>';
+		$help .= '<dt>'.__('Link ID:','gan').'</dt>';
+		$help .= '<dd>'.__('This is the (unique) Link ID. It is '.
+				   'generally a digit string prefixed by '.
+				   'the letter J.','gan').'</dd>';
+		$help .= '<dt>'.__('Link Name:','gan').'</dt>';
+		$help .= '<dd>'.__('This is the Link Name and is used as '.
+				   'anchor text for text ads.','gan').'</dd>';
+		$help .= '<dt>'.__('Merchandising Text:','gan').'</dt>';
+		$help .= '<dd>'.__('This is additional text used to sell the '.
+				   'link and is included as additional text '.
+				   'in text ads.','gan').'</dd>';
+		$help .= '<dt>'.__('Alt Text:','gan').'</dt>';
+		$help .= '<dd>'.__('This is the alternitive text used for '.
+				   'image ads.','gan').'</dd>';
+		$help .= '<dt>'.__('Start Date:','gan').'</dt>';
+		$help .= '<dd>'.__('This is the starting date for the ad. '.
+				   "The ad won't be displayed before this ".
+				   'date.','gan').'</dd>';
+		$help .= '<dt>'.__('End Date:','gan').'</dt>';
+		$help .= '<dd>'.__('This is the ending date for the ad. The '.
+				   'ad will stop being shown in this '.
+				   'date.','gan').'</dd>';
+		$help .= '<dt>'.__('Clickserver Link:','gan').'</dt>';
+		$help .= '<dd>'.__("This is the ad's target link.",'gan').
+				'</dd>';
+		$help .= '<dt>'.__('Image URL:','gan').'</dt>';
+		$help .= '<dd>'.__('This is the URL of the banner for an '.
+				   'image ad.','gan').'</dd>'; 
+		$help .= '<dt>'.__('Image Height:','gan').'</dt>';
+		$help .= '<dd>'.__('This is the height of the image (enter 0 '.
+				   'for text ads).','gan').'</dd>';
+		$help .= '<dt>'.__('Image Width:','gan').'</dt>';
+		$help .= '<dd>'.__('This is the width of the image (enter 0 '.
+				   'for text ads).','gan').'</dd>';
+	        $help .= '<dt>'.__('Link URL:','gan').'</dt>';
+		$help .= '<dd>'.__('This is the optional auxillary link URL.',
+					'gan').'</dd>';
+	        $help .= '<dt>'.__('Promo Type:','gan').'</dt>';
+		$help .= '<dd>'.__('This is the promotion type for the ad.',
+					'gan').'</dd>';
+	        $help .= '<dt>'.__('Merchant ID:','gan').'</dt>';
+		$help .= '<dd>'.__('The is the Merchant ID for this '.
+				   'advertiser. It is generally a string of '.
+				   'digits, prefixed with the letter K.',
+				   'gan').'</dd>';
+	        $help .= '<dt>'.__('enabled?','gan').'</dt>';
+		$help .= '<dd>'.__('This is a flag indicating if the ad is '.
+				   'enabled.  Ads which are not enabled are '.
+				   'not shown.','gan').'</dd>';
+		$help .= '</dl>';
+		$help .= '<p>'.__('Most of the fields are arbitary text. The '.
+				  'URL fields should be proper URL, complete '.
+				  'with the http:// prefix.  Two date '.
+				  'formats are supported: the database '.
+				  'format of YYYY-MM-DD and the more '.
+				  'conventual human format of m/d/yyyy.  An '.
+				  'end date needs to be specificed, even for '.
+				  'ads with no expiration date.  For this '.
+				  'case, a date far in the future (like '.
+				  '12/31/2099) will do.','gan').'</p>';
+		break;
+	    case 'gan-database-add-element-bulk':
+		$help .= '<h4>'.__('Add elements in bulk to the GAN Database '.
+			 'page','gan').'</h4>';
+		$help .= '<p>'.__('This is the Add elements in bulk, from a '.
+				  'TSV file downloaded from your GAN account '.
+				  'page, using the new (Beta) style Links '.
+				  'tab. You can unload this file as-is on '.
+				  'this page.','gan').'</p>';
+		break;
+	    case 'gan-database-ad-impstats':
+		$help .= '<h4>'.__('Ad Impression Statistics page','gan').
+			'</h4>';
+		$help .= '<p>'.__('This is the Ad Impression Statistics page, '.
+				  'where the impression statistics for '.
+				  'advertisements are displayed. The columns '.
+				  'displayed include the advertiser name, the '.
+				  'link id, the linkname, the end date, the '.
+				  'image width, the number of impressions, '.
+				  'and the last view date.','gan').'</p>';
+		$help .= '<p>'.__('The listing can be filtered by advertiser '.
+				  'and/or image width, and the impression '.
+				  'counts can be either zeroed in bulk, '.
+				  'individually, or all. The statistics can '.
+				  'also be downloaded as a CSV file.','gan').
+				  '</p>';
+		break;
+	    case 'gan-database-merch-impstats':
+		$help .= '<h4>'.__('Merchant Impression Statistics page',
+				'gan').'</h4>';
+		$help .= '<p>'.__('This is the Merchant Impression Statistics '.
+				  'page, where the impression statistics for '.
+				  'advertisers can be displayed. The columns '.
+				  'displayed include the advertiser, the '.
+				  'impression count and the last view date.',
+				  'gan').'</p>';
+		$help .= '<p>'.__('The impression counts can be either zeroed '.
+				  'in bulk, individually, or all. The '.
+				  'statistics can also be downloaded as a '.
+				  'CSV file.','gan').'</p>';
+		break;
+	    case 'gan-database-options':
+		$help .= '<h4>'.__('GAN Option Configuration page','gan').
+			'</h4>';
+		$help .= '<p>'.__('This is the GAN Option Configuration '.
+				  'page. There is only one option at '.
+				  'present, a flag enabling or disabling the '.
+				  'automatic deletion of expired ads. It is '.
+				  'on by default and turning it off is not '.
+				  'recomended.','gan').'</p>';
+		$help .= '<p>'.__('Also if you upgraded from an older '.
+				  'version of the GAN plugin (pre 3.0), a '.
+				  'button will be on this page to upgrade '.
+				  'the database to the new version.  This is '.
+				  'recomended.','gan').'</p>';
+		break;
+	    default: return;
+	  }
+	  $help .= '<p><a href="'.$helppageURL.'">GAN help screen</a></p>';
+	  add_contextual_help($screenid,$help);
 	}
 }
 
