@@ -213,13 +213,13 @@ class GAN_DB_List_Table extends WP_List_Table {
 	}
 	function column_StartDate($item) {
 	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::column_StartDate(".print_r($item,true).")\n");
-	  /*return mysql2date('F j, Y',$item->StartDate.' 00:00:00');*/
-	  return $item->StartDate;
+	  return mysql2date('F j, Y',$item->StartDate.' 00:00:00');
+	  //return $item->StartDate;
 	}
 	function column_EndDate($item) {
 	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::column_EndDate(".print_r($item,true).")\n");
-	  /*return mysql2date('F j, Y',$item->EndDate.' 00:00:00');*/
-	  return $item->EndDate;
+	  return mysql2date('F j, Y',$item->EndDate.' 00:00:00');
+	  //return $item->EndDate;
 	}
 	function column_Enabled($item) {
 	  if ($item->Enabled) {
@@ -574,7 +574,7 @@ class GAN_DB_List_Table extends WP_List_Table {
 	      $AltText    = '';
 	      $StartDate = $this->fixdate(trim($this->tsv_unquote($rawelts[8])));
 	      $EndDate = $this->fixdate(trim($this->tsv_unquote($rawelts[9])));
-	      if ($EndDate == 'none' || $EndDate == '') {$EndDate = "2099-12-31";}
+	      if ($EndDate == 'none' || $EndDate == '') {$EndDate = "2037-12-31";}
 	      $ClickserverURL = $this->tsv_unquote($rawelts[4]);
 	      $ImageURL = $this->tsv_unquote($rawelts[5]);
 	      $width = 0;

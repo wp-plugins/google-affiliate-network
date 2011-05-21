@@ -682,7 +682,7 @@ class GAN_Plugin {
 				  'end date needs to be specificed, even for '.
 				  'ads with no expiration date.  For this '.
 				  'case, a date far in the future (like '.
-				  '12/31/2099) will do.','gan').'</p>';
+				  '12/31/2037) will do.','gan').'</p>';
 		break;
 	    case 'gan-database-add-element-bulk':
 		$help .= '<h4>'.__('Add elements in bulk to the GAN Database '.
