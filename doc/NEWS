@@ -19,6 +19,24 @@ insert E-Mailed links (link subscriptions).  The Widgets and shortcodes
 are parameterized for both sidebar display (vertical layout) as well as
 leader/footer display (horizontal layout).
 
+The ads are rotated, with the least viewed ads from the lest viewed
+avertisers being shown in preference to ads that have been viewed more
+from avertisers than have been viewed more.  As ads are displayed, their
+impression counts are incremented, which moves such ads to the back of
+the list. Ads are displayed in iframes, which keeps the ads contained on
+the page. Either widgets can be used to display ads in side bars or
+shortcodes can be used to display ads in pages or posts (both can be
+used if desired). A given ad unit can only display text or image ads,
+not both.
+
+The plugin provides an administration page to view the database of ads,
+with the ability to add ads one at a time or in bulk (from a TSV file
+downloaded from your Google Affiliate Network Links tab).  There are
+also administration pages to view ad impression statistics and merchant
+(advertiser) impression statistics.  The statistics can be downloaded as
+CSV files.  The plugin also includes a help page and a printable PDF
+user manual.
+
 == Installation ==
 
 Unpack the plugin archive under the wp-content/plugins directory and
@@ -26,7 +44,9 @@ then activate the plugin.
 
 You can then add the widgets to your sidebar(s) and start adding in
 links with the database manager. You can also use the shortcodes to
-insert ad frames into posts or pages.
+insert ad frames into posts or pages.  There is a help page and a
+printable PDF user manual, that explains how to put ads in the database
+and how to display ads on your blog pages or posts.
 
 The link subscription handling script should be copied somewhere and
 edited as needed (database access information).  You'll need to have Tcl
@@ -56,6 +76,11 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 1. Front side view, showing both textual ads and banner ads.
 
 == Changelog ==
+
+= 4.1 =
+* Added in permission checks.
+* Restored human readable date displays.
+* Updated documentation in the readme.txt and the user manual.
 
 = 4.0.5 =
 * Maintenance release -- fix problem with date display.
