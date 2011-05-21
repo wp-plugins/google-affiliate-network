@@ -71,9 +71,9 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 == Screenshots ==
 
 1. View of ad stats.
-1. View of merchant stats.
-1. View of ad database listing.
-1. Front side view, showing both textual ads and banner ads.
+2. View of merchant stats.
+3. View of ad database listing.
+4. Front side view, showing both textual ads and banner ads.
 
 == Changelog ==
 
