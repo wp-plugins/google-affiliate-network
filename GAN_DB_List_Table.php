@@ -33,6 +33,7 @@ class GAN_DB_List_Table extends WP_List_Table {
 	  return (int) apply_filters( $option, $per_page );
 	}	
 	function prepare_items() {
+	  $this->check_permissions();
 	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::prepare_items _REQUEST is ".print_r($_REQUEST,true)."\n");
 	  if ( isset($_REQUEST['merchid']) ) {
 	    $this->merchid = $_REQUEST['merchid'];
@@ -232,6 +233,7 @@ class GAN_DB_List_Table extends WP_List_Table {
 	}
 	/* Add/View/Edit page */
 	function prepare_one_item() {
+	  $this->check_permissions();
 	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::prepare_items _REQUEST is ".print_r($_REQUEST,true)."\n");
 	  if ( isset($_REQUEST['merchid']) ) {
 	    $this->merchid = $_REQUEST['merchid'];
@@ -551,6 +553,7 @@ class GAN_DB_List_Table extends WP_List_Table {
 	  </p><?php
 	}
 	function process_bulk_upload() {
+	  $this->check_permissions();
 	  $message = '';
 	  if ( isset($_FILES['gan-tsv-file']) ) {
 	    $fp = fopen($_FILES['gan-tsv-file']['tmp_name'], 'r');
