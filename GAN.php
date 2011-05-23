@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 4.0.5
+ * Version: 4.1
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -232,7 +232,9 @@ class GAN_Plugin {
 	  ?><div class="wrap"><div id="icon-gan-db" class="icon32"><br /></div>
 	    <h2><?php _e('GAN Database','gan'); ?> <a href="<?php 
 		echo add_query_arg(
-		   array('page' => 'gan-database-add-element')); 
+		   array('page' => 'gan-database-add-element',
+			 'mode' => 'add',
+			 'id' => false)); 
 		?>" class="button add-new-h2"><?php _e('Add New','gan'); 
 		?></a> <a href="<?php 
 		echo add_query_arg(
@@ -259,7 +261,10 @@ class GAN_Plugin {
 		} ?>
 	    <form action="" method="get">
 	    <input type="hidden" name="page" value="gan-database-add-element" />
-	    <?php $this->gan_db_list_table->display_one_item_form(add_query_arg(array('page' => 'gan-database-page'))); ?></form></div><?php
+	    <?php $this->gan_db_list_table->display_one_item_form(
+			add_query_arg(array('page' => 'gan-database-page',
+			'mode' => false, 
+			'id' => false))); ?></form></div><?php
 	}
 
         /* Add elements in bulk (from a TSV file) to ad database */
