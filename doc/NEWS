@@ -77,6 +77,9 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 
 == Changelog ==
 
+= 4.1.2 =
+* Maintenance release -- hide dashboard widgets from non-priviledged users.
+
 = 4.1.1 =
 * Maintenance release -- fix problem with add bulk upload form.
 
