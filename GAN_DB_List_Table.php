@@ -613,7 +613,13 @@ class GAN_DB_List_Table extends WP_List_Table {
 	    $m = $matches[1];
 	    $d = $matches[2];
 	    $y = $matches[3];
-	    if (strlen($y) < 4) {$y = '20'.$y;}
+	    if (strlen($y) < 4) {
+	      if ($y <= date('y',time())) {
+		$y += 2000;
+	      } else {
+		$y += 1900;
+	      }
+	    }
 	    return sprintf('%04d-%02d-%02d',$y,$m,$d);
 	  } else {
 	    return $date;
