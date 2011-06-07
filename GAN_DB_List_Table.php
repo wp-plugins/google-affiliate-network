@@ -614,11 +614,11 @@ class GAN_DB_List_Table extends WP_List_Table {
 	    $d = $matches[2];
 	    $y = $matches[3];
 	    if (strlen($y) < 4) {
-	      if ($y <= date('y',time())) {
+	      if ($y <= 37) {
 		$y += 2000;
-	      } else {
+	      } else if ($y > 69) {
 		$y += 1900;
-	      }
+	      } 
 	    }
 	    return sprintf('%04d-%02d-%02d',$y,$m,$d);
 	  } else {

@@ -46,7 +46,14 @@ set DB [::mysql::connect -user $USER -password $PASSWORD -db $DATABASE]
 # Make sure the date is in a format that MySQL understands and is Y2K clean
 proc fixdate {date} {
   if {[regexp {^([[:digit:]]*)/([[:digit:]]*)/([[:digit:]]*)$} "$date" -> m d y] > 0} {
-    if {[string length $y] < 4} {set y 20$y}
+    if {[string length $y] < 4} {
+      scan $y "%02d" ny
+      if {$ny < 37} {
+	set y [expr {2000 + $ny}]
+      } elseif {$ny > 69} {
+	set y [expr {1900 + $ny}]
+      }
+    }
     return [format {%04d-%02d-%02d} $y $m $d]
   } else {
     return $date
@@ -208,7 +215,7 @@ while { [gets stdin line] >= 0 } {
   lappend elts [fixdate [string trim [tsv_unquote [lindex $rawelts 8]]]];# StartDate
   set enddate [fixdate [string trim [tsv_unquote [lindex $rawelts 9]]]]
   if {"$enddate" eq "none" || "$enddate" eq ""} {
-    lappend elts "2099-12-31";# EndDate (never)
+    lappend elts "2037-12-31";# EndDate (never)
   } else {
     lappend elts $enddate;# EndDate (explicit)
   }
