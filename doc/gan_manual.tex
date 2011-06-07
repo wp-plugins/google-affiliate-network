@@ -59,15 +59,17 @@ a TSV (Tab Separated Value) file. Manual insertion is done on the
 
 \subsection{Add new admin page (manual insertion)}
 
-This page has a form for adding a single ad.  The fields include: 
+This page has a form for adding (and editing and viewing) a single ad.
+Generally, this page is not usually used, see Section~\ref{sect:addbulk}
+for adding ads in bulk. The fields include: 
 
 \begin{description}
   \item[Advertiser:] This is the advertiser's name.
-  \item[Link ID:] This is the (unique) Link Id code.
+  \item[Link ID:] This is the (unique) Link Id code. This ID value is
+supplied by Google and uniquely identified the ad.  Link IDs must be
+unique and are prefixed by an uppercase ``J''.
   \item[Link Name:] This is the name of the link.  It is used as the
 anchor text for text ads.
-
-
   \item[Merchandising Text:] This is some ad copy for the
 link and is displayed with the ad link.
   \item[Alt Text:] This is the alterniitive text for image
@@ -81,14 +83,17 @@ like 2037-12-31.
   \item[ImageURL:] This is the URL of the ad image for image ads. 
   \item[ImageHeight:] This is the height of the image (0 for text ads). 
   \item[ImageWidth:] This is the width of the image (0 for text ads). 
-  \item[LinkURL:] This is the Link URL.
+  \item[LinkURL:] This is the Link URL.  This is the URL of the actual
+banner image.
   \item[PromoType:] This is the type of promotion.
-  \item[MerchantID:] This is the (unique) merchant id.
+  \item[MerchantID:] This is the (unique) merchant id.  This value is
+supplied by Google and is prefixed by a uppercase ``K''.
   \item[enabled?] This indicates of the ad is enabled or
 not. 
 \end{description}
 
 \subsection{Add new bulk admin page (bulk insertion)}
+\label{sect:addbulk}
 
 This page uploads a TSV file of ads previously downloaded from your
 Google Affiliate Network management page. You get this file by visiting
@@ -96,9 +101,11 @@ your Google Affiliate Network management page and clicking the Links
 tab. On this page you can select the sorts of ads you would like by
 selecting one or more of your approved advertisers and selecting the
 type of ads (text and/or banner), and other criteria such as size, etc.
-It is then possible to export these ads as a TSV file, which can then
-be downloaded. This same file can in turn be uploaded to the GAN plugin
-and the ads in this file will be added to your ad database.
+It is then possible to export these ads as a TSV file\footnote{Using
+the Export As button and selecting ``Tab Separated Values'' option.},
+which can then be downloaded. This same file can in turn be uploaded to
+the GAN plugin and the ads in this file will be added to your ad
+database.
 
 \section{Showing Ads}
 
@@ -109,6 +116,8 @@ to go into a 'sidebar' that supports widgets.  The shortcodes can go
 into any post or page.
 
 \subsection{GAN Widget}
+
+This widget shows text ads in a ``sidebar'' that supports widgets.
 
 The GAN Widget has five parameters:
 \begin{description}
@@ -126,6 +135,10 @@ of zero will cause the frame to use all of the available space.
 \end{description}
 
 \subsection{GAN Image Widget}
+
+This widget shows image (banner)  ads in a ``sidebar'' that supports
+widgets.  Any given widget instance (ad unit) can only show one size of
+banner ad.
 
 The GAN Image Widget has seven parameters:
 \begin{description}
@@ -145,6 +158,8 @@ of zero will cause the frame to use all of the available space.
 \end{description}
 
 \subsection{GAN\_Text shortcode}
+
+This shortcode inserts a text ad unit into a page or post.
 
 The GAN\_Text shortcode has same five parameters as the GAN
 Widget:
@@ -170,6 +185,10 @@ Here is an example -- 5 text ads arranged horizontally in a 798x70 frame:
 \end{verbatim}
 
 \subsection{GAN\_Image shortcode}
+
+This shortcode inserts an image (banner) ad unit into a page or post.
+Like the GAN Image Widget, all of the ads displayed are of the same
+size. 
 
 The GAN\_Image shortcode has same seven parameters as the GAN Image
 Widget:
