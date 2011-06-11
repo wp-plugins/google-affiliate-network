@@ -3,7 +3,7 @@
 class Ad_Stats_List_Table extends WP_List_Table {
 
 	var $merchid = '';
-	var $imwidth = -1;
+	var $imsize = -1;
 	function Ad_Stats_List_Table() {
 		parent::WP_List_Table( array ('items') );
 	}
@@ -14,7 +14,7 @@ class Ad_Stats_List_Table extends WP_List_Table {
 			'LinkID' => __('Link ID','gan'),
 			'LinkName' => __('Link Name','gan'),
 			'EndDate' => __('End Date','gan'),
-			'ImageWidth' => __('Image Width','gan'),
+			'ImageSize' => __('Image Size','gan'),
 			'Impressions' => __('Imp.','gan'),
 			'LastRunDate' => __('Last View','gan'));
 	}
@@ -35,37 +35,39 @@ class Ad_Stats_List_Table extends WP_List_Table {
 	  } else {
 	    $this->merchid = '';
 	  }
-	  if ( isset($_REQUEST['imwidth']) ) {
-	    $this->imwidth = $_REQUEST['imwidth'];
+	  if ( isset($_REQUEST['imsize']) ) {
+	    $this->imsize = $_REQUEST['imsize'];
 	  } else {
-	    $this->imwidth = -1;
+	    $this->imsize = -1;
 	  }
 	  if ( isset($_REQUEST['filter_top']) ) {
 	    if ( isset($_REQUEST['merchid_top']) ) {
 	      $this->merchid = $_REQUEST['merchid_top'];
 	    }
-	    if ( isset($_REQUEST['imwidth_top']) ) {
-	      $this->imwidth = $_REQUEST['imwidth_top'];
+	    if ( isset($_REQUEST['imsize_top']) ) {
+	      $this->imsize = $_REQUEST['imsize_top'];
 	    }
 	  } else if ( isset($_REQUEST['filter_bottom']) ) {
 	    if ( isset($_REQUEST['merchid_bottom']) ) {
 	      $this->merchid = $_REQUEST['merchid_bottom'];
 	    }
-	    if ( isset($_REQUEST['imwidth_bottom']) ) {
-	      $this->imwidth = $_REQUEST['imwidth_bottom'];
+	    if ( isset($_REQUEST['imsize_bottom']) ) {
+	      $this->imsize = $_REQUEST['imsize_bottom'];
 	    }
 	  }
 	  /* Build where clause */
 	  global $wpdb;
-	  if ( $this->merchid != '' || $this->imwidth != -1 ) {
+	  if ( $this->merchid != '' || $this->imsize != -1 ) {
 	    $wclause = ''; $and = '';
 	    if ($this->merchid != '') {
 	      $wclause = $wpdb->prepare(' MerchantID = %s',$this->merchid);
 	      $and = ' && ';
 	    }
-	    if ($this->imwidth != -1) {
+	    if ($this->imsize != -1) {
+	      $size = explode('x',$this->imsize);
 	      $wclause = $wpdb->prepare($wclause . $and . 
-					' ImageWidth = %d',$this->imwidth);
+					' ImageWidth = %d && ImageHeight = %d',
+					$size[0],$size[1]);
 	    }
 	    $where = ' where ' . $wclause . ' ';
 	    $wand  = ' && ' . $wclause . ' ';
@@ -130,12 +132,12 @@ class Ad_Stats_List_Table extends WP_List_Table {
 	function extra_tablenav( $which ) {
 	  if ($which == 'top') {
 	    ?><input type="hidden" name="merchid" value="<?php echo $this->merchid; ?>" />
-	      <input type="hidden" name="imwidth" value="<?php echo $this->imwidth; ?>" /><?php
+	      <input type="hidden" name="imsize" value="<?php echo $this->imsize; ?>" /><?php
 	  }
 	  ?><div class="alignleft actions"><?php
 	  GAN_Database::merchdropdown($this->merchid,'merchid_'.$which);
 	  echo '&nbsp;';
-	  GAN_Database::imwidthdropdown($this->imwidth,'imwidth_'.$which);
+	  GAN_Database::imsizedropdown($this->imsize,'imsize_'.$which);
 	  echo '&nbsp;';
 	  submit_button(__( 'Filter','gan'), 'secondary', 'filter_'.$which, 
 			false, array( 'id' => 'post-query-submit') );
@@ -145,7 +147,7 @@ class Ad_Stats_List_Table extends WP_List_Table {
 			array( 'id' => 'post-query-submit') );
 	  ?>&nbsp;<a href="<?php echo add_query_arg(array('mode' => 'ad',
 							  'merchid' => $this->merchid,
-							  'imwidth' => $this->imwidth),
+							  'imsize' => $this->imsize),
 					GAN_PLUGIN_URL.'/GAN_ExportStats.php');
 			?>" class="button-primary" ><?php 
 		_e('Download CSV','gan'); ?></a></div><?php
@@ -174,8 +176,12 @@ class Ad_Stats_List_Table extends WP_List_Table {
 		?>"><?php _e('Zero','gan'); ?></a><?php
 	  return '';
 	}
-	function column_ImageWidth($item) {
-	  return $item->ImageWidth;
+	function column_ImageSize($item) {
+	  if ($item->ImageWidth == 0 && $item->ImageHeight == 0) {
+	    return 'text';
+	  } else {
+	    return $item->ImageWidth.'x'.$item->ImageHeight;
+	  }
 	}
 	function column_EndDate($item) {
 	  return mysql2date('F j, Y',$item->EndDate);

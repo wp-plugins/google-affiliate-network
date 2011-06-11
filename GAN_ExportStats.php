@@ -119,22 +119,24 @@ if ( isset($_REQUEST['merchid']) ) {
 } else {
   $merchid = '';
 }
-if ( isset($_REQUEST['imwidth']) ) {
-  $imwidth = $_REQUEST['imwidth'];
+if ( isset($_REQUEST['imsize']) ) {
+  $imsize = $_REQUEST['imsize'];
 } else {
-  $imwidth = -1;
+  $imsize = -1;
 }
 /* Build where clause */
 global $wpdb;
-if ( $merchid != '' || $imwidth != -1 ) {
+if ( $merchid != '' || $imsize != -1 ) {
   $wclause = ''; $and = '';
   if ($merchid != '') {
     $wclause = $wpdb->prepare(' MerchantID = %s',$merchid);
     $and = ' && ';
   }
-  if ($imwidth != -1) {
+  if ($imsize != -1) {
+    $size = explode('x',$imsize);
     $wclause = $wpdb->prepare($wclause . $and . 
-				' ImageWidth = %d',$imwidth);
+				' ImageWidth = %d && ImageHeight = %d',
+				$size[0],$size[1]);
   }
   $where = ' where ' . $wclause . ' ';
 } else {
@@ -151,13 +153,13 @@ switch ($mode) {
   case 'ad':
 	$ADStatsData = GAN_Database::get_GAN_AD_VIEW_data($where);
 	//file_put_contents("php://stderr","*** GAN_ExportStats.php: ".count($ADStatsData)." rows of data in ADStatsData\n");
-	$csv .= '"Advertiser","Link ID","Link Name","End Date","Image Width","Impressions","Last View"'."\n";
+	$csv .= '"Advertiser","Link ID","Link Name","End Date","Image Size","Impressions","Last View"'."\n";
 	foreach ((array)$ADStatsData as $ADStatRow) {
 	  $csv .= '"'.gan_csv_quote(GAN_Database::get_merch_name($ADStatRow['MerchantID'])).'",';
 	  $csv .= '"'.gan_csv_quote(GAN_Database::get_link_id($ADStatRow['adid'])).'",';
 	  $csv .= '"'.gan_csv_quote(GAN_Database::get_link_name($ADStatRow['adid'])).'",';
 	  $csv .= '"'.gan_csv_quote($ADStatRow['EndDate']).'",';
-	  $csv .= $ADStatRow['ImageWidth'].',';
+	  $csv .= '"'.gan_csv_quote($ADStatRow['ImageWidth'].'x'.$ADStatRow['ImageHeight']).'",';
 	  $csv .= $ADStatRow['Impressions'].',';
 	  $csv .= '"'.gan_csv_quote($ADStatRow['LastRunDate']).'"';
 	  $csv .= "\n";

@@ -349,7 +349,7 @@ class GAN_Database {
   }
   static function get_GAN_data($where,$format = 'ARRAY_A') {
     global $wpdb;
-    return $wpdb->get_results("SELECT id,MerchantID,LinkID,ImageWidth,LinkName,StartDate,EndDate,Enabled FROM " . GAN_AD_TABLE . $where . ' Order by EndDate', $format);
+    return $wpdb->get_results("SELECT id,MerchantID,LinkID,ImageWidth,ImageHeight,LinkName,StartDate,EndDate,Enabled FROM " . GAN_AD_TABLE . $where . ' Order by EndDate', $format);
   }
   static function get_GAN_row_count($where) {
     global $wpdb;
@@ -510,6 +510,10 @@ class GAN_Database {
   static function get_imagewidths() {
     global $wpdb;
     return $wpdb->get_results("SELECT distinct ImageWidth from  " . GAN_AD_TABLE . " order by ImageWidth", 'ARRAY_A');
+  }
+  static function get_imagesizes() {
+    global $wpdb;
+    return $wpdb->get_results("SELECT distinct ImageWidth,ImageHeight from  " . GAN_AD_TABLE . " order by ImageWidth,ImageHeight", 'ARRAY_A');
   }
   static function total_ads() {
     global $wpdb;
@@ -749,6 +753,32 @@ class GAN_Database {
     if ( $imwidth == $GANImageWidth['ImageWidth'] ) 
       echo 'selected="selected"'; 
     ?>><?php echo $GANImageWidth['ImageWidth']; ?></option><?php 
+    }
+    ?></select><?php
+  }
+  /*
+   * Make a image size dropdown list
+   */
+
+  function imsizedropdown ($imsize,$name = 'imsize') {
+    $GANImagesizes = GAN_Database::get_imagesizes();
+  
+    ?><label for="gan-imsize"><?php _e('Image Size:','gan'); ?></label>
+      <select name="<?php echo $name; ?>" id="gan-imsize" maxlength="8">
+      <option value="-1" <?php 
+    if ( $imsize == "-1" ) echo 'selected="selected"'; 
+    ?>><?php _e('All','gan'); ?></option><?php
+    foreach ((array)$GANImagesizes as $GANImagesize) {
+      ?><option value="<?php echo $GANImagesize['ImageWidth'].'x'.$GANImagesize['ImageHeight']; ?>" <?php 
+    if ( $imsize == $GANImagesize['ImageWidth'].'x'.$GANImagesize['ImageHeight'] ) 
+      echo 'selected="selected"'; 
+    ?>><?php 
+      if ($GANImagesize['ImageWidth'] == 0 && 
+	   $GANImagesize['ImageHeight'] == 0) {
+	echo 'text';
+      } else {
+	echo $GANImagesize['ImageWidth'].'x'.$GANImagesize['ImageHeight']; 
+      } ?></option><?php 
     }
     ?></select><?php
   }
