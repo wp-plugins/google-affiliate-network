@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/google-affiliate-network\n"
-"POT-Creation-Date: 2011-06-11 14:14:45+00:00\n"
+"POT-Creation-Date: 2011-06-12 18:47:04+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -187,7 +187,7 @@ msgstr ""
 msgid "Image Height:"
 msgstr ""
 
-#: GAN_DB_List_Table.php:521 GAN_Database.php:746 GAN.php:664
+#: GAN_DB_List_Table.php:521 GAN_Database.php:750 GAN.php:664
 msgid "Image Width:"
 msgstr ""
 
@@ -313,15 +313,15 @@ msgstr ""
 msgid "Ad frame height:"
 msgstr ""
 
-#: GAN_Database.php:723
+#: GAN_Database.php:727
 msgid "Advertisers:"
 msgstr ""
 
-#: GAN_Database.php:727 GAN_Database.php:750 GAN_Database.php:770
+#: GAN_Database.php:731 GAN_Database.php:754 GAN_Database.php:774
 msgid "All"
 msgstr ""
 
-#: GAN_Database.php:766
+#: GAN_Database.php:770
 msgid "Image Size:"
 msgstr ""
 
@@ -484,7 +484,7 @@ msgid "Advertisers"
 msgstr ""
 
 #: GAN.php:479
-msgid "Widths"
+msgid "Sizes"
 msgstr ""
 
 #: GAN.php:491
