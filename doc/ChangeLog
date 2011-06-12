@@ -80,6 +80,7 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 * Additional Y2k / date fixes.
 * Minor updates to the documentation, clarifying various points.
 * Change Image Width column, dropdown, etc. to Image Size.
+* Change Widths to Sizes in database stats.
 
 = 4.1.3 =
 * Maintenance release -- fix problem with dates (a real live Y2K issue!)

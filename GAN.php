@@ -465,7 +465,7 @@ class GAN_Plugin {
 	  $total_ads = GAN_Database::total_ads();
 	  $disabled  = GAN_Database::disabled_count();
 	  $advertisers = GAN_Database::advertiser_count();
-	  $widths    = GAN_Database::width_count();
+	  $sizes    = GAN_Database::size_count();
 
 	  ?><div class="table">
 		<table class="ganstats">
@@ -475,8 +475,8 @@ class GAN_Plugin {
 		    <td class="ganstats_label"><?php _e('Disabled','gan'); ?></td></tr>
 		<tr><td class="ganstats_total"><?php echo $advertisers; ?></td>
 		    <td class="ganstats_label"><?php _e('Advertisers','gan'); ?></td>
-		    <td class="ganstats_total"><?php echo $widths; ?></td>
-		    <td class="ganstats_label"><?php _e('Widths','gan'); ?></td></tr>
+		    <td class="ganstats_total"><?php echo $sizes; ?></td>
+		    <td class="ganstats_label"><?php _e('Sizes','gan'); ?></td></tr>
 		</table>
 		</div><?php 
 	}

@@ -535,6 +535,10 @@ class GAN_Database {
     global $wpdb;
     return $wpdb->get_var("SELECT count(distinct ImageWidth) FROM " . GAN_AD_TABLE);
   }
+  static function size_count() {
+    global $wpdb;
+    return $wpdb->get_var("SELECT count(distinct ImageWidth, ImageHeight) FROM " . GAN_AD_TABLE);
+  }
   static function top_merch() {
     global $wpdb;
     if (GAN_Database::database_version() < 3.0) {
