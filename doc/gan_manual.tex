@@ -1,0 +1,248 @@
+\documentclass[letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{mathptmx}
+\usepackage[scaled=0.9]{helvet}
+\usepackage{url}
+\setcounter{secnumdepth}{-2}
+\title{Google Affiliate Network Plugin User Manual}
+\author{Robert Heller}
+\date{\today}
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+
+I wrote this plugin to display ads from the Google Affiliate Network on
+Deepwoods Software's WordPress powered website. This plugin uses a
+database of ads to display.  The ads are displayed in rotation, using
+the simple method of counting ad impressions and giving priority to the
+advertisers with the least impressions and display ads with the least
+impressions first that are expiring soonest.  As ads and advertisers
+are displayed, their impression counts are incremented, which moves
+them down the list\footnote{To the back of the list once the impression
+counts reach equilibrium, when the impression counts are all the
+same.}.  This means that all ads are displayed fairly, with preference
+given to new ads and to ads which are expiring soonest\footnote{Expired
+ads are not displayed and a daily cron job deletes them.}. After using
+``in house'' for a while, I have made this plugin available to other
+WordPress users who also using the Google Affiliate Network as a source
+of advertising revenue.
+
+\section{Installation}
+
+Installation is just a matter of installing from the new plugin
+page.  Once installed and activated, the plugin is ready to start
+displaying affiliate ads.
+
+\section{Configuring}
+
+There is only one configuration option: Autoexpire. The option is
+true by default.  It enables the automatic removal of ads that have
+expired. While it is possible to disable this option it is not
+recommended
+
+If you have upgraded from an older version of the plugin, the
+configure page will display a button to upgrade the database to the new
+version.
+
+\section{Inserting Ads}
+
+In order to display ads, you need to have some ads in your database.
+There are two ways to insert ads: manually, one by one or in bulk from
+a TSV (Tab Separated Value) file. Manual insertion is done on the
+\emph{Add new} admin page and bulk insertion is done on the
+\emph{Add new bulk} admin page.
+
+\subsection{Add new admin page (manual insertion)}
+
+This page has a form for adding (and editing and viewing) a single ad.
+Generally, this page is not usually used, see
+Section~\ref{sect:addbulk} for adding ads in bulk. The
+fields\footnote{These fields correspond to the column headings used in
+the files sent as part of your E-Mailed Link Subscriptions.} include: 
+
+\begin{description}
+  \item[Advertiser:] This is the advertiser's name.
+  \item[Link ID:] This is the (unique) Link Id code. This ID value is
+supplied by Google and uniquely identified the ad.  Link IDs must be
+unique and are prefixed by an uppercase ``J''.
+  \item[Link Name:] This is the name of the link.  It is used as the
+anchor text for text ads.
+  \item[Merchandising Text:] This is some ad copy for the
+link and is displayed with the ad link.
+  \item[Alt Text:] This is the alternative text for image
+ads.
+  \item[Start Date:] The is the starting date, in the format yyyy-mm-dd
+or m/d/yyyy. 
+  \item[End Date:] This is the ending date, in the format yyyy-mm-dd or
+m/d/yyyy. For ads with no ending date use a date far into the future,
+like 2037-12-31.
+  \item[Clickserver Link:] This is the tracking URL for the ad. 
+  \item[ImageURL:] This is the URL of the ad image for image ads. 
+  \item[ImageHeight:] This is the height of the image (0 for text ads). 
+  \item[ImageWidth:] This is the width of the image (0 for text ads). 
+  \item[LinkURL:] This is the Link URL.  This is the URL of the actual
+banner image.
+  \item[PromoType:] This is the type of promotion.
+  \item[MerchantID:] This is the (unique) merchant id.  This value is
+supplied by Google and is prefixed by a uppercase ``K''.
+  \item[enabled?] This indicates of the ad is enabled or
+not. 
+\end{description}
+
+\subsection{Add new bulk admin page (bulk insertion)}
+\label{sect:addbulk}
+
+This page uploads a TSV file of ads previously downloaded from your
+Google Affiliate Network management page. You get this file by visiting
+your Google Affiliate Network management page and clicking the Links
+tab. On this page you can select the sorts of ads you would like by
+selecting one or more of your approved advertisers and selecting the
+type of ads (text and/or banner), and other criteria such as size, etc.
+It is then possible to export these ads as a TSV file\footnote{Using
+the Export As button and selecting ``Tab Separated Values'' option.},
+which can then be downloaded. This same file can in turn be uploaded to
+the GAN plugin and the ads in this file will be added to your ad
+database.
+
+\section{Showing Ads}
+
+There are two ways to show ads on your pages and/or posts.  You can
+use one of the two widgets (GAN Image Widget or GAN Widget) or one of
+the two shortcodes (GAN\_Text or GAN\_Image).  The widgets of course need
+to go into a 'sidebar' that supports widgets.  The shortcodes can go
+into any post or page.
+
+\subsection{GAN Widget}
+
+This widget shows text ads in a ``sidebar'' that supports widgets.
+
+The GAN Widget has five parameters:
+\begin{description}
+  \item[Max ads:] The maximum number of ads to display.
+  \item[Orientation:] The orientation of the ads. Horizontal
+means the ads are arranged side by side like one row of a table and
+vertical means the ads are arranged in a vertical list. Typically the
+horizontal orientation is suitable for a wide but short ad frame and the
+vertical orientation is suitable for sky scrapper type ad unit.
+  \item[Target:] The link target to use. Can be either Same 
+Window or New Window or Tab.
+  \item[Ad frame width:] The width of the ad frame. A value
+of zero will cause the frame to use all of the available space.
+  \item[Ad frame height:] The height of the ad frame.
+\end{description}
+
+\subsection{GAN Image Widget}
+
+This widget shows image (banner)  ads in a ``sidebar'' that supports
+widgets.  Any given widget instance (ad unit) can only show one size of
+banner ad.
+
+The GAN Image Widget has seven parameters:
+\begin{description}
+  \item[Max ads:] The maximum number of ads to display.
+  \item[Width:] The image width of the image ads.
+  \item[Height:] The image height of the image ads.
+  \item[Orientation:] The orientation of the ads. Horizontal
+means the ads are arranged side by side like one row of a table and
+vertical means the ads are arranged in a vertical list. Typically the
+horizontal orientation is suitable for a wide but short ad frame and the
+vertical orientation is suitable for sky scrapper type ad unit.
+  \item[Target:] The link target to use. Can be either Same 
+Window or New Window or Tab.
+  \item[Ad frame width:] The width of the ad frame. A value
+of zero will cause the frame to use all of the available space.
+  \item[Ad frame height:] The height of the ad frame.
+\end{description}
+
+\subsection{GAN\_Text shortcode}
+
+This shortcode inserts a text ad unit into a page or post.
+
+The GAN\_Text shortcode has same five parameters as the GAN
+Widget:
+\begin{description}
+  \item[maxads] An integer, with the default being 4.
+The maximum number of ads to display.
+  \item[orientation] The orientation of the ads, one of
+``vertical'' (the default) or ``horizontal''. Horizontal means the ads are
+arranged side by side like one row of a table and      vertical means
+the ads are arranged in a vertical list. Typically the horizontal
+orientation is suitable for a wide but short ad frame and the vertical
+orientation is suitable for sky scrapper type ad unit.
+  \item[target] The link target to use, one of ``same'' (the
+default) or ``new''.
+  \item[ifwidth] The width of the ad frame. A value
+of zero will cause the frame to use all of the available space.
+  \item[ifheight] The height of the ad frame.
+\end{description}
+
+Here is an example -- 5 text ads arranged horizontally in a 798x70 frame:
+\begin{verbatim}
+[GAN_Text maxads=5 orientation='horizontal' ifwidth=798 ifheight=70]
+\end{verbatim}
+
+\subsection{GAN\_Image shortcode}
+
+This shortcode inserts an image (banner) ad unit into a page or post.
+Like the GAN Image Widget, all of the ads displayed are of the same
+size. 
+
+The GAN\_Image shortcode has same seven parameters as the GAN Image
+Widget:
+\begin{description}
+  \item[maxads] An integer, with the default being 4.
+The maximum number of ads to display.
+  \item[orientation] The orientation of the ads, one of
+``vertical'' (the default) or ``horizontal''. Horizontal means the ads are
+arranged side by side like one row of a table and      vertical means
+the ads are arranged in a vertical list. Typically the horizontal
+orientation is suitable for a wide but short ad frame and the vertical
+orientation is suitable for sky scrapper type ad unit.
+  \item[target] The link target to use, one of ``same'' (the
+default) or ``new''.
+  \item[width] The image width of the image ads. The
+default is 120.
+  \item[height] The image height of the image ads. The
+default is 60.
+  \item[ifwidth] The width of the ad frame. A value
+of zero will cause the frame to use all of the available space.
+  \item[ifheight] The height of the ad frame.
+\end{description}
+
+Here is an example -- 2 468x60 banners arranged vertically in a 473x65 frame:
+\begin{verbatim}
+[GAN_Image maxads=2 orientation='vertical' ifwidth=473 ifheight=65 width=468 height=60]
+\end{verbatim}
+
+\section{Editing Ads}
+
+When displaying the data on the main admin page, links are provided
+to edit, delete, or toggle the enabled flag for each ad. The ads are
+displayed ordered by expiration date, with the soonest to expire
+displayed first. It is possible to select only a single merchant's ads
+to be displayed and/or a single size of ad or only text ads.
+
+\section{Ad Subscriptions}
+
+A Tcl script is included to process E-Mailed Ad Subscriptions and
+insert them into the database.  This requires the ability to receive
+E-Mail on the server running the database server and requires that Tcl
+and the MySQLTcl package be installed as well as the use of procmail as
+a mail delivery agent.
+
+\section{Statistics}
+
+Both ad and merchant statistics are available for display and download
+as CSV files.  The statistics are ordered from fewest impressions to
+most impressions. A summary of the statistics is also displayed on the
+dashboard.  Ad statistics can be filtered by advertiser and/or by size.
+
+\end{document}
+
+
+
