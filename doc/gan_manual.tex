@@ -5,7 +5,7 @@
 \usepackage[scaled=0.9]{helvet}
 \usepackage{url}
 \setcounter{secnumdepth}{-2}
-\title{Google Affliate Network Plugin User Manual}
+\title{Google Affiliate Network Plugin User Manual}
 \author{Robert Heller}
 \date{\today}
 \begin{document}
@@ -16,7 +16,7 @@
 
 \section{Introduction}
 
-I wrote this plugin to display ads from the Google Affliate Network on
+I wrote this plugin to display ads from the Google Affiliate Network on
 Deepwoods Software's WordPress powered website. This plugin uses a
 database of ads to display.  The ads are displayed in rotation, using
 the simple method of counting ad impressions and giving priority to the
@@ -29,21 +29,21 @@ same.}.  This means that all ads are displayed fairly, with preference
 given to new ads and to ads which are expiring soonest\footnote{Expired
 ads are not displayed and a daily cron job deletes them.}. After using
 ``in house'' for a while, I have made this plugin available to other
-WordPress users who also using the Google Affliate Network as a source
+WordPress users who also using the Google Affiliate Network as a source
 of advertising revenue.
 
 \section{Installation}
 
 Installation is just a matter of installing from the new plugin
 page.  Once installed and activated, the plugin is ready to start
-displaying affilate ads.
+displaying affiliate ads.
 
 \section{Configuring}
 
 There is only one configuration option: Autoexpire. The option is
 true by default.  It enables the automatic removal of ads that have
 expired. While it is possible to disable this option it is not
-recomended
+recommended
 
 If you have upgraded from an older version of the plugin, the
 configure page will display a button to upgrade the database to the new
@@ -60,8 +60,10 @@ a TSV (Tab Separated Value) file. Manual insertion is done on the
 \subsection{Add new admin page (manual insertion)}
 
 This page has a form for adding (and editing and viewing) a single ad.
-Generally, this page is not usually used, see Section~\ref{sect:addbulk}
-for adding ads in bulk. The fields include: 
+Generally, this page is not usually used, see
+Section~\ref{sect:addbulk} for adding ads in bulk. The
+fields\footnote{These fields correspond to the column headings used in
+the files sent as part of your E-Mailed Link Subscriptions.} include: 
 
 \begin{description}
   \item[Advertiser:] This is the advertiser's name.
@@ -72,7 +74,7 @@ unique and are prefixed by an uppercase ``J''.
 anchor text for text ads.
   \item[Merchandising Text:] This is some ad copy for the
 link and is displayed with the ad link.
-  \item[Alt Text:] This is the alterniitive text for image
+  \item[Alt Text:] This is the alternative text for image
 ads.
   \item[Start Date:] The is the starting date, in the format yyyy-mm-dd
 or m/d/yyyy. 
@@ -126,7 +128,7 @@ The GAN Widget has five parameters:
 means the ads are arranged side by side like one row of a table and
 vertical means the ads are arranged in a vertical list. Typically the
 horizontal orientation is suitable for a wide but short ad frame and the
-vertical orientation is suitable for skyscrapper type ad unit.
+vertical orientation is suitable for sky scrapper type ad unit.
   \item[Target:] The link target to use. Can be either Same 
 Window or New Window or Tab.
   \item[Ad frame width:] The width of the ad frame. A value
@@ -149,7 +151,7 @@ The GAN Image Widget has seven parameters:
 means the ads are arranged side by side like one row of a table and
 vertical means the ads are arranged in a vertical list. Typically the
 horizontal orientation is suitable for a wide but short ad frame and the
-vertical orientation is suitable for skyscrapper type ad unit.
+vertical orientation is suitable for sky scrapper type ad unit.
   \item[Target:] The link target to use. Can be either Same 
 Window or New Window or Tab.
   \item[Ad frame width:] The width of the ad frame. A value
@@ -171,7 +173,7 @@ The maximum number of ads to display.
 arranged side by side like one row of a table and      vertical means
 the ads are arranged in a vertical list. Typically the horizontal
 orientation is suitable for a wide but short ad frame and the vertical
-orientation is suitable for skyscrapper type ad unit.
+orientation is suitable for sky scrapper type ad unit.
   \item[target] The link target to use, one of ``same'' (the
 default) or ``new''.
   \item[ifwidth] The width of the ad frame. A value
@@ -200,7 +202,7 @@ The maximum number of ads to display.
 arranged side by side like one row of a table and      vertical means
 the ads are arranged in a vertical list. Typically the horizontal
 orientation is suitable for a wide but short ad frame and the vertical
-orientation is suitable for skyscrapper type ad unit.
+orientation is suitable for sky scrapper type ad unit.
   \item[target] The link target to use, one of ``same'' (the
 default) or ``new''.
   \item[width] The image width of the image ads. The
@@ -223,23 +225,22 @@ When displaying the data on the main admin page, links are provided
 to edit, delete, or toggle the enabled flag for each ad. The ads are
 displayed ordered by expiration date, with the soonest to expire
 displayed first. It is possible to select only a single merchant's ads
-to be displayed and/or a single width of ad (a width of zero implies
-text ads).
+to be displayed and/or a single size of ad or only text ads.
 
-\section{Ad Subsriptions}
+\section{Ad Subscriptions}
 
-A Tcl script is included to process E-Mailed Ad Subsriptions and
+A Tcl script is included to process E-Mailed Ad Subscriptions and
 insert them into the database.  This requires the ability to receive
 E-Mail on the server running the database server and requires that Tcl
 and the MySQLTcl package be installed as well as the use of procmail as
 a mail delivery agent.
 
-\section{Statisics}
+\section{Statistics}
 
-Both ad and merchant statisics are available for display and download
-as CSV files.  The statisics are ordered from fewest impressions to
-most impressions. A summary of the statisics is also displayed on the
-dashboard.
+Both ad and merchant statistics are available for display and download
+as CSV files.  The statistics are ordered from fewest impressions to
+most impressions. A summary of the statistics is also displayed on the
+dashboard.  Ad statistics can be filtered by advertiser and/or by size.
 
 \end{document}
 

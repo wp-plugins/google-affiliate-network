@@ -1,5 +1,5 @@
 <div class="wrap"><div id="icon-gan-help" class="icon32"><br />
-</div><h2><?php _e('Help Using the Google Affliate Network Plugin','gan'); ?><?php $this->InsertVersion(); ?></h2>
+</div><h2><?php _e('Help Using the Google Affiliate Network Plugin','gan'); ?><?php $this->InsertVersion(); ?></h2>
 <?php $this->PluginSponsor(); ?>
 <ul>
 <li><a href="#Installation">Installation</a></li>
@@ -7,19 +7,19 @@
 <li><a href="#InsertingAds">Inserting Ads</a></li>
 <li><a href="#ShowingAds">Showing Ads</a></li>
 <li><a href="#EditingAds">Editing Ads</a></li>
-<li><a href="#AdSubsriptions">Ad Subsriptions</a></li>
-<li><a href="#Statisics">Statisics</a></li>
+<li><a href="#AdSubsriptions">Ad Subscriptions</a></li>
+<li><a href="#Statistics">Statistics</a></li>
 <li><a href="<?php echo GAN_PLUGIN_URL . '/doc/gan_manual.pdf'; ?>">Download printable manual</a></li>
 </ul>
 <a name="Installation"></a><h3>Installation</h3> 
 <p>Installation is just a matter of installing from the new plugin
 page.  Once installed and activated, the plugin is ready to start
-displaying affilate ads.</p> 
+displaying affiliate ads.</p> 
 <a name="Configuring"></a><h3>Configuring</h3> 
 <p>There is only one configuration option: Autoexpire. The option is
 true by default.  It enables the automatic removal of ads that have
 expired. While it is possible to disable this option it is not
-recomended</p>
+recommended</p>
 <p>If you have upgraded from an older version of the plugin, the
 configure page will display a button to upgrade the database to the new
 version.</p>
@@ -38,7 +38,7 @@ a TSV (Tab Separated Value) file. Manual insertion is done on the
 used as the anchor text for text ads.</li> 
 <li><strong>Merchandising Text:</strong> This is some ad copy for the
 link and is displayed with the ad link.</li>
-<li><strong>Alt Text:</strong> This is the alterniitive text for image
+<li><strong>Alt Text:</strong> This is the alternative text for image
 ads.</li>
 <li><strong>Start Date:</strong> The is the starting date, in the
 format yyyy-mm-dd.</li> 
@@ -82,7 +82,7 @@ into any post or page.</p>
 means the ads are arranged side by side like one row of a table and
 vertical means the ads are arranged in a vertical list. Typically the
 horizontal orientation is suitable for a wide but short ad frame and the
-vertical orientation is suitable for skyscrapper type ad unit.</li>
+vertical orientation is suitable for sky scrapper type ad unit.</li>
 <li><strong>Target:</strong> The link target to use. Can be either Same 
 Window or New Window or Tab.</li>
 <li><strong>Ad frame width:</strong> The width of the ad frame. A value
@@ -99,7 +99,7 @@ of zero will cause the frame to use all of the available space.</li>
 means the ads are arranged side by side like one row of a table and
 vertical means the ads are arranged in a vertical list. Typically the
 horizontal orientation is suitable for a wide but short ad frame and the
-vertical orientation is suitable for skyscrapper type ad unit.</li>
+vertical orientation is suitable for sky scrapper type ad unit.</li>
 <li><strong>Target:</strong> The link target to use. Can be either Same 
 Window or New Window or Tab.</li>
 <li><strong>Ad frame width:</strong> The width of the ad frame. A value
@@ -116,7 +116,7 @@ The maximum number of ads to display.</li>
 arranged side by side like one row of a table and      vertical means
 the ads are arranged in a vertical list. Typically the horizontal
 orientation is suitable for a wide but short ad frame and the vertical
-orientation is suitable for skyscrapper type ad unit.</li>
+orientation is suitable for sky scrapper type ad unit.</li>
 <li><strong>target</strong> The link target to use, one of 'same' (the
 default) or 'new'.</li>
 <li><strong>ifwidth</strong> The width of the ad frame. A value
@@ -137,7 +137,7 @@ The maximum number of ads to display.</li>
 arranged side by side like one row of a table and      vertical means
 the ads are arranged in a vertical list. Typically the horizontal
 orientation is suitable for a wide but short ad frame and the vertical
-orientation is suitable for skyscrapper type ad unit.</li>
+orientation is suitable for sky scrapper type ad unit.</li>
 <li><strong>target</strong> The link target to use, one of 'same' (the
 default) or 'new'.</li>
 <li><strong>width</strong> The image width of the image ads. The
@@ -159,14 +159,14 @@ displayed ordered by expiration date, with the soonest to expire
 displayed first. It is possible to select only a single merchant's ads
 to be displayed and/or a single width of ad (a width of zero implies
 text ads).</p>
-<a name="AdSubsriptions"></a><h3>Ad Subsriptions</h3> 
-<p>A Tcl script is included to process E-Mailed Ad Subsriptions and
+<a name="AdSubsriptions"></a><h3>Ad Subscriptions</h3> 
+<p>A Tcl script is included to process E-Mailed Ad Subscriptions and
 insert them into the database.  This requires the ability to receive
 E-Mail on the server running the database server and requires that Tcl
 and the MySQLTcl package be installed as well as the use of procmail as
 a mail delivery agent.</p>
-<a name="Statisics"></a><h3>Statisics</h3>
-<p>Both ad and merchant statisics are available for display.  The
-statisics are ordered from fewest impressions to most impressions. A
-summary of the statisics is also displayed on the dashboard.</p>
+<a name="Statistics"></a><h3>Statistics</h3>
+<p>Both ad and merchant statistics are available for display.  The
+statistics are ordered from fewest impressions to most impressions. A
+summary of the statistics is also displayed on the dashboard.</p>
 </div>
