@@ -214,10 +214,21 @@ of zero will cause the frame to use all of the available space.
   \item[ifheight] The height of the ad frame.
 \end{description}
 
-Here is an example -- 2 468x60 banners arranged vertically in a 473x65 frame:
+Here is an example -- 2 468x60 banners arranged vertically in a 468x126 frame:
 \begin{verbatim}
-[GAN_Image maxads=2 orientation='vertical' ifwidth=473 ifheight=65 width=468 height=60]
+[GAN_Image maxads=2 orientation='vertical' ifwidth=468 ifheight=126 width=468 height=60]
 \end{verbatim}
+
+\subsection{Using the ad unit insertion media button}
+
+As of version 4.3, a ``media button'' is available to aid in the
+insertion of the ad unit short codes into pages and posts.  This button
+opens a dialog window where the parameters can be easily selected to
+create a short code that will insert an ad unit into the current page or
+post. You can select the maximumn number of ads, the size or type of ad,
+the orientation of the ads within the ad unit and the size of the ad
+frame. When you click on the insert ad button, the proper short code is
+generated and inserted into your page or post.
 
 \section{Editing Ads}
 
