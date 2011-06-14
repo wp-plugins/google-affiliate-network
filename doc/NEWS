@@ -77,6 +77,9 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 
 == Changelog ==
 
+= 4.3 =
+* Added media button to insert ad unit short codes.
+
 = 4.2 =
 * Additional Y2k / date fixes.
 * Minor updates to the documentation, clarifying various points.
@@ -202,6 +205,9 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 * First official release.
 
 == Upgrade Notice ==
+
+= 4.3 =
+Added media button to insert ad unit short codes.
 
 = 4.2 =
 Assorted minor updates, including documentation cleanup.
