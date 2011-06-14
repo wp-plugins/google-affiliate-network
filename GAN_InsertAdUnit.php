@@ -148,18 +148,18 @@ wp_enqueue_script( 'jquery-color' );
 		}
 		if (imwidth == 0 && imheight == 0) {
 		   win.send_to_editor('[GAN_Text orientation="'+orientation+
-					'" maxads='+maxads+
-					' ifwidth='+ifwidth+
-					' ifheight='+ifheight+
-					' target="'+target+'"]');
+					'" maxads="'+maxads+
+					'" ifwidth="'+ifwidth+
+					'" ifheight="'+ifheight+
+					'" target="'+target+'"]');
 		} else {
 		   win.send_to_editor('[GAN_Image orientation="'+orientation+
-					'" maxads='+maxads+
-					' width='+imwidth+
-					' height='+imheight+
-					' ifwidth='+ifwidth+
-					' ifheight='+ifheight+
-					' target="'+target+'"]');
+					'" maxads="'+maxads+
+					'" width="'+imwidth+
+					'" height="'+imheight+
+					'" ifwidth="'+ifwidth+
+					'" ifheight="'+ifheight+
+					'" target="'+target+'"]');
 		}
 	});
 	/* ]]> */
