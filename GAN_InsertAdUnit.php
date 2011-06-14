@@ -126,13 +126,26 @@ wp_enqueue_script( 'jquery-color' );
 	/* <![CDATA[ */
 	jQuery('.insertad').click(function(){
 		var win = window.dialogArguments || opener || parent || top;
-		var maxads = jQuery('#maxads').val();
+		var maxads = parseInt(jQuery('#maxads').val());
 		var imsize = jQuery('#gan-imsize').val().split('x');
-		var imwidth = imsize[0]; var imheight = imsize[1];
+		var imwidth = parseInt(imsize[0]); var imheight = parseInt(imsize[1]);
 		var orientation = jQuery('#orientation').val();
 		var target = jQuery('#target').val();
 		var ifwidth = jQuery('#ifwidth').val();
 		var ifheight = jQuery('#ifheight').val();
+		if (ifwidth == '' && ifheight == '' && 
+			imwidth != 0 && imheight != 0) {
+		  switch (orientation) {
+		    case "vertical":
+		      ifwidth = imwidth;
+		      ifheight = (imheight+3)*maxads;
+		      break;
+		    case "horizontal":
+		      ifwidth = imwidth*maxads;
+		      ifheight = imheight+3;
+		      break;
+		  }
+		}
 		if (imwidth == 0 && imheight == 0) {
 		   win.send_to_editor('[GAN_Text orientation="'+orientation+
 					'" maxads='+maxads+
