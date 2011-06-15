@@ -97,26 +97,26 @@ wp_enqueue_script( 'jquery-color' );
 	?>
 </head>
 <body id="media-upload">
-<form method="post" enctype="multipart/form-data" style="clear:both" action="GAN_InsertAdUnit.php" class="media-upload-form">
+<form style="clear:both" class="media-upload-form">
 	<p><label for="maxads"><?php _e('Max ads:','gan'); ?></label>
-	   <input id="maxads" value="4" name="maxads" style="width:100%;" />
+	   <input id="maxads" value="4" name="maxads" style="width:75%;" />
 	</p>
 	<p><?php GAN_Database::imsizedropdown('0x0'); ?></p>
 	<p><label for="orientation"><?php _e('Orientation:','gan'); ?></label>
-	   <select id="orientation" name="orientation" class="widefat" style="width:100%;">
+	   <select id="orientation" name="orientation" class="widefat" style="width:75%;">
 		<option value="vertical" selected="selected"><?php _e('vertical','gan'); ?></option>
 		<option value="horizontal"><?php _e('horizontal','gan'); ?></option>
 	   </select>
 	</p><label for="target"><?php _e('Target:','gan'); ?></label>
-	    <select id="target" name="target" class="widefat" style="width:100%;">
+	    <select id="target" name="target" class="widefat" style="width:75%;">
 		<option value="same" selected="selected"><?php _e('Same Window','gan'); ?></option>
 		<option value="new"><?php _e('New Window or Tab','gan'); ?></option>
 	   </select>
 	<p><label for="ifwidth"><?php _e('Ad frame width:','gan'); ?></label>
-	   <input id="ifwidth" name="ifwidth" value="" style="width:100%;" />
+	   <input id="ifwidth" name="ifwidth" value="" style="width:75%;" />
 	</p>
 	<p><label for="ifheight"><?php _e('Ad frame height:','gan'); ?></label>
-	   <input id="ifheight" name="ifheight" value="" style="width:100%;" />
+	   <input id="ifheight" name="ifheight" value="" style="width:75%;" />
 	</p>
 	<p>
 	<a href="#" class="button insertad"><?php _e('Insert Ad Unit','gan'); ?></a>
@@ -124,6 +124,36 @@ wp_enqueue_script( 'jquery-color' );
 </form>
 <script type="text/javascript">
 	/* <![CDATA[ */
+	function changeupdate() {
+	  var maxads = parseInt(document.getElementById('maxads').value);
+	  var imsize = document.getElementById('gan-imsize').value.split('x');
+	  var imwidth = parseInt(imsize[0]); var imheight = parseInt(imsize[1]);
+	  var orientation = document.getElementById('orientation').value;
+	  var ifwidth;
+	  var ifheight;
+	  switch (orientation) {
+	    case "vertical":
+	      if (imwidth == 0) ifwidth = 120;
+	      else ifwidth = imwidth;
+	      document.getElementById('ifwidth').value = ifwidth;
+	      if (imheight == 0) ifheight = 60*maxads;
+	      else ifheight = (imheight+3)*maxads;
+	      document.getElementById('ifheight').value = ifheight;
+	      break;
+	    case "horizontal":
+	      if (imwidth == 0) ifwidth = 120*maxads;
+	      else ifwidth = imwidth*maxads;
+	      document.getElementById('ifwidth').value = ifwidth;
+	      if (imheight == 0) ifheight = 60;
+	      else ifheight = imheight+3;
+	      document.getElementById('ifheight').value = ifheight;
+	      break;
+	  }
+	  return false;
+	}
+	document.getElementById('maxads').onchange = changeupdate;
+	document.getElementById('gan-imsize').onchange = changeupdate;
+	document.getElementById('orientation').onchange = changeupdate;
 	jQuery('.insertad').click(function(){
 		var win = window.dialogArguments || opener || parent || top;
 		var maxads = parseInt(jQuery('#maxads').val());
