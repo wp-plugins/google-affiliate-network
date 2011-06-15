@@ -325,7 +325,7 @@ class GAN_Plugin {
 	  /* Head of page, filter and screen options. */
 	  $autoexpire = get_option('wp_gan_autoexpire');
 	  ?><div class="wrap"><div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?><?php $this->InsertVersion(); ?></h2>
-	    <?php $this->InsertPayPalDonateButton(); ?>
+	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 	    	<input type="hidden" name="page" value="gan-database-options" />
 		<table class="form-table">
