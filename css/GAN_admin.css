@@ -1,3 +1,24 @@
+ul#gan-admin-tabs {border-bottom: 1px solid; padding-bottom: 5px;}
+ul#gan-admin-tabs li{display:inline; list-style:none; }
+ul#gan-admin-tabs li a{
+	border:1px solid #e3e3e3;
+	background-color:#f1f1f1;
+	/*-moz-border-radius-topleft:10px;
+	-moz-border-radius-topright:10px;
+	-webkit-border-top-right-radius:10px;
+	-webkit-border-top-left-radius:10px;*/
+	padding:0px 10px 5px 10px;
+	text-decoration: none;
+}
+ul#gan-admin-tabs li a:hover{
+	border:1px solid #d3d3d3;
+	background-color:#e1e1e1;
+}
+ul#gan-admin-tabs li a.selected{
+	border:1px solid #d3d3d3;
+	background-color:#e1e1e1;
+}
+
 #gan_donate {
 	vertical-align: text-top;
 	float: right;

@@ -50,6 +50,9 @@ class GAN_Plugin {
 	var $ad_stats_list_table;
 	var $merch_stats_list_table;
 
+	var $admin_tabs;
+	var $admin_tablist;
+
 	/* Constructor: register our activation and deactivation hooks and then
 	 * add in our actions.
          */
@@ -110,45 +113,76 @@ class GAN_Plugin {
 
 	/* Add in our Admin Menu */
 	function admin_menu() {
+	  $this->admin_tabs = array();
+	  $this->admin_tablist = array();
 	  $this->database_screen_id = add_menu_page( __('GAN Database','gan'), __('GAN DB','gan'), 'manage_options', 
 		 'gan-database-page', array($this,'admin_database_page'), 
 		 GAN_PLUGIN_IMAGE_URL.'/GAN_menu.png');
+	  $this->admin_tabs['gan-database-page'] = __('GAN DB','gan');
+	  $this->admin_tablist[] = 'gan-database-page';
 	  add_action("load-$this->database_screen_id", array($this,'_init_db_list_table') );
 	  $this->add_contentualhelp($this->database_screen_id,'gan-database-page');
+
 	  $this->add_db_screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN DB element','gan'), 
 		    __('Add new','gan'), 
 		    'manage_options', 'gan-database-add-element', 
 		    array($this,'admin_add_element'));
+	  $this->admin_tabs['gan-database-add-element'] = __('Add new','gan');
+	  $this->admin_tablist[] = 'gan-database-add-element';
 	  add_action("load-$this->add_db_screen_id", array($this,'_init_add_db_list_table') );
 	  $this->add_contentualhelp($this->add_db_screen_id,'gan-database-add-element');
+
 	  $this->add_db_bulk_screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN DB elements in bulk','gan'), 
 		    __('Add new bulk','gan'), 
 		    'manage_options', 'gan-database-add-element-bulk', 
 		    array($this,'admin_add_element_bulk'));
+	  $this->admin_tabs['gan-database-add-element-bulk'] = __('Add new bulk','gan');
+	  $this->admin_tablist[] = 'gan-database-add-element-bulk';
 	  add_action("load-$this->add_db_bulk_screen_id", array($this,'_init_add_db_list_table') );
 	  $this->add_contentualhelp($this->add_db_bulk_screen_id,'gan-database-add-element-bulk');
+
 	  $screen_id = add_submenu_page( 'gan-database-page', __('Ad Impression Statistics','gan'),
 	  	    __('Ad Stats','gan'),
 		    'manage_options', 'gan-database-ad-impstats',
 		    array($this,'admin_ad_impstats'));
+	  $this->admin_tabs['gan-database-ad-impstats'] = __('Ad Stats','gan');
+	  $this->admin_tablist[] = 'gan-database-ad-impstats';
 	  add_action("load-$screen_id", array($this,'_init_ad_stats_list_table') );
 	  $this->add_contentualhelp($screen_id,'gan-database-ad-impstats');
+
 	  $screen_id = add_submenu_page( 'gan-database-page', __('Merchant Impression Statistics','gan'),
 	  	    __('Merchant Stats','gan'),
 		    'manage_options', 'gan-database-merch-impstats',
 		    array($this,'admin_merch_impstats'));
+	  $this->admin_tabs['gan-database-merch-impstats'] = __('Merchant Stats','gan');
+	  $this->admin_tablist[] = 'gan-database-merch-impstats';
 	  add_action("load-$screen_id", array($this,'_init_merch_stats_list_table') );
 	  $this->add_contentualhelp($screen_id,'gan-database-merch-impstats');
+
 	  $screen_id = add_submenu_page( 'gan-database-page', __('Configure Options','gan'),
 			    __('Configure','gan'),'manage_options', 
 			    'gan-database-options',
 			    array($this,'admin_configure_options'));
 	  $this->add_contentualhelp($screen_id,'gan-database-options');
+	  $this->admin_tabs['gan-database-options'] = __('Configure','gan');
+	  $this->admin_tablist[] = 'gan-database-options';
+
 	  add_submenu_page( 'gan-database-page', __('Help Using the Google Affliate Network Plugin','gan'),
 	  		    __('Help','gan'),'manage_options',
 			    'gan-database-help',
 			    array($this,'admin_help')); 
 	}
+	function admin_tabs($current) {
+	  ?><ul id="gan-admin-tabs" class="tabs"><?php
+	  foreach ($this->admin_tablist as $pageslug) {
+	    ?><li><a href="<?php 
+		echo add_query_arg(array('page' => $pageslug),
+				    admin_url('admin.php')); ?>" <?php
+		if ($current == $pageslug) {echo 'class="current selected"';}
+		?>><?php echo $this->admin_tabs[$pageslug]; ?></a></li><?php
+	  }
+	  ?></ul><?php
+	}	
 	function _init_db_list_table() {
 	  add_screen_option('per_page',array('label' => __('Rows','gan')) );
 	  $this->_init_add_db_list_table();
@@ -235,7 +269,8 @@ class GAN_Plugin {
 	function admin_database_page() {
 	  $this->gan_db_list_table->prepare_items();
 	  /* Head of page, filter and screen options. */
-	  ?><div class="wrap"><div id="icon-gan-db" class="icon32"><br /></div>
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-page'); ?><br clear="all" />
+	    <div id="icon-gan-db" class="icon32"><br /></div>
 	    <h2><?php _e('GAN Database','gan'); ?> <a href="<?php 
 		echo add_query_arg(
 		   array('page' => 'gan-database-add-element',
@@ -257,7 +292,8 @@ class GAN_Plugin {
 	/* Add element to ad database */
 	function admin_add_element() {
 	  $message = $this->gan_db_list_table->prepare_one_item();
-	  ?><div class="wrap"><div id="<?php echo $this->gan_db_list_table->add_item_icon(); ?>" class="icon32"><br />
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-add-element'); ?><br clear="all" />
+	    <div id="<?php echo $this->gan_db_list_table->add_item_icon(); ?>" class="icon32"><br />
 	    </div><h2><?php echo $this->gan_db_list_table->add_item_h2(); ?><?php   
 				     $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); 
@@ -276,7 +312,8 @@ class GAN_Plugin {
         /* Add elements in bulk (from a TSV file) to ad database */
 	function admin_add_element_bulk() {
 	  $message = $this->gan_db_list_table->process_bulk_upload();
-	  ?><div class="wrap"><div id="icon-gan-add-db" class="icon32"><br />
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-add-element-bulk'); ?><br clear="all" />
+	    <div id="icon-gan-add-db" class="icon32"><br />
 	    </div><h2><?php _e('Add Elements in bulk to the GAN Database','gan'); ?><?php   
                                      $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); 
@@ -291,7 +328,8 @@ class GAN_Plugin {
 	function admin_ad_impstats() {
 	  $this->ad_stats_list_table->prepare_items();
 	  /* Head of page, filter and screen options. */
-	  ?><div class="wrap"><div id="icon-gan-ad-imp" class="icon32"><br /></div><h2><?php _e('Ad Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-ad-impstats'); ?><br clear="all" />
+	    <div id="icon-gan-ad-imp" class="icon32"><br /></div><h2><?php _e('Ad Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 	    	<input type="hidden" name="page" value="gan-database-ad-impstats" />
@@ -301,7 +339,8 @@ class GAN_Plugin {
 	function admin_merch_impstats() {
 	  $this->merch_stats_list_table->prepare_items();
 	  /* Head of page, filter and screen options. */
-	  ?><div class="wrap"><div id="icon-gan-merch-imp" class="icon32"><br /></div><h2><?php _e('Merchant Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-merch-impstats'); ?><br clear="all" />
+	    <div id="icon-gan-merch-imp" class="icon32"><br /></div><h2><?php _e('Merchant Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 		<input type="hidden" name="page" value="gan-database-merch-impstats" />
@@ -324,7 +363,8 @@ class GAN_Plugin {
 	  }
 	  /* Head of page, filter and screen options. */
 	  $autoexpire = get_option('wp_gan_autoexpire');
-	  ?><div class="wrap"><div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?><?php $this->InsertVersion(); ?></h2>
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-options'); ?><br clear="all" />
+	    <div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
 	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
 	    	<input type="hidden" name="page" value="gan-database-options" />

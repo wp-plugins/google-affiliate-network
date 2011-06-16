@@ -1,4 +1,5 @@
-<div class="wrap"><div id="icon-gan-help" class="icon32"><br />
+<div class="wrap"><?php $this->admin_tabs('gan-database-help'); ?><br clear="all" />
+<div id="icon-gan-help" class="icon32"><br />
 </div><h2><?php _e('Help Using the Google Affiliate Network Plugin','gan'); ?><?php $this->InsertVersion(); ?></h2>
 <?php $this->PluginSponsor(); ?>
 <ul>
