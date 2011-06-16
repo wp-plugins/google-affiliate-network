@@ -173,7 +173,8 @@ class GAN_Plugin {
 			    array($this,'admin_help')); 
 	}
 	function admin_tabs($current) {
-	  ?><ul id="gan-admin-tabs" class="tabs"><?php
+	  ?><ul id="gan-admin-tabs" class="tabs">
+	  <li><img alt="<?php _e('GAN Database','gan'); ?>" src="<?php echo GAN_PLUGIN_IMAGE_URL.'/GAN_menu.png'; ?>" /></li><?php
 	  foreach ($this->admin_tablist as $pageslug) {
 	    ?><li><a href="<?php 
 		echo add_query_arg(array('page' => $pageslug),

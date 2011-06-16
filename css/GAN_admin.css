@@ -1,5 +1,9 @@
 ul#gan-admin-tabs {border-bottom: 1px solid; padding-bottom: 5px;}
 ul#gan-admin-tabs li{display:inline; list-style:none; }
+ul#gan-admin-tabs li img {
+	padding:0px 5px;
+	margin-bottom: -6px;
+}
 ul#gan-admin-tabs li a{
 	border:1px solid #e3e3e3;
 	background-color:#f1f1f1;
