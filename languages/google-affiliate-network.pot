@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/google-affiliate-network\n"
-"POT-Creation-Date: 2011-06-15 14:55:35+00:00\n"
+"POT-Creation-Date: 2011-06-16 16:44:26+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: GAN_Database.php:750 GAN.php:670 GAN_DB_List_Table.php:521
+#: GAN_Database.php:750 GAN.php:711 GAN_DB_List_Table.php:521
 msgid "Image Width:"
 msgstr ""
 
@@ -58,7 +58,7 @@ msgstr ""
 msgid "Last View"
 msgstr ""
 
-#: Ad_Stats_List_Table.php:126 Merch_Stats_List_Table.php:77 GAN.php:315
+#: Ad_Stats_List_Table.php:126 Merch_Stats_List_Table.php:77 GAN.php:355
 #: GAN_DB_List_Table.php:146
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
@@ -151,295 +151,295 @@ msgstr ""
 msgid "Height:"
 msgstr ""
 
-#: GAN.php:113 GAN.php:239
+#: GAN.php:118 GAN.php:177 GAN.php:275
 msgid "GAN Database"
 msgstr ""
 
-#: GAN.php:113
+#: GAN.php:118 GAN.php:121
 msgid "GAN DB"
 msgstr ""
 
-#: GAN.php:118
+#: GAN.php:126
 msgid "Add new GAN DB element"
 msgstr ""
 
-#: GAN.php:119
+#: GAN.php:127 GAN.php:130
 msgid "Add new"
 msgstr ""
 
-#: GAN.php:124
+#: GAN.php:135
 msgid "Add new GAN DB elements in bulk"
 msgstr ""
 
-#: GAN.php:125
+#: GAN.php:136 GAN.php:139
 msgid "Add new bulk"
 msgstr ""
 
-#: GAN.php:130 GAN.php:294
+#: GAN.php:144 GAN.php:333
 msgid "Ad Impression Statistics"
 msgstr ""
 
-#: GAN.php:131
+#: GAN.php:145 GAN.php:148
 msgid "Ad Stats"
 msgstr ""
 
-#: GAN.php:136 GAN.php:304
+#: GAN.php:153 GAN.php:344
 msgid "Merchant Impression Statistics"
 msgstr ""
 
-#: GAN.php:137
+#: GAN.php:154 GAN.php:157
 msgid "Merchant Stats"
 msgstr ""
 
-#: GAN.php:142 GAN.php:327
+#: GAN.php:162 GAN.php:368
 msgid "Configure Options"
 msgstr ""
 
-#: GAN.php:143
+#: GAN.php:163 GAN.php:167
 msgid "Configure"
 msgstr ""
 
-#: GAN.php:147
+#: GAN.php:170
 msgid "Help Using the Google Affliate Network Plugin"
 msgstr ""
 
-#: GAN.php:148
+#: GAN.php:171
 msgid "Help"
 msgstr ""
 
-#: GAN.php:153 GAN.php:180 GAN.php:187
+#: GAN.php:188 GAN.php:215 GAN.php:222
 msgid "Rows"
 msgstr ""
 
-#: GAN.php:161
+#: GAN.php:196
 msgid "Edit"
 msgstr ""
 
-#: GAN.php:165
+#: GAN.php:200
 msgid "View"
 msgstr ""
 
-#: GAN.php:169 GAN_DB_List_Table.php:150
+#: GAN.php:204 GAN_DB_List_Table.php:150
 msgid "Delete"
 msgstr ""
 
-#: GAN.php:173
+#: GAN.php:208
 msgid "Toggle Enable"
 msgstr ""
 
-#: GAN.php:207
+#: GAN.php:242
 msgid "Donate to Google Affiliate Network plugin software effort."
 msgstr ""
 
-#: GAN.php:218
+#: GAN.php:253
 msgid "Login into Google Affiliate Network"
 msgstr ""
 
-#: GAN.php:244
+#: GAN.php:280
 msgid "Add New"
 msgstr ""
 
-#: GAN.php:249
+#: GAN.php:285
 msgid "Add New in Bulk"
 msgstr ""
 
-#: GAN.php:280
+#: GAN.php:318
 msgid "Add Elements in bulk to the GAN Database"
 msgstr ""
 
-#: GAN.php:320
+#: GAN.php:360
 msgid "Options Saved"
 msgstr ""
 
-#: GAN.php:323
+#: GAN.php:363
 msgid "Database Upgraded"
 msgstr ""
 
-#: GAN.php:333
+#: GAN.php:374
 msgid "Enable Autoexpire?"
 msgstr ""
 
-#: GAN.php:338 GAN_DB_List_Table.php:232
+#: GAN.php:379 GAN_DB_List_Table.php:232
 msgid "Yes"
 msgstr ""
 
-#: GAN.php:342 GAN_DB_List_Table.php:234
+#: GAN.php:383 GAN_DB_List_Table.php:234
 msgid "No"
 msgstr ""
 
-#: GAN.php:345
+#: GAN.php:386
 msgid "Save Options"
 msgstr ""
 
-#: GAN.php:348
+#: GAN.php:389
 msgid "Your database needs to be upgraded."
 msgstr ""
 
-#: GAN.php:348
+#: GAN.php:389
 msgid "Upgrade Database"
 msgstr ""
 
-#: GAN.php:357
+#: GAN.php:398
 msgid "Version: %s"
 msgstr ""
 
-#: GAN.php:463
+#: GAN.php:504
 msgid "GAN Database Stats"
 msgstr ""
 
-#: GAN.php:464
+#: GAN.php:505
 msgid "GAN Impression Stats"
 msgstr ""
 
-#: GAN.php:479
+#: GAN.php:520
 msgid "Total ads"
 msgstr ""
 
-#: GAN.php:481
+#: GAN.php:522
 msgid "Disabled"
 msgstr ""
 
-#: GAN.php:483
+#: GAN.php:524
 msgid "Advertisers"
 msgstr ""
 
-#: GAN.php:485
+#: GAN.php:526
 msgid "Sizes"
 msgstr ""
 
-#: GAN.php:497
+#: GAN.php:538
 msgid "Merchants"
 msgstr ""
 
-#: GAN.php:501 GAN.php:555
+#: GAN.php:542 GAN.php:596
 msgid "Maximum"
 msgstr ""
 
-#: GAN.php:501 GAN.php:555
+#: GAN.php:542 GAN.php:596
 msgid "Minimum"
 msgstr ""
 
-#: GAN.php:502 GAN.php:556
+#: GAN.php:543 GAN.php:597
 msgid "Average"
 msgstr ""
 
-#: GAN.php:502 GAN.php:556
+#: GAN.php:543 GAN.php:597
 msgid "Std. Deviation"
 msgstr ""
 
-#: GAN.php:503 GAN.php:557
+#: GAN.php:544 GAN.php:598
 msgid "Variance"
 msgstr ""
 
-#: GAN.php:516
+#: GAN.php:557
 msgid "Merchant"
 msgstr ""
 
-#: GAN.php:517 GAN.php:571
+#: GAN.php:558 GAN.php:612
 msgid "Number of Impressions"
 msgstr ""
 
-#: GAN.php:570
+#: GAN.php:611
 msgid "Ad"
 msgstr ""
 
-#: GAN.php:612
+#: GAN.php:653
 msgid "Main GAN Database page"
 msgstr ""
 
-#: GAN.php:629
+#: GAN.php:670
 msgid "Add/Edit/View GAN Database page"
 msgstr ""
 
-#: GAN.php:636 GAN_DB_List_Table.php:465
+#: GAN.php:677 GAN_DB_List_Table.php:465
 msgid "Advertiser:"
 msgstr ""
 
-#: GAN.php:637
+#: GAN.php:678
 msgid "This is the name of the advertiser."
 msgstr ""
 
-#: GAN.php:639 GAN_DB_List_Table.php:471
+#: GAN.php:680 GAN_DB_List_Table.php:471
 msgid "Link ID:"
 msgstr ""
 
-#: GAN.php:643 GAN_DB_List_Table.php:476
+#: GAN.php:684 GAN_DB_List_Table.php:476
 msgid "Link Name:"
 msgstr ""
 
-#: GAN.php:646 GAN_DB_List_Table.php:482
+#: GAN.php:687 GAN_DB_List_Table.php:482
 msgid "Merchandising Text:"
 msgstr ""
 
-#: GAN.php:650 GAN_DB_List_Table.php:487
+#: GAN.php:691 GAN_DB_List_Table.php:487
 msgid "Alt Text:"
 msgstr ""
 
-#: GAN.php:653 GAN_DB_List_Table.php:492
+#: GAN.php:694 GAN_DB_List_Table.php:492
 msgid "Start Date:"
 msgstr ""
 
-#: GAN.php:657 GAN_DB_List_Table.php:497
+#: GAN.php:698 GAN_DB_List_Table.php:497
 msgid "End Date:"
 msgstr ""
 
-#: GAN.php:661 GAN_DB_List_Table.php:503
+#: GAN.php:702 GAN_DB_List_Table.php:503
 msgid "Clickserver Link:"
 msgstr ""
 
-#: GAN.php:662
+#: GAN.php:703
 msgid "This is the ad's target link."
 msgstr ""
 
-#: GAN.php:664 GAN_DB_List_Table.php:509
+#: GAN.php:705 GAN_DB_List_Table.php:509
 msgid "Image URL:"
 msgstr ""
 
-#: GAN.php:667 GAN_DB_List_Table.php:515
+#: GAN.php:708 GAN_DB_List_Table.php:515
 msgid "Image Height:"
 msgstr ""
 
-#: GAN.php:673 GAN_DB_List_Table.php:527
+#: GAN.php:714 GAN_DB_List_Table.php:527
 msgid "Link URL:"
 msgstr ""
 
-#: GAN.php:674
+#: GAN.php:715
 msgid "This is the optional auxillary link URL."
 msgstr ""
 
-#: GAN.php:676 GAN_DB_List_Table.php:532
+#: GAN.php:717 GAN_DB_List_Table.php:532
 msgid "Promo Type:"
 msgstr ""
 
-#: GAN.php:677
+#: GAN.php:718
 msgid "This is the promotion type for the ad."
 msgstr ""
 
-#: GAN.php:679 GAN_DB_List_Table.php:537
+#: GAN.php:720 GAN_DB_List_Table.php:537
 msgid "Merchant ID:"
 msgstr ""
 
-#: GAN.php:684 GAN_DB_List_Table.php:543
+#: GAN.php:725 GAN_DB_List_Table.php:543
 msgid "enabled?"
 msgstr ""
 
-#: GAN.php:710
+#: GAN.php:751
 msgid "Ad Impression Statistics page"
 msgstr ""
 
-#: GAN.php:727
+#: GAN.php:768
 msgid "Merchant Impression Statistics page"
 msgstr ""
 
-#: GAN.php:741
+#: GAN.php:782
 msgid "GAN Option Configuration page"
 msgstr ""
 
-#: GAN.php:764 GAN.php:766
+#: GAN.php:805 GAN.php:807
 msgid "Add Ad Unit"
 msgstr ""
 
-#: GAN_Help.php:2
+#: GAN_Help.php:3
 msgid "Help Using the Google Affiliate Network Plugin"
 msgstr ""
 
