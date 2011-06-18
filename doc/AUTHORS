@@ -77,6 +77,9 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 
 == Changelog ==
 
+= 4.? =
+* Added convience link buttons to admin pages on the dashboard widgets.
+
 = 4.4 =
 * Added admin tab navigation menu.
 

@@ -525,7 +525,11 @@ class GAN_Plugin {
 		    <td class="ganstats_total"><?php echo $sizes; ?></td>
 		    <td class="ganstats_label"><?php _e('Sizes','gan'); ?></td></tr>
 		</table>
-		</div><?php 
+		<a href="<?php 
+			echo add_query_arg(array('page' => 'gan-database-page'),
+					   admin_url('admin.php')); 
+			?>" style="float:right;" class="button"><?php _e('Manage the GAN ad DB','gan'); 
+		?></a><br clear="all" /></div><?php 
 	}
 	/* Impression statisics dashboard widget */
 	function impression_stats_widget() {
@@ -584,7 +588,11 @@ class GAN_Plugin {
 		?>
 	  </tbody>
 	  </table>
-	  <?php
+	  <a href="<?php 
+			echo add_query_arg(array('page' => 'gan-database-merch-impstats'),
+					   admin_url('admin.php')); 
+			?>" style="float:right;" class="button"><?php _e('Detailed Merchant Stats','gan'); 
+		?></a><br clear="all" /><?php
 	  $top_ads = GAN_Database::top_ads();
 	  $ad_statistics = GAN_Database::ad_statistics();
 	  $max_ad_impressions = GAN_Database::max_ad_impressions();
@@ -638,6 +646,11 @@ class GAN_Plugin {
 		?>
 	  </tbody>
 	  </table>
+	  <a href="<?php 
+			echo add_query_arg(array('page' => 'gan-database-ad-impstats'),
+					   admin_url('admin.php')); 
+			?>" style="float:right;" class="button"><?php _e('Detailed Ad Stats','gan'); 
+		?></a><br clear="all" />
 	  <?php
 	}
 	function check_autoexpire() {
