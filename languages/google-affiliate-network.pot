@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/google-affiliate-network\n"
-"POT-Creation-Date: 2011-06-16 16:44:26+00:00\n"
+"POT-Creation-Date: 2011-06-18 15:53:39+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: GAN_Database.php:750 GAN.php:711 GAN_DB_List_Table.php:521
+#: GAN_Database.php:750 GAN.php:724 GAN_DB_List_Table.php:521
 msgid "Image Width:"
 msgstr ""
 
@@ -307,135 +307,147 @@ msgstr ""
 msgid "Sizes"
 msgstr ""
 
-#: GAN.php:538
+#: GAN.php:531
+msgid "Manage the GAN ad DB"
+msgstr ""
+
+#: GAN.php:542
 msgid "Merchants"
 msgstr ""
 
-#: GAN.php:542 GAN.php:596
+#: GAN.php:546 GAN.php:604
 msgid "Maximum"
 msgstr ""
 
-#: GAN.php:542 GAN.php:596
+#: GAN.php:546 GAN.php:604
 msgid "Minimum"
 msgstr ""
 
-#: GAN.php:543 GAN.php:597
+#: GAN.php:547 GAN.php:605
 msgid "Average"
 msgstr ""
 
-#: GAN.php:543 GAN.php:597
+#: GAN.php:547 GAN.php:605
 msgid "Std. Deviation"
 msgstr ""
 
-#: GAN.php:544 GAN.php:598
+#: GAN.php:548 GAN.php:606
 msgid "Variance"
 msgstr ""
 
-#: GAN.php:557
+#: GAN.php:561
 msgid "Merchant"
 msgstr ""
 
-#: GAN.php:558 GAN.php:612
+#: GAN.php:562 GAN.php:620
 msgid "Number of Impressions"
 msgstr ""
 
-#: GAN.php:611
+#: GAN.php:594
+msgid "Detailed Merchant Stats"
+msgstr ""
+
+#: GAN.php:619
 msgid "Ad"
 msgstr ""
 
-#: GAN.php:653
+#: GAN.php:652
+msgid "Detailed Ad Stats"
+msgstr ""
+
+#: GAN.php:666
 msgid "Main GAN Database page"
 msgstr ""
 
-#: GAN.php:670
+#: GAN.php:683
 msgid "Add/Edit/View GAN Database page"
 msgstr ""
 
-#: GAN.php:677 GAN_DB_List_Table.php:465
+#: GAN.php:690 GAN_DB_List_Table.php:465
 msgid "Advertiser:"
 msgstr ""
 
-#: GAN.php:678
+#: GAN.php:691
 msgid "This is the name of the advertiser."
 msgstr ""
 
-#: GAN.php:680 GAN_DB_List_Table.php:471
+#: GAN.php:693 GAN_DB_List_Table.php:471
 msgid "Link ID:"
 msgstr ""
 
-#: GAN.php:684 GAN_DB_List_Table.php:476
+#: GAN.php:697 GAN_DB_List_Table.php:476
 msgid "Link Name:"
 msgstr ""
 
-#: GAN.php:687 GAN_DB_List_Table.php:482
+#: GAN.php:700 GAN_DB_List_Table.php:482
 msgid "Merchandising Text:"
 msgstr ""
 
-#: GAN.php:691 GAN_DB_List_Table.php:487
+#: GAN.php:704 GAN_DB_List_Table.php:487
 msgid "Alt Text:"
 msgstr ""
 
-#: GAN.php:694 GAN_DB_List_Table.php:492
+#: GAN.php:707 GAN_DB_List_Table.php:492
 msgid "Start Date:"
 msgstr ""
 
-#: GAN.php:698 GAN_DB_List_Table.php:497
+#: GAN.php:711 GAN_DB_List_Table.php:497
 msgid "End Date:"
 msgstr ""
 
-#: GAN.php:702 GAN_DB_List_Table.php:503
+#: GAN.php:715 GAN_DB_List_Table.php:503
 msgid "Clickserver Link:"
 msgstr ""
 
-#: GAN.php:703
+#: GAN.php:716
 msgid "This is the ad's target link."
 msgstr ""
 
-#: GAN.php:705 GAN_DB_List_Table.php:509
+#: GAN.php:718 GAN_DB_List_Table.php:509
 msgid "Image URL:"
 msgstr ""
 
-#: GAN.php:708 GAN_DB_List_Table.php:515
+#: GAN.php:721 GAN_DB_List_Table.php:515
 msgid "Image Height:"
 msgstr ""
 
-#: GAN.php:714 GAN_DB_List_Table.php:527
+#: GAN.php:727 GAN_DB_List_Table.php:527
 msgid "Link URL:"
 msgstr ""
 
-#: GAN.php:715
+#: GAN.php:728
 msgid "This is the optional auxillary link URL."
 msgstr ""
 
-#: GAN.php:717 GAN_DB_List_Table.php:532
+#: GAN.php:730 GAN_DB_List_Table.php:532
 msgid "Promo Type:"
 msgstr ""
 
-#: GAN.php:718
+#: GAN.php:731
 msgid "This is the promotion type for the ad."
 msgstr ""
 
-#: GAN.php:720 GAN_DB_List_Table.php:537
+#: GAN.php:733 GAN_DB_List_Table.php:537
 msgid "Merchant ID:"
 msgstr ""
 
-#: GAN.php:725 GAN_DB_List_Table.php:543
+#: GAN.php:738 GAN_DB_List_Table.php:543
 msgid "enabled?"
 msgstr ""
 
-#: GAN.php:751
+#: GAN.php:764
 msgid "Ad Impression Statistics page"
 msgstr ""
 
-#: GAN.php:768
+#: GAN.php:781
 msgid "Merchant Impression Statistics page"
 msgstr ""
 
-#: GAN.php:782
+#: GAN.php:795
 msgid "GAN Option Configuration page"
 msgstr ""
 
-#: GAN.php:805 GAN.php:807
+#: GAN.php:818 GAN.php:820
 msgid "Add Ad Unit"
 msgstr ""
 
