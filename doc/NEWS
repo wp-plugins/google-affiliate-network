@@ -14,20 +14,24 @@ Both text links and image ads can be displayed.
 A Widget / shortcode plugin to display Google Affiliate Network ads. 
 Both text links and image ads can be displayed.  The widgets are
 parameterized. There is backend access to the database table of links. 
-Links can be added and/or edited by hand.  A Tcl script is included to
-insert E-Mailed links (link subscriptions).  The Widgets and shortcodes
-are parameterized for both sidebar display (vertical layout) as well as
+Links can be added and/or edited by hand or can be added in bulk from a
+Tab Separate Value file, as downloaded from Links (Beta) tab from the
+Google Affiliate Network page.  A Tcl script is included to insert
+E-Mailed links (link subscriptions).  The Widgets and shortcodes are
+parameterized for both sidebar display (vertical layout) as well as
 leader/footer display (horizontal layout).
 
 The ads are rotated, with the least viewed ads from the lest viewed
 avertisers being shown in preference to ads that have been viewed more
-from avertisers than have been viewed more.  As ads are displayed, their
-impression counts are incremented, which moves such ads to the back of
-the list. Ads are displayed in iframes, which keeps the ads contained on
-the page. Either widgets can be used to display ads in side bars or
-shortcodes can be used to display ads in pages or posts (both can be
-used if desired). A given ad unit can only display text or image ads,
-not both.
+from avertisers than have been viewed more.  As ads are displayed,
+their impression counts are incremented, which moves such ads to the
+back of the list. Ads are displayed in iframes, which keeps the ads
+contained on the page. Either widgets can be used to display ads in
+side bars or shortcodes can be used to display ads in pages or posts
+(both can be used if desired). A given ad unit can only display text or
+image ads, not both. As a convience, a media insert button is available
+on the post and page editor to generate and insert short codes to
+display ad units on posts and pages.
 
 The plugin provides an administration page to view the database of ads,
 with the ability to add ads one at a time or in bulk (from a TSV file
@@ -80,6 +84,7 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 = 4.? =
 * Added convience link buttons to admin pages on the dashboard widgets.
 * Additional date fix.
+* Minor updates to the readme file.
 
 = 4.4 =
 * Added admin tab navigation menu.
