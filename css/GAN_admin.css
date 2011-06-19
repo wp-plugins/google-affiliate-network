@@ -35,6 +35,10 @@ ul#gan-admin-tabs li a.selected{
 	font-size: 60%;
 }
 
+#gan_dash_version {
+	float: left;
+}
+
 #icon-gan-db {
         background: transparent url(../images/GANicons32.png) no-repeat -12px -5px;
 }

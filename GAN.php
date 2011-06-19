@@ -397,6 +397,9 @@ class GAN_Plugin {
 	function InsertVersion() {
 	  ?><span id="gan_version"><?php printf(__('Version: %s','gan'),GAN_VERSION) ?></span><?php
 	}
+	function InsertDashVersion() {
+	  ?><span id="gan_dash_version"><?php printf(__('Version: %s','gan'),GAN_VERSION) ?></span><?php
+	}
 	/*
 	 * Build an action link
 	 */
@@ -529,7 +532,9 @@ class GAN_Plugin {
 			echo add_query_arg(array('page' => 'gan-database-page'),
 					   admin_url('admin.php')); 
 			?>" style="float:right;" class="button"><?php _e('Manage the GAN ad DB','gan'); 
-		?></a><br clear="all" /></div><?php 
+		?></a><br clear="all" />
+		<?php $this->InsertDashVersion(); ?><br clear="all" />
+		</div><?php 
 	}
 	/* Impression statisics dashboard widget */
 	function impression_stats_widget() {
