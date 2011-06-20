@@ -1,0 +1,113 @@
+ul#gan-admin-tabs {border-bottom: 1px solid; padding-bottom: 5px;}
+ul#gan-admin-tabs li{display:inline; list-style:none; }
+ul#gan-admin-tabs li img {
+	padding:0px 5px;
+	margin-bottom: -6px;
+}
+ul#gan-admin-tabs li a{
+	border:1px solid #e3e3e3;
+	background-color:#f1f1f1;
+	/*-moz-border-radius-topleft:10px;
+	-moz-border-radius-topright:10px;
+	-webkit-border-top-right-radius:10px;
+	-webkit-border-top-left-radius:10px;*/
+	padding:0px 10px 5px 10px;
+	text-decoration: none;
+}
+ul#gan-admin-tabs li a:hover{
+	border:1px solid #d3d3d3;
+	background-color:#e1e1e1;
+}
+ul#gan-admin-tabs li a.selected{
+	border:1px solid #d3d3d3;
+	background-color:#e1e1e1;
+}
+
+#gan_donate {
+	vertical-align: text-top;
+	float: right;
+}
+
+#gan_version {
+	float: right;
+	font-style: italic;
+	color: #808080;
+	font-size: 60%;
+}
+
+#gan_dash_version {
+	float: left;
+}
+
+#icon-gan-db {
+        background: transparent url(../images/GANicons32.png) no-repeat -12px -5px;
+}
+
+#icon-gan-add-db {
+        background: transparent url(../images/GANicons32.png) no-repeat -64px -5px;
+}
+
+#icon-gan-edit-db {
+        background: transparent url(../images/GANicons32.png) no-repeat -131px -5px;
+}
+
+#icon-gan-view-db {
+        background: transparent url(../images/GANicons32.png) no-repeat -363px -5px;
+}
+
+#icon-gan-ad-imp {
+	background: transparent url(../images/GANicons32.png) no-repeat -177px -5px;
+}
+
+#icon-gan-merch-imp {
+	background: transparent url(../images/GANicons32.png) no-repeat -223px -5px;
+}
+
+#icon-gan-options {
+	background: transparent url(../images/GANicons32.png) no-repeat -269px -5px;
+}
+
+#icon-gan-help {
+	background: transparent url(../images/GANicons32.png) no-repeat -315px -5px;
+}
+
+.column-LinkName {
+   width: 40%;
+}
+
+.column-MerchantID_wide {
+   width: 75%;
+}
+
+.column-ImageWidth {
+   width: 5%;
+}
+
+.column-Impressions {
+   width: 5%;
+}
+
+.column-Enabled {
+   width: 7%;
+}
+
+.check-column {
+   width: 3%;
+}
+
+
+table.ganstats {
+width:100%;
+font-size:200%;
+}
+td.ganstats_total {
+text-align:right;
+padding-right: 10px;
+padding-left:   0px;
+}
+td.ganstats_label {
+text-align:left;
+padding-left:   10px;
+padding-right:   0px;
+}
+
