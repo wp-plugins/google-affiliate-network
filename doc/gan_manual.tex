@@ -4,6 +4,7 @@
 \usepackage{mathptmx}
 \usepackage[scaled=0.9]{helvet}
 \usepackage{url}
+\usepackage{graphicx}
 \setcounter{secnumdepth}{-2}
 \title{Google Affiliate Network Plugin User Manual}
 \author{Robert Heller}
@@ -49,7 +50,25 @@ If you have upgraded from an older version of the plugin, the
 configure page will display a button to upgrade the database to the new
 version.
 
-\section{Inserting Ads}
+\section{Managing your ad database}
+
+\begin{figure}[ht]
+\begin{centering}
+\includegraphics[width=3in]{gandatabase.png}
+\caption{GAN Database Admin Page}
+\label{fig:gandb}
+\end{centering}
+\end{figure}
+Managing your ads is done from the main GAN database page, shown in
+Figure~\ref{fig:gandb}. The advertiser, link id, link name, image size,
+start date, end date, and enabled flag are displayed in this table. Ads
+are sorted by increasing end date.  It is possible to filter the
+displayed ad by advertiser and/or ad size.  There is a button to enable
+all ads and to delete ads that have expired.  Ads can be deleted or
+have their enable flag toggled in bulk.  Ads can be individually
+edited, viewed, deleted or have their enable flags toggled.
+
+\subsection{Inserting Ads}
 
 In order to display ads, you need to have some ads in your database.
 There are two ways to insert ads: manually, one by one or in bulk from
@@ -57,18 +76,26 @@ a TSV (Tab Separated Value) file. Manual insertion is done on the
 \emph{Add new} admin page and bulk insertion is done on the
 \emph{Add new bulk} admin page.
 
-\subsection{Add new admin page (manual insertion)}
+\subsubsection{Add new admin page (manual insertion)}
 
-This page has a form for adding (and editing and viewing) a single ad.
-Generally, this page is not usually used, see
-Section~\ref{sect:addbulk} for adding ads in bulk. The
-fields\footnote{These fields correspond to the column headings used in
-the files sent as part of your E-Mailed Link Subscriptions.} include: 
+\begin{figure}[ht]
+\begin{centering}
+\includegraphics[width=3in]{ganmanualadd.png}
+\caption{GAN Manual Add Page}
+\label{fig:manualadd}
+\end{centering}
+\end{figure}
+This page, shown in Figure~\ref{fig:manualadd}, has a form for adding
+(and editing and viewing) a single ad. Generally, this page is not
+usually used, see Section~\ref{sect:addbulk} for adding ads in bulk.
+The fields\footnote{These fields correspond to the column headings used
+in the files sent as part of your E-Mailed Link Subscriptions.}
+include: 
 
 \begin{description}
   \item[Advertiser:] This is the advertiser's name.
   \item[Link ID:] This is the (unique) Link Id code. This ID value is
-supplied by Google and uniquely identified the ad.  Link IDs must be
+supplied by Google and uniquely identifies the ad.  Link IDs must be
 unique and are prefixed by an uppercase ``J''.
   \item[Link Name:] This is the name of the link.  It is used as the
 anchor text for text ads.
@@ -94,20 +121,58 @@ supplied by Google and is prefixed by a uppercase ``K''.
 not. 
 \end{description}
 
-\subsection{Add new bulk admin page (bulk insertion)}
+\subsubsection{Add new bulk admin page (bulk insertion)}
 \label{sect:addbulk}
 
-This page uploads a TSV file of ads previously downloaded from your
-Google Affiliate Network management page. You get this file by visiting
-your Google Affiliate Network management page and clicking the Links
-tab. On this page you can select the sorts of ads you would like by
-selecting one or more of your approved advertisers and selecting the
-type of ads (text and/or banner), and other criteria such as size, etc.
-It is then possible to export these ads as a TSV file\footnote{Using
-the Export As button and selecting ``Tab Separated Values'' option.},
-which can then be downloaded. This same file can in turn be uploaded to
-the GAN plugin and the ads in this file will be added to your ad
-database.
+\begin{figure}[ht]
+\begin{centering}
+\includegraphics[width=3in]{bulkadd.png}
+\caption{GAN Bulk Add Page}
+\label{fig:bulkadd}
+\end{centering}
+\end{figure}
+\begin{figure}[ht]
+\begin{centering}
+\includegraphics[width=2in]{ganLinksTab.png}
+\caption{GAN Links Tab}
+\label{fig:ganLinksTab}
+\end{centering}
+\end{figure}
+\begin{figure}[ht]
+\begin{centering}
+\includegraphics[width=2in]{ganExport.png}
+\caption{GAN Export Links As}
+\label{fig:ganExport}
+\end{centering}
+\end{figure}
+This page, shown in Figure~\ref{fig:bulkadd}, uploads a TSV file of ads
+previously downloaded from your Google Affiliate Network management
+page. You get this file by visiting your Google Affiliate Network
+management page and clicking the Links tab (see
+figure~\ref{fig:ganLinksTab}). On this page you can select the sorts of
+ads you would like by selecting one or more of your approved
+advertisers and selecting the type of ads (text and/or banner), and
+other criteria such as size, etc. It is then possible to export these
+ads as a TSV file, using the Export As button and selecting ``Tab
+Separated Values'' option (see figure~\ref{fig:ganExport}), which can
+then be downloaded. This same file can in turn be uploaded to the GAN
+plugin and the ads in this file will be added to your ad database.
+
+\subsection{Editing Ads}
+
+When displaying the data on the main admin page, links are provided
+to edit, delete, or toggle the enabled flag for each ad. The ads are
+displayed ordered by expiration date, with the soonest to expire
+displayed first. It is possible to select only a single merchant's ads
+to be displayed and/or a single size of ad or only text ads.
+
+\subsection{Ad Subscriptions}
+
+A Tcl script is included to process E-Mailed Ad Subscriptions and
+insert them into the database.  This requires the ability to receive
+E-Mail on the server running the database server and requires that Tcl
+and the MySQLTcl package be installed as well as the use of procmail as
+a mail delivery agent.
 
 \section{Showing Ads}
 
@@ -119,7 +184,15 @@ into any post or page.
 
 \subsection{GAN Widget}
 
-This widget shows text ads in a ``sidebar'' that supports widgets.
+\begin{figure}[ht]
+\begin{centering}
+\includegraphics[width=2in]{ganwidget.png}
+\caption{GAN Widget}
+\label{fig:ganwidget}
+\end{centering}
+\end{figure}
+This widget (see Figure~\ref{fig:ganwidget}) shows text ads in a
+``sidebar'' that supports widgets.
 
 The GAN Widget has five parameters:
 \begin{description}
@@ -138,9 +211,16 @@ of zero will cause the frame to use all of the available space.
 
 \subsection{GAN Image Widget}
 
-This widget shows image (banner)  ads in a ``sidebar'' that supports
-widgets.  Any given widget instance (ad unit) can only show one size of
-banner ad.
+\begin{figure}[ht]
+\begin{centering}
+\includegraphics[width=2in]{ganimagewidget.png}
+\caption{GAN Image Widget}
+\label{fig:ganimagewidget}
+\end{centering}
+\end{figure}
+This widget (see Figure~\ref{fig:ganimagewidget}) shows image (banner) 
+ads in a ``sidebar'' that supports widgets.  Any given widget instance
+(ad unit) can only show one size of banner ad.
 
 The GAN Image Widget has seven parameters:
 \begin{description}
@@ -221,30 +301,31 @@ Here is an example -- 2 468x60 banners arranged vertically in a 468x126 frame:
 
 \subsection{Using the ad unit insertion media button}
 
-As of version 4.3, a ``media button'' is available to aid in the
-insertion of the ad unit short codes into pages and posts.  This button
-opens a dialog window where the parameters can be easily selected to
-create a short code that will insert an ad unit into the current page or
-post. You can select the maximumn number of ads, the size or type of ad,
-the orientation of the ads within the ad unit and the size of the ad
-frame. When you click on the insert ad button, the proper short code is
-generated and inserted into your page or post.
 
-\section{Editing Ads}
-
-When displaying the data on the main admin page, links are provided
-to edit, delete, or toggle the enabled flag for each ad. The ads are
-displayed ordered by expiration date, with the soonest to expire
-displayed first. It is possible to select only a single merchant's ads
-to be displayed and/or a single size of ad or only text ads.
-
-\section{Ad Subscriptions}
-
-A Tcl script is included to process E-Mailed Ad Subscriptions and
-insert them into the database.  This requires the ability to receive
-E-Mail on the server running the database server and requires that Tcl
-and the MySQLTcl package be installed as well as the use of procmail as
-a mail delivery agent.
+\begin{figure}[ht]
+\begin{centering}
+\includegraphics[width=2in]{ganmediabutton.png}
+\caption{GAN Insert Ad Unit Media button}
+\label{fig:ganmediabutton}
+\end{centering}
+\end{figure}
+\begin{figure}[ht]
+\begin{centering}
+\includegraphics[width=3in]{ganinsertaddialog.png}
+\caption{GAN Insert Ad Unit Dialog Box}
+\label{fig:ganinsertaddialog}
+\end{centering}
+\end{figure}
+As of version 4.3, a ``media button'', shown in
+Figure~\ref{fig:ganmediabutton}, is available to aid in the insertion
+of the ad unit short codes into pages and posts.  This button opens a
+dialog window, shown in Figure~\ref{fig:ganinsertaddialog}, where the
+parameters can be easily selected to create a short code that will
+insert an ad unit into the current page or post. You can select the
+maximumn number of ads, the size or type of ad, the orientation of the
+ads within the ad unit and the size of the ad frame. When you click on
+the insert ad button, the proper short code is generated and inserted
+into your page or post.
 
 \section{Statistics}
 
