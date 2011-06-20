@@ -58,6 +58,13 @@ and mysqltcl installed. You will also need procmail (almost all Linux
 system use procmail for their local mail delivery agent).  Read the
 ganlinksToDB.tcl file carefully.
 
+== Downloadable PDF user manual ==
+
+A downloadable PDF user manual is available at [gan_manual.pdf][pdfdownload].
+This manual provides detailed documentation on how to use this plugin.
+
+[gan_manual.pdf]: http://www.deepsoft.com/downloadfile/gan_manual.pdf
+
 == Frequently Asked Questions ==
 
 = Something does not work. What should I do? =
@@ -85,6 +92,7 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 * Added convience link buttons to admin pages on the dashboard widgets.
 * Additional date fix.
 * Minor updates to the readme file.
+* Minor updates to the dashboard widgets.
 
 = 4.4 =
 * Added admin tab navigation menu.
