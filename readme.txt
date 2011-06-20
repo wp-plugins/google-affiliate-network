@@ -4,7 +4,7 @@ Donate link: http://www.deepsoft.com/GAN
 Tags: gan,affiliate,widget,google,plugin,ads,shortcode
 Requires at least: 2.7
 Tested up to: 3.1.1
-Stable tag: 4.4
+Stable tag: 4.5
 
 A Widget / shortcode plugin to display Google Affiliate Network ads. 
 Both text links and image ads can be displayed.
@@ -58,6 +58,13 @@ and mysqltcl installed. You will also need procmail (almost all Linux
 system use procmail for their local mail delivery agent).  Read the
 ganlinksToDB.tcl file carefully.
 
+== Downloadable PDF user manual ==
+
+A downloadable PDF user manual is available at [gan_manual.pdf][pdfdownload].
+This manual provides detailed documentation on how to use this plugin.
+
+[gan_manual.pdf]: http://www.deepsoft.com/downloadfile/gan_manual.pdf
+
 == Frequently Asked Questions ==
 
 = Something does not work. What should I do? =
@@ -81,10 +88,11 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 
 == Changelog ==
 
-= 4.? =
+= 4.5 =
 * Added convience link buttons to admin pages on the dashboard widgets.
 * Additional date fix.
-* Minor updates to the readme file.
+* Updates to the readme file.
+* Minor updates to the dashboard widgets.
 
 = 4.4 =
 * Added admin tab navigation menu.
@@ -217,6 +225,10 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 * First official release.
 
 == Upgrade Notice ==
+
+= 4.5 =
+Added convience link buttons to admin pages on the dashboard widgets. Merchant
+stats date format fix. Updates to the readme file.
 
 = 4.4 =
 Added admin tab navigation menu.
