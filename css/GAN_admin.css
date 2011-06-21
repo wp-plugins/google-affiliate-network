@@ -40,19 +40,19 @@ ul#gan-admin-tabs li a.selected{
 }
 
 #icon-gan-db {
-        background: transparent url(../images/GANicons32.png) no-repeat -12px -5px;
+	background: transparent url(../images/GANicons32.png) no-repeat -12px -5px;
 }
 
 #icon-gan-add-db {
-        background: transparent url(../images/GANicons32.png) no-repeat -64px -5px;
+	background: transparent url(../images/GANicons32.png) no-repeat -64px -5px;
 }
 
 #icon-gan-edit-db {
-        background: transparent url(../images/GANicons32.png) no-repeat -131px -5px;
+	background: transparent url(../images/GANicons32.png) no-repeat -131px -5px;
 }
 
 #icon-gan-view-db {
-        background: transparent url(../images/GANicons32.png) no-repeat -363px -5px;
+	background: transparent url(../images/GANicons32.png) no-repeat -363px -5px;
 }
 
 #icon-gan-ad-imp {
@@ -70,6 +70,43 @@ ul#gan-admin-tabs li a.selected{
 #icon-gan-help {
 	background: transparent url(../images/GANicons32.png) no-repeat -315px -5px;
 }
+
+.gantops_table td.value {
+	background-image: url(../images/gridline58.gif);
+	background-repeat: repeat-x;
+	background-position: left top;
+	border-left: 1px solid #e5e5e5;
+	border-right: 1px solid #e5e5e5;
+	padding: 0;
+	background-color: transparent;
+}
+.gantops_table td {
+	padding: 4px 6px;
+	border-bottom: 1px solid #e5e5e5;
+	border-left: 1px solid #e5e5e5;  
+	background-color: #fff;
+}
+.gantops_table td.value img {
+	vertical-align: middle;
+	margin: 5px 5px 5px 0; 
+	border-right: 1px solid #828282;
+	border-bottom: 1px solid #828282;
+}
+.gantops_table th {
+	text-align: left;
+	vertical-align: top;
+	border-bottom: 1px solid #e5e5e5;
+}
+.gantops_table .auraltext {
+	position: absolute; 
+	font-size: 0;
+	left: -1000px;
+}
+
+
+
+
+
 
 .column-LinkName {
    width: 40%;

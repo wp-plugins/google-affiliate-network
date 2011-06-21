@@ -545,8 +545,8 @@ class GAN_Plugin {
 	  //echo "\n<!-- GAN_Plugin::impression_stats_widget: max_merch_impressions = ".$max_merch_impressions." -->\n";
 	  ?>
 	  <h4 style="width: 100%;text-align: center;"><?php _e('Merchants'); ?></h4><br />
-	  <table class="ganmerchimpstats" width="100%">
-	    <thead>
+	  <table class="ganstats_table" width="100%">
+	    <th>
 		<tr>
 		   <th scope="col"><?php _e('Maximum','gan'); ?></th><th scope="col"><?php _e('Minimum','gan'); ?></th>
 		   <th scope="col"><?php _e('Average','gan'); ?></th><th scope="col"><?php _e('Std. Deviation','gan'); ?></th>
@@ -560,7 +560,7 @@ class GAN_Plugin {
 		   <td width="20%" style="text-align: center;"><?php echo $merch_statistics['variance']; ?></td></tr>
 	    </tbody>
 	  </table>
-	  <table class="ganmerchtopimps" width="100%">
+	  <table class="gantops_table" width="100%">
 	  <tbody>
 		<tr>
 		   <th scope="col"><span class="auraltext"><?php _e('Merchant','gan'); ?></span> </th>
@@ -603,7 +603,7 @@ class GAN_Plugin {
 	  $max_ad_impressions = GAN_Database::max_ad_impressions();
 	  ?>
 	  <h4 style="width: 100%;text-align: center;">Ads</h4><br />
-	  <table class="ganadimpstats" width="100%">
+	  <table class="ganstats_table" width="100%">
 	    <thead>
 		<tr>
 		   <th scope="col"><?php _e('Maximum','gan'); ?></th><th scope="col"><?php _e('Minimum','gan'); ?></th>
@@ -618,7 +618,7 @@ class GAN_Plugin {
 		   <td width="20%" style="text-align: center;"><?php echo $ad_statistics['variance']; ?></td></tr>
 	    </tbody>
 	  </table>
-	  <table class="ganadtopimps" width="100%">
+	  <table class="gantops_table" width="100%">
 	  <tbody>
 		<tr>
 		   <th scope="col"><span class="auraltext"><?php _e('Ad','gan'); ?></span> </th>
