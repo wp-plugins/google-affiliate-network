@@ -63,7 +63,7 @@ ganlinksToDB.tcl file carefully.
 A downloadable PDF user manual is available at [gan_manual.pdf][pdfdownload].
 This manual provides detailed documentation on how to use this plugin.
 
-[gan_manual.pdf]: http://www.deepsoft.com/downloadfile/gan_manual.pdf
+[pdfdownload]: http://www.deepsoft.com/downloadfile/gan_manual.pdf
 
 == Frequently Asked Questions ==
 
@@ -87,6 +87,10 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 4. Front side view, showing both textual ads and banner ads.
 
 == Changelog ==
+
+= =
+* Improve the look of the dashboard impression stats widget.
+* Minor fix to the readme file.
 
 = 4.5.1 =
 * Major updates to the user manual, including the insertion of helpful 
