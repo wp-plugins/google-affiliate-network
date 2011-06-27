@@ -4,7 +4,7 @@ Donate link: http://www.deepsoft.com/GAN
 Tags: gan,affiliate,widget,google,plugin,ads,shortcode
 Requires at least: 2.7
 Tested up to: 3.1.1
-Stable tag: 4.5.1
+Stable tag: 4.6
 
 A Widget / shortcode plugin to display Google Affiliate Network ads. 
 Both text links and image ads can be displayed.
@@ -48,17 +48,16 @@ then activate the plugin.
 
 You can then add the widgets to your sidebar(s) and start adding in
 links with the database manager. You can also use the shortcodes to
-insert ad frames into posts or pages.  There is a help page and a
-printable PDF user manual, that explains how to put ads in the database
-and how to display ads on your blog pages or posts.
+insert ad frames into posts or pages (you can use the Insert Ad Unit
+media button to generate and insert these short codes).  here is a help
+page and a printable PDF user manual, that explains how to put ads in
+the database and how to display ads on your blog pages or posts.
 
 The link subscription handling script should be copied somewhere and
 edited as needed (database access information).  You'll need to have Tcl
 and mysqltcl installed. You will also need procmail (almost all Linux
 system use procmail for their local mail delivery agent).  Read the
 ganlinksToDB.tcl file carefully.
-
-== Downloadable PDF user manual ==
 
 A downloadable PDF user manual is available at [gan_manual.pdf][pdfdownload].
 This manual provides detailed documentation on how to use this plugin.
@@ -67,16 +66,21 @@ This manual provides detailed documentation on how to use this plugin.
 
 == Frequently Asked Questions ==
 
+Support is handled either with [Deepwoods Software's
+Bugzilla][bugreport] (submit any bugs and feature requests to the
+Bugzilla) or though the [Deepwoods Software's Support page][support]
+(use this for  comments or for general questions).
+
 = Something does not work. What should I do? =
 
-Submit a bug at [Deepwoods Software's Bugzilla][bug report].
+Submit a bug at [Deepwoods Software's Bugzilla][bugreport].
 
 = I have another question that is not listed here. What should I do? =
 
 Submit one on [Deepwoods Software's Support page][support]. You can also submit
-a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
+a documentation bug at [Deepwoods Software's Bugzilla][bugreport] as well.
 
-[bug report]: http://bugzilla.deepsoft.com/enter_bug.cgi?product=Google%20Affilliate%20Network%20Plugin%20for%20WordPress "Deepwoods Software Bugzilla"
+[bugreport]: http://bugzilla.deepsoft.com/enter_bug.cgi?product=Google%20Affilliate%20Network%20Plugin%20for%20WordPress "Deepwoods Software Bugzilla"
 [support]: http://www.deepsoft.com/support/ "Deepwoods Software's Support page"
 
 == Screenshots ==
@@ -88,9 +92,10 @@ a documentation bug at [Deepwoods Software's Bugzilla][bug report] as well.
 
 == Changelog ==
 
-= =
+= 4.6 =
 * Improve the look of the dashboard impression stats widget.
-* Minor fix to the readme file.
+* Various fixes to the readme file.
+* Updated the internationalization.
 
 = 4.5.1 =
 * Major updates to the user manual, including the insertion of helpful 
