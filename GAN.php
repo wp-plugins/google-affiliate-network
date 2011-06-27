@@ -256,14 +256,14 @@ class GAN_Plugin {
 	function wp_head() {
 	  $path = GAN_PLUGIN_CSS_URL . '/GAN.css';
 
-	  echo '<link rel="stylesheet" type="text/css" href="' . $path . '" />';
+	  echo '<link rel="stylesheet" type="text/css" href="' . $path . '?version='.GAN_VERSION.'" />';
 	}
 
 	/* Admin side head action: load our admin style sheet */
 	function admin_head() {
 	  $this->wp_head();
 	  $path = GAN_PLUGIN_CSS_URL . '/GAN_admin.css';
-	  echo '<link rel="stylesheet" type="text/css" href="' . $path . '" />';
+	  echo '<link rel="stylesheet" type="text/css" href="' . $path . '?version='.GAN_VERSION.'" />';
 	}
 
 	/* Main admin page.  List the ads in the database */
