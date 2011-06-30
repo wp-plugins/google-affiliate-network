@@ -117,4 +117,49 @@ class Merch_Stats_List_Table extends WP_List_Table {
 	function column_default($item, $column_name) {
 	  return apply_filters( 'manage_items_custom_column','',$column_name,$item->id);
 	}
+	/**
+	 * Generate the table navigation above or below the table
+	 *
+	 * @since 3.1.0
+	 * @access protected
+	 */
+	function display_tablenav( $which ) {
+		if ( 'top' == $which ) {
+			wp_nonce_field( 'bulk-' . $this->_args['plural'] );
+			$this->top_statistics();
+		}
+?>
+	<div class="tablenav <?php echo esc_attr( $which ); ?>">
+
+		<div class="alignleft actions">
+			<?php $this->bulk_actions( $which ); ?>
+		</div>
+<?php
+		$this->extra_tablenav( $which );
+		$this->pagination( $which );
+?>
+
+		<br class="clear" />
+	</div>
+<?php
+	}
+	function top_statistics() {
+		$merch_statistics = GAN_Database::merch_statistics();
+?><table class="ganstats_table" width="100%">
+	    <thead>
+		<tr>
+		   <th scope="col"><?php _e('Maximum','gan'); ?></th><th scope="col"><?php _e('Minimum','gan'); ?></th>
+		   <th scope="col"><?php _e('Average','gan'); ?></th><th scope="col"><?php _e('Std. Deviation','gan'); ?></th>
+		   <th scope="col"><?php _e('Variance','gan'); ?></th></tr>
+	    <tbody>
+		<tr>
+		   <td width="20%" style="text-align: center;"><?php echo $merch_statistics['maximum']; ?></td>
+		   <td width="20%" style="text-align: center;"><?php echo $merch_statistics['minimum']; ?></td>
+		   <td width="20%" style="text-align: center;"><?php echo $merch_statistics['average']; ?></td>
+		   <td width="20%" style="text-align: center;"><?php echo $merch_statistics['std_deviation']; ?></td>
+		   <td width="20%" style="text-align: center;"><?php echo $merch_statistics['variance']; ?></td></tr>
+	    </tbody>
+	  </table>
+<?php
+	}
 }

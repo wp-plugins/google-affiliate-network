@@ -92,6 +92,9 @@ a documentation bug at [Deepwoods Software's Bugzilla][bugreport] as well.
 
 == Changelog ==
 
+= development version =
+* Add summary statistics to the top of the ad and merchant statistics pages.
+
 = 4.6 =
 * Improve the look of the dashboard impression stats widget.
 * Various fixes to the readme file.
