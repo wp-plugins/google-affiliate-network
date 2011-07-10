@@ -9,7 +9,11 @@ class GAN_DB_List_Table extends WP_List_Table {
 	var $merchid = '';
 	var $imsize = -1;
 	function GAN_DB_List_Table() {
-		parent::WP_List_Table( array ('items') );
+		if ( method_exists('WP_List_Table','WP_List_Table')) {
+			parent::WP_List_Table( array ('items') );
+		} else {
+			parent::__construct( array ('items') );
+		}
 	}
 	function set_row_actions($racts) { $this->row_actions = $racts; }
 	function get_columns() {

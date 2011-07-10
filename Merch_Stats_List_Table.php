@@ -5,7 +5,11 @@ require_once(dirname(__FILE__) . "/GAN_Constants.php");
 class Merch_Stats_List_Table extends WP_List_Table {
 
 	function Merch_Stats_List_Table() {
-		parent::WP_List_Table( array ('items') );
+		if ( method_exists('WP_List_Table','WP_List_Table')) {
+			parent::WP_List_Table( array ('items') );
+		} else {
+			parent::__construct( array ('items') );
+		}
 	}
 	function get_columns() {
 		return array (

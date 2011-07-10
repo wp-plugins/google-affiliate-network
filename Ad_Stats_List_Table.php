@@ -5,7 +5,11 @@ class Ad_Stats_List_Table extends WP_List_Table {
 	var $merchid = '';
 	var $imsize = -1;
 	function Ad_Stats_List_Table() {
-		parent::WP_List_Table( array ('items') );
+		if ( method_exists('WP_List_Table','WP_List_Table')) {
+			parent::WP_List_Table( array ('items') );
+		} else {
+			parent::__construct( array ('items') );
+		}
 	}
 	function get_columns() {
 		return array (
