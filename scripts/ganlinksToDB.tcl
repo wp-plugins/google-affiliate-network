@@ -140,7 +140,20 @@ proc insert_GAN {Advertiser LinkID LinkName MerchandisingText AltText
   global GAN_MERCH_TABLE
 
   if {[regexp {^[[:digit:]]} "$LinkID"] > 0} {set LinkID J$LinkID}
+  if {[regexp {^J[[:digit:]]*$} "$LinkID"] < 1} {
+    puts "-- Bad LinkID: $LinkID, not inserted"
+    return
+  }
   if {[regexp {^[[:digit:]]} "$MerchantID"] > 0} {set MerchantID K$MerchantID}
+  if {[regexp {^K[[:digit:]]*$} "$MerchantID"] < 1} {
+    puts "-- Bad MerchantID: $MerchantID, not inserted"
+    return
+  }
+  set sqldupcheck "select count(*) from $GAN_AD_TABLE where LinkID = [db_quote $LinkID]"
+  if {[::mysql::sel $DB $sqldupcheck -list] > 0} {
+    puts "-- Duplicate LinkID: $LinkID"
+    return
+  }
   if {[database_version] < 3.0} {
     set sqlstatement "insert into $GAN_AD_TABLE (Advertiser, LinkID, LinkName, \
 			MerchandisingText, AltText, StartDate, EndDate, \
@@ -204,7 +217,7 @@ while { [gets stdin line] >= 0 } {
 # Body of table in message
 while { [gets stdin line] >= 0 } {
   set elts [split "$line" "\t"]
-  if {[llength $elts] < 14} {continue}
+  if {[llength $elts] != 14} {continue}
 
   set elts [lreplace $elts 5 5 [fixdate [lindex $elts 5]]];# Fix start date
   # Fix EndDate

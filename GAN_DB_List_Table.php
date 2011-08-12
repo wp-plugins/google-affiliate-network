@@ -64,6 +64,17 @@ class GAN_DB_List_Table extends WP_List_Table {
 	      $this->imsize = $_REQUEST['imsize_bottom'];
 	    }
 	  }
+	  if ( isset($_REQUEST['delmerch_top']) ) {
+	    if ( isset($_REQUEST['delmerchid_top']) && 
+			$_REQUEST['delmerchid_top'] != '') {
+	      GAN_Database::delete_ads_by_merchantID($_REQUEST['delmerchid_top']);
+	    }
+	  } else if ( isset($_REQUEST['delmerch_bottom']) ) {
+	    if ( isset($_REQUEST['delmerchid_bottom']) && 
+			$_REQUEST['delmerchid_bottom'] != '') {
+	      GAN_Database::delete_ads_by_merchantID($_REQUEST['delmerchid_bottom']);
+	    }
+	  }
 	  /* Build where clause */
 	  global $wpdb;
 	  if ( $this->merchid != '' || $this->imsize != -1 ) {
@@ -174,7 +185,11 @@ class GAN_DB_List_Table extends WP_List_Table {
 	  submit_button(__( 'Delete Expired','gan'), 'secondary', 
 			'deleteexpired_'.$which, false, 
 			array( 'id' => 'post-query-submit') );
-
+	  echo '<br />';
+	  GAN_Database::merchdropdown($this->merchid,'delmerchid_'.$which);
+	  echo '&nbsp;';
+	  submit_button(__( 'Delete Merchant','gan'), 'primary', 'delmerch_'.$which,
+			false, array( 'id' => 'post-query-submit') );
 	  echo '</div>';
 	}
 	function get_column_info() {

@@ -327,6 +327,25 @@ class GAN_Database {
       $wpdb->query($sql);
     }
   }
+  static function delete_ads_by_merchantID($MerchantID) {
+    global $wpdb;
+    if (GAN_Database::database_version() < 3.0) {
+      $sql = $wpdb->prepare("select id from ".GAN_AD_STATS_TABLE_VIEW." where MerchantID = %s",$MerchantID);
+      $ids = $wpdb->get_col($sql);
+      foreach ($ids as $id) {
+	$wpdb->query("delete from ".GAN_AD_STATS_TABLE_VIEW." where id = ".$id);
+      }
+      $sql = $wpdb->prepare("delete from " . GAN_AD_TABLE . " where MerchantID = %s",$MerchantID);
+      $wpdb->query($sql);
+      $sql = $wpdb->prepare("delete from " . GAN_MERCH_STATS_TABLE . " where MerchantID = %s",$MerchantID);
+      $wpdb->query($sql);
+    } else {
+      $sql = $wpdb->prepare("delete from " . GAN_AD_TABLE . " where MerchantID = %s",$MerchantID);
+      $wpdb->query($sql);
+      $sql = $wpdb->prepare("delete from " . GAN_MERCH_TABLE . " where MerchantID = %s",$MerchantID);
+      $wpdb->query($sql);
+    }
+  }
   static function toggle_enabled($id) {
     global $wpdb;
     $sql = $wpdb->prepare("SELECT enabled FROM " . GAN_AD_TABLE . ' where id = %s',$id);

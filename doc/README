@@ -49,7 +49,7 @@ then activate the plugin.
 You can then add the widgets to your sidebar(s) and start adding in
 links with the database manager. You can also use the shortcodes to
 insert ad frames into posts or pages (you can use the Insert Ad Unit
-media button to generate and insert these short codes).  here is a help
+media button to generate and insert these short codes).  There is a help
 page and a printable PDF user manual, that explains how to put ads in
 the database and how to display ads on your blog pages or posts.
 
