@@ -33,7 +33,7 @@ class Ad_Stats_List_Table extends WP_List_Table {
 	}	
 	function prepare_items() {
 	  $this->check_permissions();
-	  file_put_contents("php://stderr","*** Ad_Stats_List_Table::prepare_items _REQUEST is ".print_r($_REQUEST,true)."\n");
+	  //file_put_contents("php://stderr","*** Ad_Stats_List_Table::prepare_items _REQUEST is ".print_r($_REQUEST,true)."\n");
 	  if ( isset($_REQUEST['merchid']) ) {
 	    $this->merchid = $_REQUEST['merchid'];
 	  } else {

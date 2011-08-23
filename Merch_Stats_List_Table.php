@@ -29,7 +29,7 @@ class Merch_Stats_List_Table extends WP_List_Table {
 	}	
 	function prepare_items() {
 	  $this->check_permissions();
-	  file_put_contents("php://stderr","*** Merch_Stats_List_Table::prepare_items _REQUEST is ".print_r($_REQUEST,true)."\n");
+	  //file_put_contents("php://stderr","*** Merch_Stats_List_Table::prepare_items _REQUEST is ".print_r($_REQUEST,true)."\n");
 	  if ( isset($_REQUEST['action']) && $_REQUEST['action'] != -1 ) {
 	    $theaction = $_REQUEST['action'];
 	  } else if ( isset($_REQUEST['action2']) && $_REQUEST['action2'] != -1 ) {
