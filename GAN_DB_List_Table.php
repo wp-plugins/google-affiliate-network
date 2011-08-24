@@ -612,7 +612,7 @@ class GAN_DB_List_Table extends WP_List_Table {
 	      $PromoType = $this->tsv_unquote($rawelts[12]);
 	      $MerchantID = $this->tsv_unquote($rawelts[2]);
 	      if (GAN_Database::find_ad_by_LinkID($LinkID) != 0) {
-		$message .= sprintf(__('Duplicate Link ID $s (%s). Ad not inserted into database.','gan'),$LinkID,$LinkName);
+		$message .= sprintf(__('Duplicate Link ID %s (%s). Ad not inserted into database.','gan'),$LinkID,$LinkName);
 		$message .= "<br />\n";
 	        continue;
 	      }
