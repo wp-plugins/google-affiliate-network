@@ -65,14 +65,34 @@ class GAN_DB_List_Table extends WP_List_Table {
 	    }
 	  }
 	  if ( isset($_REQUEST['delmerch_top']) ) {
-	    if ( isset($_REQUEST['delmerchid_top']) && 
-			$_REQUEST['delmerchid_top'] != '') {
-	      GAN_Database::delete_ads_by_merchantID($_REQUEST['delmerchid_top']);
+	    if ( isset($_REQUEST['modmerchid_top']) && 
+			$_REQUEST['modmerchid_top'] != '') {
+	      GAN_Database::delete_ads_by_merchantID($_REQUEST['modmerchid_top']);
 	    }
 	  } else if ( isset($_REQUEST['delmerch_bottom']) ) {
-	    if ( isset($_REQUEST['delmerchid_bottom']) && 
-			$_REQUEST['delmerchid_bottom'] != '') {
-	      GAN_Database::delete_ads_by_merchantID($_REQUEST['delmerchid_bottom']);
+	    if ( isset($_REQUEST['modmerchid_bottom']) && 
+			$_REQUEST['modmerchid_bottom'] != '') {
+	      GAN_Database::delete_ads_by_merchantID($_REQUEST['modmerchid_bottom']);
+	    }
+	  } else if ( isset($_REQUEST['disablemerch_top']) ) {
+	    	    if ( isset($_REQUEST['modmerchid_top']) && 
+			$_REQUEST['modmerchid_top'] != '') {
+	      GAN_Database::disable_ads_by_merchantID($_REQUEST['modmerchid_top']);
+	    }
+	  } else if ( isset($_REQUEST['disablemerch_bottom']) ) {
+	    	    if ( isset($_REQUEST['modmerchid_bottom']) && 
+			$_REQUEST['modmerchid_bottom'] != '') {
+	      GAN_Database::disable_ads_by_merchantID($_REQUEST['modmerchid_bottom']);
+	    }
+	  } else if ( isset($_REQUEST['enablemerch_top']) ) {
+	    	    if ( isset($_REQUEST['modmerchid_top']) && 
+			$_REQUEST['modmerchid_top'] != '') {
+	      GAN_Database::enable_ads_by_merchantID($_REQUEST['modmerchid_top']);
+	    }
+	  } else if ( isset($_REQUEST['enablemerch_bottom']) ) {
+	    	    if ( isset($_REQUEST['modmerchid_bottom']) && 
+			$_REQUEST['modmerchid_bottom'] != '') {
+	      GAN_Database::enable_ads_by_merchantID($_REQUEST['modmerchid_bottom']);
 	    }
 	  }
 	  /* Build where clause */
@@ -186,9 +206,15 @@ class GAN_DB_List_Table extends WP_List_Table {
 			'deleteexpired_'.$which, false, 
 			array( 'id' => 'post-query-submit') );
 	  echo '<br />';
-	  GAN_Database::merchdropdown($this->merchid,'delmerchid_'.$which);
+	  GAN_Database::merchdropdown($this->merchid,'modmerchid_'.$which);
 	  echo '&nbsp;';
 	  submit_button(__( 'Delete Merchant','gan'), 'primary', 'delmerch_'.$which,
+			false, array( 'id' => 'post-query-submit') );
+	  echo '&nbsp;';
+	  submit_button(__( 'Disable Merchant','gan'), 'secondary', 'disablemerch_'.$which,
+			false, array( 'id' => 'post-query-submit') );
+	  echo '&nbsp;';
+	  submit_button(__( 'Enable Merchant','gan'), 'secondary', 'enablemerch_'.$which,
 			false, array( 'id' => 'post-query-submit') );
 	  echo '</div>';
 	}

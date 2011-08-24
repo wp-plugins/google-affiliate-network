@@ -346,6 +346,16 @@ class GAN_Database {
       $wpdb->query($sql);
     }
   }
+  static function disable_ads_by_merchantID($MerchantID) {
+    global $wpdb;
+    $sql = $wpdb->prepare("update " . GAN_AD_TABLE . " set enabled=false where MerchantID = %s",$MerchantID);
+    $wpdb->query($sql);
+  }
+  static function enable_ads_by_merchantID($MerchantID) {
+    global $wpdb;
+    $sql = $wpdb->prepare("update " . GAN_AD_TABLE . " set enabled=true where MerchantID = %s",$MerchantID);
+    $wpdb->query($sql);
+  }
   static function toggle_enabled($id) {
     global $wpdb;
     $sql = $wpdb->prepare("SELECT enabled FROM " . GAN_AD_TABLE . ' where id = %s',$id);
