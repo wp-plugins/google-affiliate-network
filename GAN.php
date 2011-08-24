@@ -250,7 +250,7 @@ class GAN_Plugin {
 	  }
 	}
 	function InsertH2AffiliateLoginButton() {
-	  ?><p><a target="_blank" href="http://www.connectcommerce.com/global/login.html" class="button"><?php _e('Login into Google Affiliate Network','gan'); ?></a></p><?php
+	  ?><p><a target="_blank" href="http://www.google.com/ads/affiliatenetwork/" class="button"><?php _e('Login into Google Affiliate Network','gan'); ?></a></p><?php
 	}
 	/* Front side head action: load our style sheet */
 	function wp_head() {
