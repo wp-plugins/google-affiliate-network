@@ -92,7 +92,10 @@ class GAN_Widget extends WP_Widget {
 		}
 
 		/* Create the iframe.  The ads will be served by GAN_Server. */
-		echo '<iframe scrolling="auto" class="'.$instance['ulid'].'" '.
+		echo '<iframe scrolling="auto" frameborder="0" vspace="0" '.
+			      'marginheight="0" marginwidth="0" hspace="0" '.
+			      'allowtransparency="true" class="'.
+			      $instance['ulid'].'" '.
 			'src="'.add_query_arg(
 				array('ulid' => $instance['ulid'],
 				      'maxads' => $instance['maxads'],
@@ -133,7 +136,9 @@ class GAN_Widget extends WP_Widget {
 	    $frameh=' height="'.$ifheight.'" ';
 	  }
 	  $frameattrs=$framew.$frameh;
-	  $result  = '<iframe scrolling="auto" class="'.$ulid.'" '.
+	  $result  = '<iframe scrolling="auto" frameborder="0" vspace="0" '.
+			      'marginheight="0" marginwidth="0" hspace="0" '.
+			      'allowtransparency="true" class="'.$ulid.'" '.
 			'src="'.add_query_arg(
 				array('ulid' => $ulid, 'maxads' => $maxads,
 					'target' => $thetarget),

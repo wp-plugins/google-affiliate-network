@@ -48,7 +48,9 @@ class GAN_ImageWidget extends WP_Widget {
 		    $ifheight=' height="'.$instance['ifheight'].'" ';
 		}
 		
-		echo '<iframe scrolling="auto" class="'.$instance['ulid'].'" '.
+		echo '<iframe scrolling="no" frameborder="0" vspace="0" '.
+			      'marginheight="0" marginwidth="0" hspace="0" '.
+			      'allowtransparency="true" class="'.$instance['ulid'].'" '.
 			'src="'.add_query_arg(
 			array('ulid' => $instance['ulid'],
 			      'maxads' => $instance['maxads'],
@@ -93,7 +95,9 @@ class GAN_ImageWidget extends WP_Widget {
 	    $frameh=' height="'.$ifheight.'" ';
 	  }
 	  $frameattrs=$framew.$frameh;
-	  $result  = '<iframe scrolling="auto" class="'.$ulid.'" '.
+	  $result  = '<iframe scrolling="no" frameborder="0" vspace="0" '.
+			      'marginheight="0" marginwidth="0" hspace="0" '.
+			      'allowtransparency="true" class="'.$ulid.'" '.
 			'src="'.add_query_arg(
 				array('ulid' => $ulid, 'maxads' => $maxads,
 				      'height' => $height, 'width' => $width,
