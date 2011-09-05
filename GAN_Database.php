@@ -610,7 +610,7 @@ class GAN_Database {
 				    " order by Impressions DESC LIMIT 5", 'ARRAY_A');
     }
   }
-  static function ad_statistics() {
+  static function ad_statistics($where = '') {
     global $wpdb;
     if (GAN_Database::database_version() < 3.0) {
       return $wpdb->get_row("SELECT MAX(Impressions) maximum, ".
@@ -618,14 +618,14 @@ class GAN_Database {
 						    "AVG(Impressions) average, ".
 						    "STDDEV(Impressions) std_deviation, ".
 						    "VARIANCE(Impressions) variance FROM ".
-						GAN_AD_STATS_TABLE, 'ARRAY_A');
+						GAN_AD_STATS_TABLE.$where, 'ARRAY_A');
     } else {
       return $wpdb->get_row("SELECT MAX(Impressions) maximum, ".
 	  				            "MIN(Impressions) minimum, ".
 						    "AVG(Impressions) average, ".
 						    "STDDEV(Impressions) std_deviation, ".
 						    "VARIANCE(Impressions) variance FROM ".
-						GAN_AD_TABLE, 'ARRAY_A');
+						GAN_AD_TABLE.$where, 'ARRAY_A');
     }
   }
   static function max_ad_impressions() {

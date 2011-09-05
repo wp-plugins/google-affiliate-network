@@ -4,6 +4,7 @@ class Ad_Stats_List_Table extends WP_List_Table {
 
 	var $merchid = '';
 	var $imsize = -1;
+	var $stats_where = '';
 	function Ad_Stats_List_Table() {
 		if ( method_exists('WP_List_Table','WP_List_Table')) {
 			parent::WP_List_Table( array ('items') );
@@ -124,6 +125,7 @@ class Ad_Stats_List_Table extends WP_List_Table {
 	  }
 	  $start = ($pagenum-1)*$per_page;
   	  $this->items = array_slice( $all_items,$start,$per_page );
+	  $this->stats_where = $where;
 	}
 	function check_permissions() {
 	  if (!current_user_can('manage_options')) {
@@ -228,7 +230,7 @@ class Ad_Stats_List_Table extends WP_List_Table {
 <?php
 	}
 	function top_statistics() {
-		$ad_statistics = GAN_Database::ad_statistics();
+		$ad_statistics = GAN_Database::ad_statistics($this->stats_where);
 ?><table class="ganstats_table" width="100%">
 	    <thead>
 		<tr>
