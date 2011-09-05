@@ -48,14 +48,15 @@ class GAN_Database {
 		       'PRIMARY' => 'KEY (id)'
 		     );
     global $wpdb;
-    $sql = "CREATE TABLE " . GAN_AD_TABLE . '(';
+    $sql = "CREATE TABLE " . GAN_AD_TABLE . ' (';
     foreach($columns as $column => $option) {
        $sql .= "{$column} {$option}, ";
     }
-    $sql = rtrim($sql, ', ') . ")";
+    $sql = rtrim($sql, ', ') . " )";
     if($wpdb->get_var("SHOW TABLES LIKE '" . GAN_AD_TABLE . "'") != GAN_AD_TABLE) {
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-	dbDelta($sql);
+	$result = dbDelta($sql);
+	//?><pre><?php print_r($result); ?></pre><br /><?php $wpdb->print_error(); ?><br /><?php
     }
   }
   /* Make Merchants table -- contains the MerchantID, the Advertiser name, 
@@ -70,14 +71,15 @@ class GAN_Database {
 		       'PRIMARY' => 'KEY (id)',
 		       'INDEX'     => '(MerchantID)' );
     global $wpdb;
-    $sql = "CREATE TABLE " . GAN_MERCH_TABLE . '(';
+    $sql = "CREATE TABLE " . GAN_MERCH_TABLE . ' (';
     foreach($columns as $column => $option) {
 	$sql .= "{$column} {$option}, ";
     }
-    $sql = rtrim($sql, ', ') . ")";
+    $sql = rtrim($sql, ', ') . " )";
     if($wpdb->get_var("SHOW TABLES LIKE '" . GAN_MERCH_TABLE . "'") != GAN_MERCH_TABLE) {
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 	$result = dbDelta($sql);
+	//?><pre><?php print_r($result); ?></pre><br /><?php $wpdb->print_error(); global $EZSQL_ERROR; print_r($EZSQL_ERROR); ?><br /><?php
     }
   }
   static function upgrade_database() {
@@ -85,64 +87,52 @@ class GAN_Database {
     $dbversion = GAN_Database::database_version();
     //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: dbversion = ".$dbversion."\n");
     if ($dbversion == 3.0) return;
-    if ($dbversion == 0.0) {
-      GAN_Database::make_ad_table();
-      GAN_Database::make_merchs_table();
-      return;
+    $olderror = $wpdb->show_errors(true);
+    if ($dbversion > 0.0 && $dbversion < 3.0) {
+      //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: populating merchs table\n");
+      $query = 'SELECT DISTINCT MerchantID,Advertiser from '.GAN_AD_TABLE;
+      //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: query = ".$query."\n");
+      $merchs = $wpdb->get_results($query, 'ARRAY_A' );
+      //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: merchs = ".print_r((array)$merchs,true)."\n");
+    } else {
+      $merchs = array();
     }
-    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: making merchs table\n");
+    GAN_Database::make_ad_table();
     GAN_Database::make_merchs_table();
-    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: populating merchs table\n");
-    $query = 'SELECT DISTINCT MerchantID,Advertiser from '.GAN_AD_TABLE;
-    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: query = ".$query."\n");
-    $merchs = $wpdb->get_results($query, 'ARRAY_A' );
-    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: merchs = ".print_r((array)$merchs,true)."\n");
-    foreach ((array)$merchs as $merch) {
-      //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: inserting ".print_r($merch,true)." into merchs table\n");
-      $wpdb->insert(GAN_MERCH_TABLE,$merch,array("%s","%s"));
-    }
-    $query = 'SELECT DISTINCT MerchantID,Impressions,LastRunDate from '.
+    if ($dbversion > 0.0 && $dbversion < 3.0) {
+      foreach ((array)$merchs as $merch) {
+        //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: inserting ".print_r($merch,true)." into merchs table\n");
+        $wpdb->insert(GAN_MERCH_TABLE,$merch,array("%s","%s"));
+      }
+      $query = 'SELECT DISTINCT MerchantID,Impressions,LastRunDate from '.
 		GAN_MERCH_STATS_TABLE;
-    $merch_stats = $wpdb->get_results($query, 'ARRAY_A' );
-    foreach ((array)$merch_stats as $merch_stat) {
-      //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: inserting ".print_r($merch_stat,true)." into merchs table\n");
-      $wpdb->update( GAN_MERCH_TABLE, array("Impressions" => $merch_stat['Impressions'],
+      $merch_stats = $wpdb->get_results($query, 'ARRAY_A' );
+      foreach ((array)$merch_stats as $merch_stat) {
+        //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: inserting ".print_r($merch_stat,true)." into merchs table\n");
+        $wpdb->update( GAN_MERCH_TABLE, array("Impressions" => $merch_stat['Impressions'],
 					  "LastRunDate" => $merch_stat['LastRunDate']),
 				    array("MerchantID" => $merch_stat['MerchantID']),
 				    array("%d","%s"), "%s");
-    }
-    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: dropping ".GAN_MERCH_STATS_TABLE." and ".GAN_MERCH_STATS_TABLE_VIEW."\n");
-    $wpdb->query('DROP TABLE '.GAN_MERCH_STATS_TABLE);
-    $wpdb->query('DROP VIEW  '.GAN_MERCH_STATS_TABLE_VIEW);
-    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: Altering ".GAN_AD_TABLE.": dropping Advertiser and side columns\n");
-    $wpdb->query('ALTER TABLE '.GAN_AD_TABLE.' DROP COLUMN Advertiser');
-    $wpdb->query('ALTER TABLE '.GAN_AD_TABLE.' DROP COLUMN side');
-    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: Altering ".GAN_AD_TABLE.": adding stats columns\n");
-    $sql = 'ALTER TABLE '.GAN_AD_TABLE.' ADD COLUMN (';
-    $columns = array (
-		       'LastRunDate' => "date default '1970-01-01'" , /* Last Impression data */
-		       'Impressions' => 'int default 0',	/* Impression count */
-		     );
-    foreach($columns as $column => $option) {
-      $sql .= "{$column} {$option}, ";
-    }
-    $sql = rtrim($sql, ', ') . ")";
-    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: sql = ".$sql."\n");
-    $wpdb->query($sql);
-    $query = 'SELECT DISTINCT adid,Impressions,LastRunDate from '.
+      }
+      //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: dropping ".GAN_MERCH_STATS_TABLE." and ".GAN_MERCH_STATS_TABLE_VIEW."\n");
+      $wpdb->query('DROP TABLE '.GAN_MERCH_STATS_TABLE);
+      $wpdb->query('DROP VIEW  '.GAN_MERCH_STATS_TABLE_VIEW);
+      $query = 'SELECT DISTINCT adid,Impressions,LastRunDate from '.
 		GAN_AD_STATS_TABLE;
-    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: merging in ad stats\n");
-    $ad_stats = $wpdb->get_results($query, 'ARRAY_A' );
-    foreach ((array)$ad_stats as $ad_stat) {
-      //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: inserting ".print_r($ad_stat,true)."\n");
-      $wpdb->update( GAN_AD_TABLE, array("Impressions" => $ad_stat['Impressions'],
+      //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: merging in ad stats\n");
+      $ad_stats = $wpdb->get_results($query, 'ARRAY_A' );
+      foreach ((array)$ad_stats as $ad_stat) {
+        //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: inserting ".print_r($ad_stat,true)."\n");
+        $wpdb->update( GAN_AD_TABLE, array("Impressions" => $ad_stat['Impressions'],
 					  "LastRunDate" => $ad_stat['LastRunDate']),
 				    array("id" => $ad_stat['adid']),
 				    array("%d","%s"), "%d");
-    }
-    //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: Dropping ".GAN_AD_STATS_TABLE." and ".GAN_AD_STATS_TABLE_VIEW."\n");
-    $wpdb->query('DROP TABLE '.GAN_AD_STATS_TABLE);
-    $wpdb->query('DROP VIEW  '.GAN_AD_STATS_TABLE_VIEW);
+      }
+      //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: Dropping ".GAN_AD_STATS_TABLE." and ".GAN_AD_STATS_TABLE_VIEW."\n");
+      $wpdb->query('DROP TABLE '.GAN_AD_STATS_TABLE);
+      $wpdb->query('DROP VIEW  '.GAN_AD_STATS_TABLE_VIEW);
+    }  
+    $wpdb->show_errors($olderror);
   }
   /*
    * Return an array of ordered merchants (advertisers).  Returns only

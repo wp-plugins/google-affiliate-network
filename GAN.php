@@ -385,6 +385,7 @@ class GAN_Plugin {
 		<p>
 			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options','gan'); ?>" />
 		</p><?php 
+		?><span id="gan_dash_version"><?php printf(__('Database Version: %3.1f','gan'),GAN_Database::database_version()) ?></span><br /><?php
 		if (GAN_Database::database_version() < 3.0) {
 		  ?><p><?php _e('Your database needs to be upgraded.','gan'); ?>&nbsp;<input type="submit" name="upgradedatabase" class="button-primary" value="<?php _e('Upgrade Database','gan'); ?>"></p><?php
 		} ?></form></div><?php
