@@ -68,7 +68,7 @@ class GAN_Plugin {
 		add_action('wp_dashboard_setup', array($this,'wp_dashboard_setup'));
 		add_action('gan_daily_event',array($this,'check_autoexpire'));
 		add_option('wp_gan_autoexpire','yes');
-	        /* add_option('wp_gan_disablesponsor','no'); */
+	        add_option('wp_gan_disablesponsor','no');
 		load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',
 					  basename(GAN_DIR).'/languages/');
 		if (is_admin()) {
@@ -243,10 +243,13 @@ class GAN_Plugin {
 	}
 
 	function PluginSponsor() {
-	  if (/*get_option('wp_gan_disablesponsor') == 'yes'*/ true) {
+	  if (get_option('wp_gan_disablesponsor') == 'yes') {
 	    $this->InsertPayPalDonateButton();
 	  } else {
-	    ?><script></script><?php
+	    ?><script type="text/javascript">
+var psHost = (("https:" == document.location.protocol) ? "https://" : "http://");
+document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/spsn/display.php?client=google-affiliate-network&spot=' type='text/javascript'%3E%3C/script%3E"));
+</script><?php
 	  }
 	}
 	function InsertH2AffiliateLoginButton() {
@@ -354,16 +357,19 @@ class GAN_Plugin {
 	  {
 	    wp_die( __('You do not have sufficient permissions to access this page.', 'gan') );
 	  }
-	  if ( isset($_GET['saveoptions']) ) {
-	    $autoexpire = $_GET['gan_autoexpire'];
+	  if ( isset($_REQUEST['saveoptions']) ) {
+	    $autoexpire = $_REQUEST['gan_autoexpire'];
 	    update_option('wp_gan_autoexpire',$autoexpire);
+	    $disablesponsor = $_REQUEST['gan_disablesponsor'];
+	    update_option('wp_gan_disablesponsor',$disablesponsor);
 	    ?><div id="message"class="updated fade"><p><?php _e('Options Saved','gan'); ?></p></div><?php
-	  } else if ( isset($_GET['upgradedatabase']) ) {
+	  } else if ( isset($_REQUEST['upgradedatabase']) ) {
 	    GAN_Database::upgrade_database();
 	    ?><div id="message"class="updated fade"><p><?php _e('Database Upgraded','gan'); ?></p></div><?php
 	  }
 	  /* Head of page, filter and screen options. */
 	  $autoexpire = get_option('wp_gan_autoexpire');
+	  $disablesponsor = get_option('wp_gan_disablesponsor');
 	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-options'); ?><br clear="all" />
 	    <div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
@@ -378,6 +384,17 @@ class GAN_Plugin {
 				} 
 			?> /><?php _e('Yes','gan'); ?>&nbsp;<input type="radio" name="gan_autoexpire" value="no"<?php
 				if ($autoexpire == 'no') {
+				  echo ' checked="checked" ';
+				}
+			?> /><?php _e('No','gan'); ?></td></tr>
+		  <tr valign="top">
+		    <th scope="row"><label for="gan_disablesponsor" style="width:20%;"><?php _e('Disable PluginSponsor messages?','gan'); ?></label></th>
+		    <td><input type="radio" name="gan_disablesponsor" value="yes"<?php
+				if ($disablesponsor == 'yes') {
+				  echo ' checked="checked" ';
+				} 
+			?> /><?php _e('Yes','gan'); ?>&nbsp;<input type="radio" name="gan_disablesponsor" value="no"<?php
+				if ($disablesponsor == 'no') {
 				  echo ' checked="checked" ';
 				}
 			?> /><?php _e('No','gan'); ?></td></tr>
@@ -407,23 +424,23 @@ class GAN_Plugin {
 
 	function make_page_query($page, $id, $what)
 	{
-		if ( isset($_GET['GAN_rows_per_page']) ) {
-		  $per_page = $_GET['GAN_rows_per_page'];
+		if ( isset($_REQUEST['GAN_rows_per_page']) ) {
+		  $per_page = $_REQUEST['GAN_rows_per_page'];
 		} else {
 		  $per_page = 20;
 		}
-		if ( isset($_GET['pagenum']) ) {
-		  $pagenum = $_GET['pagenum'];
+		if ( isset($_REQUEST['pagenum']) ) {
+		  $pagenum = $_REQUEST['pagenum'];
 		} else {
 		  $pagenum = 1;
 		}
-		if ( isset($_GET['merchid']) ) {
-		  $merchid = $_GET['merchid'];
+		if ( isset($_REQUEST['merchid']) ) {
+		  $merchid = $_REQUEST['merchid'];
 		} else {
 		  $merchid = "";
 		}
-	        if ( isset($_GET['imwidth']) ) {
-		  $imwidth = $_GET['imwidth'];
+	        if ( isset($_REQUEST['imwidth']) ) {
+		  $imwidth = $_REQUEST['imwidth'];
 		} else {
 		  $imwidth = -1;
 	 	}
@@ -443,23 +460,23 @@ class GAN_Plugin {
 	function cancel_page_query()
 	{
 		
-		if ( isset($_GET['GAN_rows_per_page']) ) {
-		  $per_page = $_GET['GAN_rows_per_page'];
+		if ( isset($_REQUEST['GAN_rows_per_page']) ) {
+		  $per_page = $_REQUEST['GAN_rows_per_page'];
 		} else {
 		  $per_page = 20;
 		}
-		if ( isset($_GET['pagenum']) ) {
-		  $pagenum = $_GET['pagenum'];
+		if ( isset($_REQUEST['pagenum']) ) {
+		  $pagenum = $_REQUEST['pagenum'];
 		} else {
 		  $pagenum = 1;
 		}
-		if ( isset($_GET['merchid']) ) {
-		  $merchid = $_GET['merchid'];
+		if ( isset($_REQUEST['merchid']) ) {
+		  $merchid = $_REQUEST['merchid'];
 		} else {
 		  $merchid = "";
 		}
-	        if ( isset($_GET['imwidth']) ) {
-		  $imwidth = $_GET['imwidth'];
+	        if ( isset($_REQUEST['imwidth']) ) {
+		  $imwidth = $_REQUEST['imwidth'];
 		} else {
 		  $imwidth = -1;
 	 	}
@@ -476,23 +493,23 @@ class GAN_Plugin {
 
 	function hidden_filter_fields ()
 	{
-		if ( isset($_GET['GAN_rows_per_page']) ) {
-		  $per_page = $_GET['GAN_rows_per_page'];
+		if ( isset($_REQUEST['GAN_rows_per_page']) ) {
+		  $per_page = $_REQUEST['GAN_rows_per_page'];
 		} else {
 		  $per_page = 20;
 		}
-		if ( isset($_GET['pagenum']) ) {
-		  $pagenum = $_GET['pagenum'];
+		if ( isset($_REQUEST['pagenum']) ) {
+		  $pagenum = $_REQUEST['pagenum'];
 		} else {
 		  $pagenum = 1;
 		}
-		if ( isset($_GET['merchid']) ) {
-		  $merchid = $_GET['merchid'];
+		if ( isset($_REQUEST['merchid']) ) {
+		  $merchid = $_REQUEST['merchid'];
 		} else {
 		  $merchid = "";
 		}
-	        if ( isset($_GET['imwidth']) ) {
-		  $imwidth = $_GET['imwidth'];
+	        if ( isset($_REQUEST['imwidth']) ) {
+		  $imwidth = $_REQUEST['imwidth'];
 		} else {
 		  $imwidth = -1;
 	 	}
