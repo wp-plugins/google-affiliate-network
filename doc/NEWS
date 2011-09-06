@@ -4,7 +4,7 @@ Donate link: http://www.deepsoft.com/GAN
 Tags: gan,affiliate,widget,google,plugin,ads,shortcode
 Requires at least: 2.7
 Tested up to: 3.2
-Stable tag: 4.8
+Stable tag: 4.9
 
 A Widget / shortcode plugin to display Google Affiliate Network ads. 
 Both text links and image ads can be displayed.
@@ -40,6 +40,22 @@ also administration pages to view ad impression statistics and merchant
 (advertiser) impression statistics.  The statistics can be downloaded as
 CSV files.  The plugin also includes a help page and a printable PDF
 user manual.
+
+= Sustainable Plugin Development - and Your Privacy =
+
+Google Affiliate Network is a participant in the Sustainable Plugins
+Sponsorship Network (SPSN) - http://pluginsponsors.com/. The SPSN model
+offers modest sponsorships to plugin authors in return for a small
+amount of screen real estate on plugin options pages. The SPSN sponsor
+messages can be switched altogether: just visit the Config page.
+
+IMPORTANT PRIVACY INFORMATION: NO INDIVIDUALLY IDENTIFIABLE DETAILS OF
+ANY KIND, REGARDING EITHER YOU OR YOUR SITE, will be collected or
+shared as a result of displaying Sustainable Plugins Sponsorship
+Network (SPSN) sponsor messages. Sponsors receive only aggregate
+reports of impressions on a worldwide per-plugin basis, NOT on
+impressions or on any other activity at any individual site which
+happens to be using a plugin.
 
 == Installation ==
 
@@ -90,7 +106,15 @@ a documentation bug at [Deepwoods Software's Bugzilla][bugreport] as well.
 3. View of ad database listing.
 4. Front side view, showing both textual ads and banner ads.
 
+
+
 == Changelog ==
+
+= 4.9 =
+* Various changes to the database creation / update code (try to make things
+  work on WIMP/WAMP servers).
+* Added filter code to the brief ad stats.
+* Added PluginSponser code.
 
 = 4.8 =
 * Update localization
