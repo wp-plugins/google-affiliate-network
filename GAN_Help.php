@@ -3,6 +3,7 @@
 </div><h2><?php _e('Help Using the Google Affiliate Network Plugin','gan'); ?><?php $this->InsertVersion(); ?></h2>
 <?php $this->PluginSponsor(); ?>
 <ul>
+<li><a href="#Introduction">Introduction</a></li>
 <li><a href="#Installation">Installation</a></li>
 <li><a href="#Configuring">Configuring</a></li>
 <li><a href="#InsertingAds">Inserting Ads</a></li>
@@ -12,15 +13,49 @@
 <li><a href="#Statistics">Statistics</a></li>
 <li><a href="<?php echo GAN_PLUGIN_URL . '/doc/gan_manual.pdf'; ?>">Download printable manual</a></li>
 </ul>
+<a name="Introduction"></a><h3>Introduction</h3>
+<p>I wrote this plugin to display ads from the Google Affiliate Network
+on Deepwoods Software's WordPress powered website. This plugin uses a
+database of ads to display.  The ads are displayed in rotation, using
+the simple method of counting ad impressions and giving priority to the
+advertisers with the least impressions and display ads with the least
+impressions first that are expiring soonest.  As ads and advertisers
+are displayed, their impression counts are incremented, which moves
+them down the list.  This means that all ads are displayed fairly, with
+preference given to new ads and to ads which are expiring soonest.
+After using &quot;in house&quot; for a while, I have made this plugin
+available to other WordPress users who also using the Google Affiliate
+Network as a source of advertising revenue.</p>
+<h4>Sustainable Plugin Development - and Your Privacy</h4>
+<p>Google Affiliate Network is a participant in the Sustainable Plugins
+Sponsorship Network (SPSN) - 
+<a href="http://pluginsponsors.com/">http://pluginsponsors.com/</a>. The
+SPSN model offers modest sponsorships to plugin authors in return for a
+small amount of screen real estate on plugin options pages. The SPSN
+sponsor messages can be switched altogether: just visit the Config
+page.</p>
+<p><strong>IMPORTANT PRIVACY INFORMATION: NO INDIVIDUALLY IDENTIFIABLE
+DETAILS OF ANY KIND, REGARDING EITHER YOU OR YOUR SITE</strong>, will be
+collected or shared as a result of displaying Sustainable Plugins
+Sponsorship Network (SPSN) sponsor messages. Sponsors receive only
+aggregate reports of impressions on a worldwide per-plugin basis, NOT
+on impressions or on any other activity at any individual site which
+happens to be using a plugin.</p>
+<p>There is a configuration option to disable PluginSponsor messages,
+see the section on <a href="#Configuring">configuring</a> for details
+about this option.</p>
 <a name="Installation"></a><h3>Installation</h3> 
 <p>Installation is just a matter of installing from the new plugin
 page.  Once installed and activated, the plugin is ready to start
 displaying affiliate ads.</p> 
 <a name="Configuring"></a><h3>Configuring</h3> 
-<p>There is only one configuration option: Autoexpire. The option is
-true by default.  It enables the automatic removal of ads that have
-expired. While it is possible to disable this option it is not
-recommended</p>
+<p>There are two configuration options: one for automatically deleting
+expired ads and one to disable PluginSponsor messages.  The option to
+automatically delete expired ads is on by default and the option to
+disable PluginSponsor messages is off by default. While it is possible
+to disable automatically deleting expired ads it is not recommended. If
+PluginSponsor messages are turned off, a PayPal donate message is
+displayed instead.</p>
 <p>If you have upgraded from an older version of the plugin, the
 configure page will display a button to upgrade the database to the new
 version.</p>

@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 4.9
+ * Version: 4.9.1
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -818,11 +818,15 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 		$help .= '<h4>'.__('GAN Option Configuration page','gan').
 			'</h4>';
 		$help .= '<p>'.__('This is the GAN Option Configuration '.
-				  'page. There is only one option at '.
+				  'page. There are two options at '.
 				  'present, a flag enabling or disabling the '.
-				  'automatic deletion of expired ads. It is '.
-				  'on by default and turning it off is not '.
-				  'recomended.','gan').'</p>';
+				  'automatic deletion of expired ads and a '.
+				  'flag to disable PluginSponsor messages. '.
+				  'The automatic deletion of expired ads flag '.
+				  'is on by default and turning it off is not '.
+				  'recomended. The flag to disable '.
+				  'PluginSponsor messages if off by default. ',
+				  'gan').'</p>';
 		$help .= '<p>'.__('Also if you upgraded from an older '.
 				  'version of the GAN plugin (pre 3.0), a '.
 				  'button will be on this page to upgrade '.
