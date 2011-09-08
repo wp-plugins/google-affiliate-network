@@ -27,19 +27,19 @@ class GAN_Database {
   static function make_ad_table() {
     $columns = array ( 'id' => 'int NOT NULL AUTO_INCREMENT',	/* ID */
 	// Moved to merch table   'Advertiser' => 'varchar(255) NOT NULL' , /* Advertiser name */
-		       'LinkID'     => 'varchar(16)  NOT NULL' , /* Link ID */
-		       'LinkName'   => 'varchar(255) NOT NULL' , /* Link Name */
-		       'MerchandisingText' => 'varchar(255)' ,   /* Merch text */
-		       'AltText' => 'varchar(255)' ,		 /* Alt text */
-		       'StartDate' => 'date NOT NULL' ,		 /* Start date */
-		       'EndDate'   => 'date NOT NULL' ,		 /* End data */
-		       'ClickserverLink' => 'varchar(255) NOT NULL' , /* Ad link */
-		       'ImageURL' => 'varchar(255)' ,		 /* URL of image */
+		       'LinkID'     => "varchar(16)  NOT NULL default ''" , /* Link ID */
+		       'LinkName'   => "varchar(255) NOT NULL default''" , /* Link Name */
+		       'MerchandisingText' => "varchar(255) default ''" ,   /* Merch text */
+		       'AltText' => "varchar(255) default ''" ,		 /* Alt text */
+		       'StartDate' => "date NOT NULL default '1970-01-01'" ,		 /* Start date */
+		       'EndDate'   => "date NOT NULL default '2037-12-31'" ,		 /* End data */
+		       'ClickserverLink' => "varchar(255) NOT NULL default ''" , /* Ad link */
+		       'ImageURL' => "varchar(255) default ''" ,		 /* URL of image */
 		       'ImageHeight' => 'int default 0' ,	 /* height of image */
 		       'ImageWidth' => 'int default 0' ,	 /* width of image */
-		       'LinkURL' => 'varchar(255) NOT NULL' ,	 /* Link URL */
-		       'PromoType' => 'varchar(32) NOT NULL' ,   /* Type of promo */
-		       'MerchantID'  => 'varchar(16) NOT NULL',  /* Merchant ID */
+		       'LinkURL' => "varchar(255) NOT NULL default ''" ,	 /* Link URL */
+		       'PromoType' => "varchar(32) NOT NULL default ''" ,   /* Type of promo */
+		       'MerchantID'  => "varchar(16) NOT NULL default ''",  /* Merchant ID */
 	// column dropped (not used)   'side' => 'boolean NOT NULL',		 /* side (not used) */
 		       'enabled' => 'boolean NOT NULL',		 /* enabled flag */
 	// Columns added (from ad stats table):
@@ -50,13 +50,13 @@ class GAN_Database {
     global $wpdb;
     $sql = "CREATE TABLE " . GAN_AD_TABLE . ' (';
     foreach($columns as $column => $option) {
-       $sql .= "{$column} {$option}, ";
+       $sql .= "{$column} {$option}, \n";
     }
-    $sql = rtrim($sql, ', ') . " )";
+    $sql = rtrim($sql, ", \n") . " \n)";
     if($wpdb->get_var("SHOW TABLES LIKE '" . GAN_AD_TABLE . "'") != GAN_AD_TABLE) {
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 	$result = dbDelta($sql);
-	//?><pre><?php print_r($result); ?></pre><br /><?php $wpdb->print_error(); ?><br /><?php
+	/* ?><pre><?php print_r($result); ?></pre><br /><?php $wpdb->print_error(); ?><br /><?php */
     }
   }
   /* Make Merchants table -- contains the MerchantID, the Advertiser name, 
@@ -64,8 +64,8 @@ class GAN_Database {
    */
   static function make_merchs_table() {
     $columns = array ( 'id' => 'int NOT NULL AUTO_INCREMENT',	/* ID */
-		       'Advertiser' => 'varchar(255) NOT NULL' , /* Advertiser name */
-		       'MerchantID' => 'varchar(16) NOT NULL' , /* Merchant ID */
+		       'Advertiser' => "varchar(255) NOT NULL default ''" , /* Advertiser name */
+		       'MerchantID' => "varchar(16) NOT NULL default ''" , /* Merchant ID */
 		       'LastRunDate' => "date default '1970-01-01'" , /* Last Impression data */
 		       'Impressions' => 'int default 0', /* Impression count */
 		       'PRIMARY' => 'KEY (id)',
@@ -73,13 +73,13 @@ class GAN_Database {
     global $wpdb;
     $sql = "CREATE TABLE " . GAN_MERCH_TABLE . ' (';
     foreach($columns as $column => $option) {
-	$sql .= "{$column} {$option}, ";
+	$sql .= "{$column} {$option}, \n";
     }
-    $sql = rtrim($sql, ', ') . " )";
+    $sql = rtrim($sql, ", \n") . " \n)";
     if($wpdb->get_var("SHOW TABLES LIKE '" . GAN_MERCH_TABLE . "'") != GAN_MERCH_TABLE) {
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 	$result = dbDelta($sql);
-	//?><pre><?php print_r($result); ?></pre><br /><?php $wpdb->print_error(); global $EZSQL_ERROR; print_r($EZSQL_ERROR); ?><br /><?php
+	/* ?><pre><?php print_r($result); ?></pre><br /><?php $wpdb->print_error(); global $EZSQL_ERROR; print_r($EZSQL_ERROR); ?><br /><?php */
     }
   }
   static function upgrade_database() {
