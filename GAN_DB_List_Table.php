@@ -606,17 +606,22 @@ class GAN_DB_List_Table extends WP_List_Table {
 	function process_bulk_upload() {
 	  $this->check_permissions();
 	  $message = '';
+	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::process_bulk_upload: _FILES is ".print_r($_FILES,true)."\n");
 	  if ( isset($_FILES['gan-tsv-file']) ) {
 	    $fp = fopen($_FILES['gan-tsv-file']['tmp_name'], 'r');
 	    $count = 0;
 	    $message .= '<p>';
 	    while ($line = fgets($fp)) {
+	      //file_put_contents("php://stderr","*** GAN_DB_List_Table::process_bulk_upload: line (1) is '$line'\n");
 	      $line = trim($line,"\n");
 	      if (preg_match('/^"Id"[[:space:]]*"Name"/',$line)) {break;}
+	      if (preg_match('/^Id[[:space:]]*Name/',$line)) {break;}
 	    }
 	    while ($line = fgets($fp)) {
 	      $line = trim($line,"\n");
+	      //file_put_contents("php://stderr","*** GAN_DB_List_Table::process_bulk_upload: line (2) is '$line'\n");
 	      $rawelts = explode("\t",$line);
+	      //file_put_contents("php://stderr","*** GAN_DB_List_Table::process_bulk_upload: rawelts is ".print_r($rawelts,true)."\n");
 	      if (count($rawelts) < 16) {continue;}
 	      $Advertizer = $this->tsv_unquote($rawelts[3]);
 	      $LinkID     = $this->tsv_unquote($rawelts[0]);
