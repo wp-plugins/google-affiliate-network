@@ -635,7 +635,7 @@ class GAN_DB_List_Table extends WP_List_Table {
 	      $ImageURL = $this->tsv_unquote($rawelts[5]);
 	      $width = 0;
 	      $height = 0;
-	      if (preg_match('/^"([[:digit:]]*)x([[:digit:]]*)"$/',$rawelts[6],$matches) ) {
+	      if (preg_match('/^([[:digit:]]*)x([[:digit:]]*)$/',$this->tsv_unquote($rawelts[6]),$matches) ) {
 		$width = $matches[1];
 		$height = $matches[2];
 	      }
