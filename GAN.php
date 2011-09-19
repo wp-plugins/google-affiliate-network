@@ -288,7 +288,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 			_e('Add New in Bulk','gan'); ?></a><?php 
 					$this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
-	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
+	    <form method="post" action="">
 		<input type="hidden" name="page" value="gan-database-page" />
 		<?php $this->gan_db_list_table->display(); ?></form></div><?php
 	}
@@ -305,7 +305,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	    <?php if ($message != '') {
 		?><div id="message" class="update fade"><?php echo $message; ?></div><?php
 		} ?>
-	    <form action="" method="get">
+	    <form action="" method="post">
 	    <input type="hidden" name="page" value="gan-database-add-element" />
 	    <?php $this->gan_db_list_table->display_one_item_form(
 			add_query_arg(array('page' => 'gan-database-page',
@@ -335,7 +335,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-ad-impstats'); ?><br clear="all" />
 	    <div id="icon-gan-ad-imp" class="icon32"><br /></div><h2><?php _e('Ad Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
-	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
+	    <form method="post" action="">
 	    	<input type="hidden" name="page" value="gan-database-ad-impstats" />
 		<?php $this->ad_stats_list_table->display(); ?></form></div><?php
 	}
@@ -346,7 +346,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-merch-impstats'); ?><br clear="all" />
 	    <div id="icon-gan-merch-imp" class="icon32"><br /></div><h2><?php _e('Merchant Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
-	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
+	    <form method="post" action="">
 		<input type="hidden" name="page" value="gan-database-merch-impstats" />
 		<?php $this->merch_stats_list_table->display(); ?></form></div><?php
 	}
@@ -373,7 +373,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-options'); ?><br clear="all" />
 	    <div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
-	    <form method="get" action="<?php echo admin_url('admin.php'); ?>">
+	    <form method="post" action="">
 	    	<input type="hidden" name="page" value="gan-database-options" />
 		<table class="form-table">
 		  <tr valign="top">

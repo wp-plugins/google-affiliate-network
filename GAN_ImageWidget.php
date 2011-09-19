@@ -56,7 +56,8 @@ class GAN_ImageWidget extends WP_Widget {
 			      'maxads' => $instance['maxads'],
 			      'height' => $instance['height'],
 			      'width' => $instance['width'],
-			      'target' => $instance['target']),
+			      'target' => $instance['target'],
+			      'merchid' => $instance['merchid']),
 			GAN_PLUGIN_URL.'/GAN_Server.php').'" '.
 			'frameborder="0" '.$ifwidth.$ifheight.'></iframe>';
 
@@ -72,7 +73,8 @@ class GAN_ImageWidget extends WP_Widget {
 	    'height' => 60,
 	    'ifwidth' => '',
 	    'ifheight' => '',
-	    'target' => 'same'), $atts ) );
+	    'target' => 'same',
+	    'merchid' => ''), $atts ) );
 	  
 	  switch ($orientation) {
 	    case 'horizontal': $ulid = 'GANleader'; break;
@@ -101,7 +103,8 @@ class GAN_ImageWidget extends WP_Widget {
 			'src="'.add_query_arg(
 				array('ulid' => $ulid, 'maxads' => $maxads,
 				      'height' => $height, 'width' => $width,
-					'target' => $thetarget),
+					'target' => $thetarget,
+					'merchid' => $merchid),
 				GAN_PLUGIN_URL.'/GAN_Server.php').'" '.
 			'frameborder="0" '.$frameattrs.'></iframe>';
 	  return $result;
@@ -167,6 +170,8 @@ class GAN_ImageWidget extends WP_Widget {
                 $instance['ifwidth'] = $new_instance['ifwidth'];
                 $instance['ifheight'] = $new_instance['ifheight'];
 		$instance['target'] = $new_instance['target'];
+		$instance['merchid'] = $new_instance['merchid'];
+
 		return $instance;
 	}
 
@@ -180,7 +185,8 @@ class GAN_ImageWidget extends WP_Widget {
 	    /* Set up some default widget settings. */
 	    $defaults = array( 'ulid' => 'GANright', 'maxads' => 4, 
 				'width' => 120, 'height' => 60,
-				'target' => '_top' );
+				'target' => '_top',
+				'merchid' => '' );
 	    $instance = wp_parse_args( (array) $instance, $defaults ); ?>
 	    <p>
 		<label for="<?php echo $this->get_field_id( 'maxads' ); ?>"><?php _e('Max ads:','gan'); ?></label>
@@ -211,6 +217,9 @@ class GAN_ImageWidget extends WP_Widget {
 		    <option value="GANright"  <?php if ( 'GANright' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('vertical','gan'); ?></option>
 		    <option value="GANleader" <?php if ( 'GANleader' == $instance['ulid'] ) echo 'selected="selected"'; ?>><?php _e('horizontal','gan'); ?></option>
 		</select>
+	    </p>
+	    <p>
+		<?php GAN_Database::merchdropdown($instance['merchid'],$this->get_field_name( 'merchid' ), $this->get_field_id( 'merchid' ) ); ?>
 	    </p>
             <p>
                 <label for="<?php echo $this->get_field_id( 'target' ); ?>"><?php _e('Target:','gan'); ?></label>

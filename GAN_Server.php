@@ -46,6 +46,7 @@ if (headers_sent()) {
 @header("Expires: 0");
 @header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 @header("Robots: none");
+@header("X-Robots-Tag: noindex, nofollow");
 echo " ";	/* End of headers */
 
 /* Start serving content (ads) */
@@ -55,16 +56,21 @@ echo '<link rel="stylesheet" type="text/css" href="' . $path . '" />';
 ?></head><body style="margin:0px;padding:0px"><?php
 
 /* Make sure we have the parameters we need. */
-if (!isset($_GET['ulid']) && !isset($_GET['maxads']) ) {
+if (!isset($_REQUEST['ulid']) && !isset($_REQUEST['maxads']) ) {
   wp_die(__('The needed parameters are missing. Probably because this file was not called from an iframe.','gan'));
 }
 
 /* Load parameters */
-$instance = array( 'ulid' => $_GET['ulid'], 'maxads' => $_GET['maxads'] );
-if ( isset($_GET['target']) ) {
-  $instance['target'] = $_GET['target'];
+$instance = array( 'ulid' => $_REQUEST['ulid'], 'maxads' => $_REQUEST['maxads'] );
+if ( isset($_REQUEST['target']) ) {
+  $instance['target'] = $_REQUEST['target'];
 } else {
   $instance['target'] = '_top';
+}
+if ( isset($_REQUEST['merchid']) ) {
+  $instance['merchid'] = $_REQUEST['merchid'];
+} else {
+  $instance['merchid'] = '';
 }
 
 ?><div style="margin:0px;padding:0px"><?php
@@ -72,13 +78,17 @@ if ( isset($_GET['target']) ) {
 /* Text or image ads? If height and width are not set (or are 0), serve text 
  * ads */
 
-if ((!isset($_GET['height']) || $_GET['height'] == "0") && 
-    (!isset($_GET['width'])  || $_GET['width'] == "0") ) {
+if ((!isset($_REQUEST['height']) || $_REQUEST['height'] == "0") && 
+    (!isset($_REQUEST['width'])  || $_REQUEST['width'] == "0") ) {
 	$maxads = $instance['maxads'];
 	//echo "\n<!-- GAN_Widget::widget: \$maxads (1) = " . $maxads . " -->";
 	if (empty($maxads)) $maxads = 4;
 	//echo "\n<!-- GAN_Widget::widget: \$maxads (2) = " . $maxads . " -->";
-	$merchlist = GAN_Database::ordered_merchants(0,0);
+	if ($instance['merchid'] != '') {
+	  $merchlist[] = $instance['merchid'];
+	} else {
+	  $merchlist = GAN_Database::ordered_merchants(0,0);
+	}
 	//echo "\n<!-- GAN_Widget::widget: merchlist = ".print_r($merchlist,true)." -->\n";
 	/* Display the ads, if any. Display maxads at most. */
 	$numads = 0;
@@ -108,13 +118,17 @@ if ((!isset($_GET['height']) || $_GET['height'] == "0") &&
 	      ?></ul><?php
 	}
 } else {	/* Serve image ads of the specificed size */
-	if (isset($_GET['height'])) {$instance['height'] = $_GET['height'];}
-	if (isset($_GET['width'])) {$instance['width'] = $_GET['width'];}
+	if (isset($_REQUEST['height'])) {$instance['height'] = $_REQUEST['height'];}
+	if (isset($_REQUEST['width'])) {$instance['width'] = $_REQUEST['width'];}
 	$maxads = $instance['maxads'];
 	//echo "\n<!-- GAN_Widget::widget: \$maxads (1) = " . $maxads . " -->";
 	if (empty($maxads)) $maxads = 4;
 	//echo "\n<!-- GAN_Widget::widget: \$maxads (2) = " . $maxads . " -->";
-	$merchlist = GAN_Database::ordered_merchants($instance['height'],$instance['width']);
+	if ($instance['merchid'] != '') {
+	  $merchlist[] = $instance['merchid'];
+	} else {
+	  $merchlist = GAN_Database::ordered_merchants($instance['height'],$instance['width']);
+	}
 	/* Display the ads, if any. Display maxads at most. */
 	$numads = 0;
 	if (! empty($merchlist) ) {

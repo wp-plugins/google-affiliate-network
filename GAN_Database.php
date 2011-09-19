@@ -319,31 +319,44 @@ class GAN_Database {
   }
   static function delete_ads_by_merchantID($MerchantID) {
     global $wpdb;
+    if ($MerchantID != '') {
+      $whereMID = $wpdb->prepare(" where MerchantID = %s",$MerchantID);
+    } else {
+      $whereMID = '';
+    }
     if (GAN_Database::database_version() < 3.0) {
-      $sql = $wpdb->prepare("select id from ".GAN_AD_STATS_TABLE_VIEW." where MerchantID = %s",$MerchantID);
+      $sql = "select id from ".GAN_AD_STATS_TABLE_VIEW.$whereMID;
       $ids = $wpdb->get_col($sql);
       foreach ($ids as $id) {
 	$wpdb->query("delete from ".GAN_AD_STATS_TABLE_VIEW." where id = ".$id);
       }
-      $sql = $wpdb->prepare("delete from " . GAN_AD_TABLE . " where MerchantID = %s",$MerchantID);
+      $sql = "delete from " . GAN_AD_TABLE . $whereMID;
       $wpdb->query($sql);
-      $sql = $wpdb->prepare("delete from " . GAN_MERCH_STATS_TABLE . " where MerchantID = %s",$MerchantID);
+      $sql = "delete from " . GAN_MERCH_STATS_TABLE . $whereMID;
       $wpdb->query($sql);
     } else {
-      $sql = $wpdb->prepare("delete from " . GAN_AD_TABLE . " where MerchantID = %s",$MerchantID);
+      $sql = "delete from " . GAN_AD_TABLE . $whereMID;
       $wpdb->query($sql);
-      $sql = $wpdb->prepare("delete from " . GAN_MERCH_TABLE . " where MerchantID = %s",$MerchantID);
+      $sql = "delete from " . GAN_MERCH_TABLE . $whereMID;
       $wpdb->query($sql);
     }
   }
   static function disable_ads_by_merchantID($MerchantID) {
     global $wpdb;
-    $sql = $wpdb->prepare("update " . GAN_AD_TABLE . " set enabled=false where MerchantID = %s",$MerchantID);
+    if ($MerchantID != '') {
+      $sql = $wpdb->prepare("update " . GAN_AD_TABLE . " set enabled=false where MerchantID = %s",$MerchantID);
+    } else {
+      $sql = "update " . GAN_AD_TABLE . " set enabled=false";
+    }	
     $wpdb->query($sql);
   }
   static function enable_ads_by_merchantID($MerchantID) {
     global $wpdb;
-    $sql = $wpdb->prepare("update " . GAN_AD_TABLE . " set enabled=true where MerchantID = %s",$MerchantID);
+    if ($MerchantID != '') {
+      $sql = $wpdb->prepare("update " . GAN_AD_TABLE . " set enabled=true where MerchantID = %s",$MerchantID);
+    } else {
+      $sql = "update " . GAN_AD_TABLE . " set enabled=true";
+    }
     $wpdb->query($sql);
   }
   static function toggle_enabled($id) {
@@ -740,11 +753,11 @@ class GAN_Database {
    * Create merchant dropdown list
    */
 
-  static function merchdropdown ($merchid,$name='merchid') {
+  static function merchdropdown ($merchid,$name='merchid',$fieldid='gan-merchid') {
     $GANMerchants = GAN_Database::get_merchants();
 	
-    ?><label for="gan-merchid"><?php _e('Advertisers:','gan'); ?></label>
-      <select name="<?php echo $name; ?>" id="gan-merchid" maxlength="20">
+    ?><label for="<?php echo $fieldid; ?>"><?php _e('Advertisers:','gan'); ?></label>
+      <select name="<?php echo $name; ?>" id="<?php echo $fieldid; ?>" maxlength="20">
       <option value="" <?php 
 	if ( $merchid == "" ) echo 'selected="selected"'; 
 	?>><?php _e('All','gan'); ?></option><?php
