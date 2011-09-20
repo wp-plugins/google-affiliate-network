@@ -350,12 +350,49 @@ ad, the orientation of the ads within the ad unit and the size of the
 ad frame. When you click on the insert ad button, the proper short code
 is generated and inserted into your page or post.
 
+\subsection{The ad rotation algorithmn}
+
+The ad rotation algorithmn uses the impression count and the end date to
+fairly display ads.  Impression counts are stored for each ad and each
+merchant.  When an ad from a given merchant is displayed, that
+merchant's impression count is incremented.  And when a given ad is
+displayed, its impression count is incremented.  These counts are used
+like this:
+
+The ad display loop works like this:
+
+First the merchant with the lowest impression count that has an ad of
+the desired size is selected.  Then the ad from that merchant with the
+lowest impression count, that also has the soonest end date is selected
+(expired ads are not shown).  The HTML code for the ad is generated,
+then the impression count for the ad and the merchant are incremented.
+Then the process is repeated.  This means that every merchant gets a
+shot and every ad of every merchant also gets a shot.
+
+Some things to note:
+
+If a merchant has a lot of ads, each of these ads will be displayed
+fewer times than the ads of a merchant with a smaller number of ads. 
+Each merchant will get the same number of total impressions and these
+impressions will be shared across all of the merchant's ads.  Ads that
+will expire sooner will get ``prefered'' exposure and will tend to get
+more impressions, at least until they expire.  Newly added merchants and
+ads will also get ``prefered'' exposure, since they will be starting
+with a impression counts of zero.  But over time, these ``new''
+merchants and ads will catch up with the older merchants and ads.  It is
+possible to zero the impression counts of both merchants and ads and
+this will ``level'' the playing field.
+
 \section{Statistics}
 
 Both ad and merchant statistics are available for display and download
 as CSV files.  The statistics are ordered from fewest impressions to
 most impressions. A summary of the statistics is also displayed on the
 dashboard.  Ad statistics can be filtered by advertiser and/or by size.
+
+In the statistics display is the option to zero all, a select group, or
+individual ads or merchants. These impression counts are used by the ad
+rotation algorithmn.
 
 \end{document}
 
