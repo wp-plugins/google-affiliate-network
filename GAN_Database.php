@@ -53,11 +53,9 @@ class GAN_Database {
        $sql .= "{$column} {$option}, \n";
     }
     $sql = rtrim($sql, ", \n") . " \n)";
-    if($wpdb->get_var("SHOW TABLES LIKE '" . GAN_AD_TABLE . "'") != GAN_AD_TABLE) {
-	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-	$result = dbDelta($sql);
-	/* ?><pre><?php print_r($result); ?></pre><br /><?php $wpdb->print_error(); ?><br /><?php */
-    }
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    $result = dbDelta($sql);
+    /* ?><pre><?php print_r($result); ?></pre><br /><?php $wpdb->print_error(); ?><br /><?php */
   }
   /* Make Merchants table -- contains the MerchantID, the Advertiser name, 
    * number of impressions, and the date of the last impression.
@@ -76,11 +74,9 @@ class GAN_Database {
 	$sql .= "{$column} {$option}, \n";
     }
     $sql = rtrim($sql, ", \n") . " \n)";
-    if($wpdb->get_var("SHOW TABLES LIKE '" . GAN_MERCH_TABLE . "'") != GAN_MERCH_TABLE) {
-	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-	$result = dbDelta($sql);
-	/* ?><pre><?php print_r($result); ?></pre><br /><?php $wpdb->print_error(); global $EZSQL_ERROR; print_r($EZSQL_ERROR); ?><br /><?php */
-    }
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    $result = dbDelta($sql);
+    /* ?><pre><?php print_r($result); ?></pre><br /><?php $wpdb->print_error(); global $EZSQL_ERROR; print_r($EZSQL_ERROR); ?><br /><?php */
   }
   static function upgrade_database() {
     global $wpdb;

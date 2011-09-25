@@ -39,6 +39,8 @@ define('GAN_PATH', GAN_DIR . '/' . GAN_FILE);
 
 /* Load Database code */
 require_once(GAN_DIR . "/GAN_Database.php");
+/* Load Product code */
+require_once(GAN_DIR.'/GAN_Products.php');
 
 /* Main plugin class. Implements the basic admin functions of the plugin. */
 class GAN_Plugin {
@@ -49,6 +51,7 @@ class GAN_Plugin {
 	var $add_db_bulk_screen_id;
 	var $ad_stats_list_table;
 	var $merch_stats_list_table;
+	var $products_processing;
 
 	var $admin_tabs;
 	var $admin_tablist;
@@ -66,9 +69,16 @@ class GAN_Plugin {
 		add_action('wp_head', array($this,'wp_head'));
 		add_action('admin_head', array($this,'admin_head'));
 		add_action('wp_dashboard_setup', array($this,'wp_dashboard_setup'));
-		add_action('gan_daily_event',array($this,'check_autoexpire'));
+		add_action('gan_daily_event',array($this,'daily_work'));
 		add_option('wp_gan_autoexpire','yes');
 	        add_option('wp_gan_disablesponsor','no');
+		add_option('wp_gan_products','no');	/* products */
+
+		if (get_option('wp_gan_products') == 'yes') {
+		  $this->products_processing = new GAN_Products($this);
+		}
+
+
 		load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',
 					  basename(GAN_DIR).'/languages/');
 		if (is_admin()) {
@@ -362,6 +372,8 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	    update_option('wp_gan_autoexpire',$autoexpire);
 	    $disablesponsor = $_REQUEST['gan_disablesponsor'];
 	    update_option('wp_gan_disablesponsor',$disablesponsor);
+	    $products = $_REQUEST['gan_products'];
+	    update_option('wp_gan_products',$products);
 	    ?><div id="message"class="updated fade"><p><?php _e('Options Saved','gan'); ?></p></div><?php
 	  } else if ( isset($_REQUEST['upgradedatabase']) ) {
 	    GAN_Database::upgrade_database();
@@ -370,6 +382,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	  /* Head of page, filter and screen options. */
 	  $autoexpire = get_option('wp_gan_autoexpire');
 	  $disablesponsor = get_option('wp_gan_disablesponsor');
+	  $products = get_option('wp_gan_products');
 	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-options'); ?><br clear="all" />
 	    <div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
@@ -398,6 +411,17 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 				  echo ' checked="checked" ';
 				}
 			?> /><?php _e('No','gan'); ?></td></tr>
+		  <tr valign="top">
+		    <th scope="row"><label for="gan_products" style="width:20%;"><?php _e('Enable GAN Products?','gan'); ?></label></th>
+		    <td><input type="radio" name="gan_products" value="yes"<?php
+				if ($products == 'yes') {
+				  echo ' checked="checked" ';
+				} 
+			?> /><?php _e('Yes','gan'); ?>&nbsp;<input type="radio" name="gan_products" value="no"<?php
+				if ($products == 'no') {
+				  echo ' checked="checked" ';
+				}
+			?> /><?php _e('No','gan'); ?></td></tr>
 		</table>
 		<p>
 			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options','gan'); ?>" />
@@ -418,107 +442,6 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	function InsertDashVersion() {
 	  ?><span id="gan_dash_version"><?php printf(__('Version: %s','gan'),GAN_VERSION) ?></span><?php
 	}
-	/*
-	 * Build an action link
-	 */
-
-	function make_page_query($page, $id, $what)
-	{
-		if ( isset($_REQUEST['GAN_rows_per_page']) ) {
-		  $per_page = $_REQUEST['GAN_rows_per_page'];
-		} else {
-		  $per_page = 20;
-		}
-		if ( isset($_REQUEST['pagenum']) ) {
-		  $pagenum = $_REQUEST['pagenum'];
-		} else {
-		  $pagenum = 1;
-		}
-		if ( isset($_REQUEST['merchid']) ) {
-		  $merchid = $_REQUEST['merchid'];
-		} else {
-		  $merchid = "";
-		}
-	        if ( isset($_REQUEST['imwidth']) ) {
-		  $imwidth = $_REQUEST['imwidth'];
-		} else {
-		  $imwidth = -1;
-	 	}
-		echo admin_url('admin.php') . "?page=".$page."&"
-			. "GAN_rows_per_page=$per_page&"
-			. "pagenum=$pagenum&"
-			. "merchid=$merchid&"
-			. "imwidth=$imwidth&"
-			. "id=$id&"
-			. "action=$what ";
-	}
-
-	/*
-	 * Build a cancel link
-	 */
-
-	function cancel_page_query()
-	{
-		
-		if ( isset($_REQUEST['GAN_rows_per_page']) ) {
-		  $per_page = $_REQUEST['GAN_rows_per_page'];
-		} else {
-		  $per_page = 20;
-		}
-		if ( isset($_REQUEST['pagenum']) ) {
-		  $pagenum = $_REQUEST['pagenum'];
-		} else {
-		  $pagenum = 1;
-		}
-		if ( isset($_REQUEST['merchid']) ) {
-		  $merchid = $_REQUEST['merchid'];
-		} else {
-		  $merchid = "";
-		}
-	        if ( isset($_REQUEST['imwidth']) ) {
-		  $imwidth = $_REQUEST['imwidth'];
-		} else {
-		  $imwidth = -1;
-	 	}
-		echo admin_url('admin.php') . "?page=gan-database-page&"
-			. "GAN_rows_per_page=$per_page&"
-			. "pagenum=$pagenum&"
-			. "merchid=$merchid&"
-			. "imwidth=$imwidth";
-	}
-
-	/*
-	 * Create hidden fields for filter options.
-	 */
-
-	function hidden_filter_fields ()
-	{
-		if ( isset($_REQUEST['GAN_rows_per_page']) ) {
-		  $per_page = $_REQUEST['GAN_rows_per_page'];
-		} else {
-		  $per_page = 20;
-		}
-		if ( isset($_REQUEST['pagenum']) ) {
-		  $pagenum = $_REQUEST['pagenum'];
-		} else {
-		  $pagenum = 1;
-		}
-		if ( isset($_REQUEST['merchid']) ) {
-		  $merchid = $_REQUEST['merchid'];
-		} else {
-		  $merchid = "";
-		}
-	        if ( isset($_REQUEST['imwidth']) ) {
-		  $imwidth = $_REQUEST['imwidth'];
-		} else {
-		  $imwidth = -1;
-	 	}
-		?><input type="hidden" name="GAN_rows_per_page" value="<?php echo $per_page; ?>" />
-		  <input type="hidden" name="pagenum" value="<?php echo $pagenum; ?>" />
-		  <input type="hidden" name="merchid" value="<?php echo $merchid; ?>" />
-		  <input type="hidden" name="imwidth" value="<?php echo $imwidth; ?>" /><?php
-	}
-
 	/* Set up dashboard widgets */
 	function wp_dashboard_setup() {
 	  if (current_user_can( 'manage_options' )) {
@@ -676,10 +599,11 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 		?></a><br clear="all" />
 	  <?php
 	}
-	function check_autoexpire() {
+	function daily_work() {
 	  if (get_option('wp_gan_autoexpire') == 'yes') {
 	    GAN_Database::deleteexpired('');
 	  }
+	  GAN_Products::daily_import_new();
 	}
 	function add_contentualhelp($screenid,$thepage) {
 	  $helppageURL = add_query_arg(array('page' => 'gan-database-help'));
@@ -856,6 +780,7 @@ require_once(GAN_DIR . "/GAN_ImageWidget.php");
 /* Create an instanance of the plugin */
 global $gan_plugin;
 $gan_plugin = new GAN_Plugin;
+
 
 
 
