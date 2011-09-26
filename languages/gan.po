@@ -4,13 +4,497 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  \n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/google-affiliate-network\n"
-"POT-Creation-Date: 2011-09-25 20:12:17+00:00\n"
+"POT-Creation-Date: 2011-09-26 18:28:29+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2010-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: GAN_Products.php:24
+msgid "Subscriptions"
+msgstr "Subscriptions"
+
+#: GAN_Products.php:27 GAN.php:206
+msgid "Edit"
+msgstr "Edit"
+
+#: GAN_Products.php:31 GAN.php:210
+msgid "View"
+msgstr "View"
+
+#: GAN_Products.php:35 GAN_Products.php:71 GAN_DB_List_Table.php:185
+#: GAN.php:214
+msgid "Delete"
+msgstr "Delete"
+
+#: GAN_Products.php:39 GAN_Products.php:72
+msgid "Import"
+msgstr "Import"
+
+#: GAN_Products.php:51 GAN_DB_List_Table.php:22 Merch_Stats_List_Table.php:17
+#: Ad_Stats_List_Table.php:18
+msgid "Advertiser"
+msgstr "Advertiser"
+
+#: GAN_Products.php:52
+msgid "Zip File Path"
+msgstr "Zip File Path"
+
+#: GAN_Products.php:53
+msgid "Daily Import?"
+msgstr "Daily Import?"
+
+#: GAN_Products.php:67 GAN_Products.php:496 GAN_Products.php:557
+#: GAN_DB_List_Table.php:181 Merch_Stats_List_Table.php:81
+#: Ad_Stats_List_Table.php:132 GAN.php:368
+msgid "You do not have sufficient permissions to access this page."
+msgstr "You do not have sufficient permissions to access this page."
+
+#: GAN_Products.php:210
+msgid "GAN Product Database"
+msgstr "GAN Product Database"
+
+#: GAN_Products.php:211
+msgid "GAN Product DB"
+msgstr "GAN Product DB"
+
+#: GAN_Products.php:219
+msgid "Add new GAN Product Subscriptions"
+msgstr "Add new GAN Product Subscriptions"
+
+#: GAN_Products.php:220 GAN.php:137 GAN.php:140
+msgid "Add new"
+msgstr "Add new"
+
+#: GAN_Products.php:226
+msgid "Configure GAN Product Subscriptions"
+msgstr "Configure GAN Product Subscriptions"
+
+#: GAN_Products.php:227 GAN.php:173 GAN.php:177
+msgid "Configure"
+msgstr "Configure"
+
+#: GAN_Products.php:246
+msgid "GAN Product Subscriptions"
+msgstr "GAN Product Subscriptions"
+
+#: GAN_Products.php:251 GAN.php:293
+msgid "Add New"
+msgstr "Add New"
+
+#: GAN_Products.php:384
+msgid "%s product subscription deleted."
+msgstr "%s product subscription deleted."
+
+#: GAN_Products.php:389
+msgid "%d pending posts to be deleted for %s."
+msgstr "%d pending posts to be deleted for %s."
+
+#: GAN_Products.php:399 GAN_DB_List_Table.php:383
+msgid "Advertiser missing."
+msgstr "Advertiser missing."
+
+#: GAN_Products.php:401
+msgid "Duplicate Advertiser."
+msgstr "Duplicate Advertiser."
+
+#: GAN_Products.php:404
+msgid "Zip File Path missing."
+msgstr "Zip File Path missing."
+
+#: GAN_Products.php:434 GAN_DB_List_Table.php:510 GAN.php:637
+msgid "Advertiser:"
+msgstr "Advertiser:"
+
+#: GAN_Products.php:446
+msgid "-- Select a Merchant --"
+msgstr "-- Select a Merchant --"
+
+#: GAN_Products.php:456
+msgid "Zip File Path:"
+msgstr "Zip File Path:"
+
+#: GAN_Products.php:462
+msgid "Import Daily?"
+msgstr "Import Daily?"
+
+#: GAN_Products.php:471 GAN_Products.php:489
+msgid "Add Product Subscription"
+msgstr "Add Product Subscription"
+
+#: GAN_Products.php:474
+msgid "Update Product Subscription"
+msgstr "Update Product Subscription"
+
+#: GAN_Products.php:477 GAN_DB_List_Table.php:603 GAN_DB_List_Table.php:697
+msgid "Return"
+msgstr "Return"
+
+#: GAN_Products.php:490
+msgid "Edit Product Subscription"
+msgstr "Edit Product Subscription"
+
+#: GAN_Products.php:491
+msgid "View Product Subscription"
+msgstr "View Product Subscription"
+
+#: GAN_Products.php:507 GAN_DB_List_Table.php:319
+msgid "%s inserted with id %d."
+msgstr "%s inserted with id %d."
+
+#: GAN_Products.php:523 GAN_DB_List_Table.php:350
+msgid "%s updated."
+msgstr "%s updated."
+
+#: GAN_Products.php:568 GAN.php:377
+msgid "Options Saved"
+msgstr "Options Saved"
+
+#: GAN_Products.php:575
+msgid "Configure Product Options"
+msgstr "Configure Product Options"
+
+#: GAN_Products.php:581
+msgid "Import for Shopper Press?"
+msgstr "Import for Shopper Press?"
+
+#: GAN_Products.php:586 GAN_DB_List_Table.php:277 GAN.php:398 GAN.php:409
+#: GAN.php:420
+msgid "Yes"
+msgstr "Yes"
+
+#: GAN_Products.php:590 GAN_DB_List_Table.php:279 GAN.php:402 GAN.php:413
+#: GAN.php:424
+msgid "No"
+msgstr "No"
+
+#: GAN_Products.php:592
+msgid "Post format (for other than Shopper Press)"
+msgstr "Post format (for other than Shopper Press)"
+
+#: GAN_Products.php:597
+msgid "CSS for posts (for other than Shopper Press)"
+msgstr "CSS for posts (for other than Shopper Press)"
+
+#: GAN_Products.php:602
+msgid "Custom Fields (for other than Shopper Press)"
+msgstr "Custom Fields (for other than Shopper Press)"
+
+#: GAN_Products.php:621 GAN.php:427
+msgid "Save Options"
+msgstr "Save Options"
+
+#: GAN_Products.php:694
+msgid "%d Products imported from %s."
+msgstr "%d Products imported from %s."
+
+#: GAN_Products.php:696
+msgid "Failed to open %s: %d."
+msgstr "Failed to open %s: %d."
+
+#: GAN_Products.php:872
+msgid "%d product posts deleted from %s."
+msgstr "%d product posts deleted from %s."
+
+#: GAN_DB_List_Table.php:23 Ad_Stats_List_Table.php:19
+msgid "Link ID"
+msgstr "Link ID"
+
+#: GAN_DB_List_Table.php:24 Ad_Stats_List_Table.php:20
+msgid "Link Name"
+msgstr "Link Name"
+
+#: GAN_DB_List_Table.php:25 Ad_Stats_List_Table.php:22
+msgid "Image Size"
+msgstr "Image Size"
+
+#: GAN_DB_List_Table.php:26 GAN_DB_List_Table.php:396
+msgid "Start Date"
+msgstr "Start Date"
+
+#: GAN_DB_List_Table.php:27 GAN_DB_List_Table.php:402
+#: Ad_Stats_List_Table.php:21
+msgid "End Date"
+msgstr "End Date"
+
+#: GAN_DB_List_Table.php:28
+msgid "Enabled?"
+msgstr "Enabled?"
+
+#: GAN_DB_List_Table.php:186
+msgid "Toggle Enabled"
+msgstr "Toggle Enabled"
+
+#: GAN_DB_List_Table.php:198 Ad_Stats_List_Table.php:148
+msgid "Filter"
+msgstr "Filter"
+
+#: GAN_DB_List_Table.php:201
+msgid "Enable All"
+msgstr "Enable All"
+
+#: GAN_DB_List_Table.php:205
+msgid "Delete Expired"
+msgstr "Delete Expired"
+
+#: GAN_DB_List_Table.php:211
+msgid "Delete Merchant"
+msgstr "Delete Merchant"
+
+#: GAN_DB_List_Table.php:214
+msgid "Disable Merchant"
+msgstr "Disable Merchant"
+
+#: GAN_DB_List_Table.php:217
+msgid "Enable Merchant"
+msgstr "Enable Merchant"
+
+#: GAN_DB_List_Table.php:386
+msgid "Link ID missing."
+msgstr "Link ID missing."
+
+#: GAN_DB_List_Table.php:388
+msgid "Duplicate Link ID."
+msgstr "Duplicate Link ID."
+
+#: GAN_DB_List_Table.php:391
+msgid "Link Name missing."
+msgstr "Link Name missing."
+
+#: GAN_DB_List_Table.php:394
+msgid "Start Date missing."
+msgstr "Start Date missing."
+
+#: GAN_DB_List_Table.php:400
+msgid "End Date missing."
+msgstr "End Date missing."
+
+#: GAN_DB_List_Table.php:406
+msgid "Clickserver Link missing."
+msgstr "Clickserver Link missing."
+
+#: GAN_DB_List_Table.php:409
+msgid "Merchant ID missing."
+msgstr "Merchant ID missing."
+
+#: GAN_DB_List_Table.php:414
+msgid "Image Height should be a whole number."
+msgstr "Image Height should be a whole number."
+
+#: GAN_DB_List_Table.php:419
+msgid "Image Width should be a whole number."
+msgstr "Image Width should be a whole number."
+
+#: GAN_DB_List_Table.php:436
+msgid "%s invalid: should be YYYY-MM-DD or MM/DD/YYYY."
+msgstr "%s invalid: should be YYYY-MM-DD or MM/DD/YYYY."
+
+#: GAN_DB_List_Table.php:439
+msgid "%s month out of range, should be 1 to 12."
+msgstr "%s month out of range, should be 1 to 12."
+
+#: GAN_DB_List_Table.php:442
+msgid "%s date out of range, should be 1 to 31."
+msgstr "%s date out of range, should be 1 to 31."
+
+#: GAN_DB_List_Table.php:481
+msgid "Add Element to the GAN Database"
+msgstr "Add Element to the GAN Database"
+
+#: GAN_DB_List_Table.php:482
+msgid "Edit Element in the GAN Database"
+msgstr "Edit Element in the GAN Database"
+
+#: GAN_DB_List_Table.php:483
+msgid "View Element in the GAN Database"
+msgstr "View Element in the GAN Database"
+
+#: GAN_DB_List_Table.php:516 GAN.php:640
+msgid "Link ID:"
+msgstr "Link ID:"
+
+#: GAN_DB_List_Table.php:521 GAN.php:644
+msgid "Link Name:"
+msgstr "Link Name:"
+
+#: GAN_DB_List_Table.php:527 GAN.php:647
+msgid "Merchandising Text:"
+msgstr "Merchandising Text:"
+
+#: GAN_DB_List_Table.php:532 GAN.php:651
+msgid "Alt Text:"
+msgstr "Alt Text:"
+
+#: GAN_DB_List_Table.php:537 GAN.php:654
+msgid "Start Date:"
+msgstr "Start Date:"
+
+#: GAN_DB_List_Table.php:542 GAN.php:658
+msgid "End Date:"
+msgstr "End Date:"
+
+#: GAN_DB_List_Table.php:548 GAN.php:662
+msgid "Clickserver Link:"
+msgstr "Clickserver Link:"
+
+#: GAN_DB_List_Table.php:554 GAN.php:665
+msgid "Image URL:"
+msgstr "Image URL:"
+
+#: GAN_DB_List_Table.php:560 GAN.php:668
+msgid "Image Height:"
+msgstr "Image Height:"
+
+#: GAN_DB_List_Table.php:566 GAN_Database.php:778 GAN.php:671
+msgid "Image Width:"
+msgstr "Image Width:"
+
+#: GAN_DB_List_Table.php:572 GAN.php:674
+msgid "Link URL:"
+msgstr "Link URL:"
+
+#: GAN_DB_List_Table.php:577 GAN.php:677
+msgid "Promo Type:"
+msgstr "Promo Type:"
+
+#: GAN_DB_List_Table.php:582 GAN.php:680
+msgid "Merchant ID:"
+msgstr "Merchant ID:"
+
+#: GAN_DB_List_Table.php:588 GAN.php:685
+msgid "enabled?"
+msgstr "enabled?"
+
+#: GAN_DB_List_Table.php:597
+msgid "Add Ad To Database"
+msgstr "Add Ad To Database"
+
+#: GAN_DB_List_Table.php:600
+msgid "Update Ad In Database"
+msgstr "Update Ad In Database"
+
+#: GAN_DB_List_Table.php:646
+msgid "Duplicate Link ID %s (%s). Ad not inserted into database."
+msgstr "Duplicate Link ID %s (%s). Ad not inserted into database."
+
+#: GAN_DB_List_Table.php:656
+msgid "Inserted %s (%s) into ad database."
+msgstr "Inserted %s (%s) into ad database."
+
+#: GAN_DB_List_Table.php:660
+msgid "Inserted %d ads into ad database."
+msgstr "Inserted %d ads into ad database."
+
+#: GAN_DB_List_Table.php:695
+msgid "Select TSV File:"
+msgstr "Select TSV File:"
+
+#: GAN_DB_List_Table.php:696
+msgid "Upload file"
+msgstr "Upload file"
+
+#: GAN_ExportStats.php:108 GAN_Server.php:40
+msgid ""
+"The headers have been sent by another plugin - there may be a plugin "
+"conflict."
+msgstr ""
+"The headers have been sent by another plugin - there may be a plugin "
+"conflict."
+
+#: GAN_Help.php:3
+msgid "Help Using the Google Affiliate Network Plugin"
+msgstr "Help Using the Google Affiliate Network Plugin"
+
+#: Merch_Stats_List_Table.php:18 Ad_Stats_List_Table.php:23
+msgid "Imp."
+msgstr "Imp."
+
+#: Merch_Stats_List_Table.php:19 Ad_Stats_List_Table.php:24
+msgid "Last View"
+msgstr "Last View"
+
+#: Merch_Stats_List_Table.php:89 Ad_Stats_List_Table.php:151
+msgid "Zero All"
+msgstr "Zero All"
+
+#: Merch_Stats_List_Table.php:95 Ad_Stats_List_Table.php:159
+msgid "Download CSV"
+msgstr "Download CSV"
+
+#: Merch_Stats_List_Table.php:112 Ad_Stats_List_Table.php:182
+msgid "Zero"
+msgstr "Zero"
+
+#: Merch_Stats_List_Table.php:155 Ad_Stats_List_Table.php:237 GAN.php:492
+#: GAN.php:550
+msgid "Maximum"
+msgstr "Maximum"
+
+#: Merch_Stats_List_Table.php:155 Ad_Stats_List_Table.php:237 GAN.php:492
+#: GAN.php:550
+msgid "Minimum"
+msgstr "Minimum"
+
+#: Merch_Stats_List_Table.php:156 Ad_Stats_List_Table.php:238 GAN.php:493
+#: GAN.php:551
+msgid "Average"
+msgstr "Average"
+
+#: Merch_Stats_List_Table.php:156 Ad_Stats_List_Table.php:238 GAN.php:493
+#: GAN.php:551
+msgid "Std. Deviation"
+msgstr "Std. Deviation"
+
+#: Merch_Stats_List_Table.php:157 Ad_Stats_List_Table.php:239 GAN.php:494
+#: GAN.php:552
+msgid "Variance"
+msgstr "Variance"
+
+#: GAN_Widget.php:14
+msgid "Display Google Affiliate Network links"
+msgstr "Display Google Affiliate Network links"
+
+#: GAN_Widget.php:20
+msgid "GAN Widget"
+msgstr "GAN Widget"
+
+#: GAN_Widget.php:184 GAN_InsertAdUnit.php:101 GAN_ImageWidget.php:192
+msgid "Max ads:"
+msgstr "Max ads:"
+
+#: GAN_Widget.php:191 GAN_InsertAdUnit.php:105 GAN_ImageWidget.php:213
+msgid "Orientation:"
+msgstr "Orientation:"
+
+#: GAN_Widget.php:195 GAN_InsertAdUnit.php:107 GAN_ImageWidget.php:217
+msgid "vertical"
+msgstr "vertical"
+
+#: GAN_Widget.php:196 GAN_InsertAdUnit.php:108 GAN_ImageWidget.php:218
+msgid "horizontal"
+msgstr "horizontal"
+
+#: GAN_Widget.php:203 GAN_InsertAdUnit.php:110 GAN_ImageWidget.php:225
+msgid "Target:"
+msgstr "Target:"
+
+#: GAN_Widget.php:207 GAN_InsertAdUnit.php:112 GAN_ImageWidget.php:229
+msgid "Same Window"
+msgstr "Same Window"
+
+#: GAN_Widget.php:208 GAN_InsertAdUnit.php:113 GAN_ImageWidget.php:230
+msgid "New Window or Tab"
+msgstr "New Window or Tab"
+
+#: GAN_Widget.php:212 GAN_InsertAdUnit.php:115 GAN_ImageWidget.php:234
+msgid "Ad frame width:"
+msgstr "Ad frame width:"
+
+#: GAN_Widget.php:219 GAN_InsertAdUnit.php:118 GAN_ImageWidget.php:241
+msgid "Ad frame height:"
+msgstr "Ad frame height:"
 
 #: GAN_Database.php:755
 msgid "Advertisers:"
@@ -20,90 +504,17 @@ msgstr "Advertisers:"
 msgid "All"
 msgstr "All"
 
-#: GAN_Database.php:778 GAN.php:671 GAN_DB_List_Table.php:566
-msgid "Image Width:"
-msgstr "Image Width:"
-
 #: GAN_Database.php:798
 msgid "Image Size:"
 msgstr "Image Size:"
 
-#: Ad_Stats_List_Table.php:18 Merch_Stats_List_Table.php:17
-#: GAN_Products.php:50 GAN_DB_List_Table.php:22
-msgid "Advertiser"
-msgstr "Advertiser"
-
-#: Ad_Stats_List_Table.php:19 GAN_DB_List_Table.php:23
-msgid "Link ID"
-msgstr "Link ID"
-
-#: Ad_Stats_List_Table.php:20 GAN_DB_List_Table.php:24
-msgid "Link Name"
-msgstr "Link Name"
-
-#: Ad_Stats_List_Table.php:21 GAN_DB_List_Table.php:27
-#: GAN_DB_List_Table.php:402
-msgid "End Date"
-msgstr "End Date"
-
-#: Ad_Stats_List_Table.php:22 GAN_DB_List_Table.php:25
-msgid "Image Size"
-msgstr "Image Size"
-
-#: Ad_Stats_List_Table.php:23 Merch_Stats_List_Table.php:18
-msgid "Imp."
-msgstr "Imp."
-
-#: Ad_Stats_List_Table.php:24 Merch_Stats_List_Table.php:19
-msgid "Last View"
-msgstr "Last View"
-
-#: Ad_Stats_List_Table.php:132 Merch_Stats_List_Table.php:81
-#: GAN_Products.php:66 GAN_Products.php:457 GAN_Products.php:518 GAN.php:368
-#: GAN_DB_List_Table.php:181
-msgid "You do not have sufficient permissions to access this page."
-msgstr "You do not have sufficient permissions to access this page."
-
-#: Ad_Stats_List_Table.php:148 GAN_DB_List_Table.php:198
-msgid "Filter"
-msgstr "Filter"
-
-#: Ad_Stats_List_Table.php:151 Merch_Stats_List_Table.php:89
-msgid "Zero All"
-msgstr "Zero All"
-
-#: Ad_Stats_List_Table.php:159 Merch_Stats_List_Table.php:95
-msgid "Download CSV"
-msgstr "Download CSV"
-
-#: Ad_Stats_List_Table.php:182 Merch_Stats_List_Table.php:112
-msgid "Zero"
-msgstr "Zero"
-
-#: Ad_Stats_List_Table.php:237 Merch_Stats_List_Table.php:155 GAN.php:492
-#: GAN.php:550
-msgid "Maximum"
-msgstr "Maximum"
-
-#: Ad_Stats_List_Table.php:237 Merch_Stats_List_Table.php:155 GAN.php:492
-#: GAN.php:550
-msgid "Minimum"
-msgstr "Minimum"
-
-#: Ad_Stats_List_Table.php:238 Merch_Stats_List_Table.php:156 GAN.php:493
-#: GAN.php:551
-msgid "Average"
-msgstr "Average"
-
-#: Ad_Stats_List_Table.php:238 Merch_Stats_List_Table.php:156 GAN.php:493
-#: GAN.php:551
-msgid "Std. Deviation"
-msgstr "Std. Deviation"
-
-#: Ad_Stats_List_Table.php:239 Merch_Stats_List_Table.php:157 GAN.php:494
-#: GAN.php:552
-msgid "Variance"
-msgstr "Variance"
+#: GAN_Server.php:60
+msgid ""
+"The needed parameters are missing. Probably because this file was not called "
+"from an iframe."
+msgstr ""
+"The needed parameters are missing. Probably because this file was not called "
+"from an iframe."
 
 #: GAN_InsertAdUnit.php:62 GAN_InsertAdUnit.php:65
 msgid "Blue"
@@ -120,42 +531,6 @@ msgstr "Uploads"
 #: GAN_InsertAdUnit.php:79
 msgid "WordPress"
 msgstr "WordPress"
-
-#: GAN_InsertAdUnit.php:101 GAN_ImageWidget.php:192 GAN_Widget.php:184
-msgid "Max ads:"
-msgstr "Max ads:"
-
-#: GAN_InsertAdUnit.php:105 GAN_ImageWidget.php:213 GAN_Widget.php:191
-msgid "Orientation:"
-msgstr "Orientation:"
-
-#: GAN_InsertAdUnit.php:107 GAN_ImageWidget.php:217 GAN_Widget.php:195
-msgid "vertical"
-msgstr "vertical"
-
-#: GAN_InsertAdUnit.php:108 GAN_ImageWidget.php:218 GAN_Widget.php:196
-msgid "horizontal"
-msgstr "horizontal"
-
-#: GAN_InsertAdUnit.php:110 GAN_ImageWidget.php:225 GAN_Widget.php:203
-msgid "Target:"
-msgstr "Target:"
-
-#: GAN_InsertAdUnit.php:112 GAN_ImageWidget.php:229 GAN_Widget.php:207
-msgid "Same Window"
-msgstr "Same Window"
-
-#: GAN_InsertAdUnit.php:113 GAN_ImageWidget.php:230 GAN_Widget.php:208
-msgid "New Window or Tab"
-msgstr "New Window or Tab"
-
-#: GAN_InsertAdUnit.php:115 GAN_ImageWidget.php:234 GAN_Widget.php:212
-msgid "Ad frame width:"
-msgstr "Ad frame width:"
-
-#: GAN_InsertAdUnit.php:118 GAN_ImageWidget.php:241 GAN_Widget.php:219
-msgid "Ad frame height:"
-msgstr "Ad frame height:"
 
 #: GAN_InsertAdUnit.php:122
 msgid "Insert Ad Unit"
@@ -176,169 +551,6 @@ msgstr "Width:"
 #: GAN_ImageWidget.php:206
 msgid "Height:"
 msgstr "Height:"
-
-#: GAN_Products.php:23
-msgid "Subscriptions"
-msgstr "Subscriptions"
-
-#: GAN_Products.php:26 GAN.php:206
-msgid "Edit"
-msgstr "Edit"
-
-#: GAN_Products.php:30 GAN.php:210
-msgid "View"
-msgstr "View"
-
-#: GAN_Products.php:34 GAN_Products.php:70 GAN.php:214
-#: GAN_DB_List_Table.php:185
-msgid "Delete"
-msgstr "Delete"
-
-#: GAN_Products.php:38 GAN_Products.php:71
-msgid "Import"
-msgstr "Import"
-
-#: GAN_Products.php:51
-msgid "Zip File Path"
-msgstr "Zip File Path"
-
-#: GAN_Products.php:52
-msgid "Daily Import?"
-msgstr "Daily Import?"
-
-#: GAN_Products.php:203
-msgid "GAN Product Database"
-msgstr "GAN Product Database"
-
-#: GAN_Products.php:204
-msgid "GAN Product DB"
-msgstr "GAN Product DB"
-
-#: GAN_Products.php:212
-msgid "Add new GAN Product Subscriptions"
-msgstr "Add new GAN Product Subscriptions"
-
-#: GAN_Products.php:213 GAN.php:137 GAN.php:140
-msgid "Add new"
-msgstr "Add new"
-
-#: GAN_Products.php:219
-msgid "Configure GAN Product Subscriptions"
-msgstr "Configure GAN Product Subscriptions"
-
-#: GAN_Products.php:220 GAN.php:173 GAN.php:177
-msgid "Configure"
-msgstr "Configure"
-
-#: GAN_Products.php:239
-msgid "GAN Product Subscriptions"
-msgstr "GAN Product Subscriptions"
-
-#: GAN_Products.php:244 GAN.php:293
-msgid "Add New"
-msgstr "Add New"
-
-#: GAN_Products.php:360 GAN_DB_List_Table.php:383
-msgid "Advertiser missing."
-msgstr "Advertiser missing."
-
-#: GAN_Products.php:362
-msgid "Duplicate Advertiser."
-msgstr "Duplicate Advertiser."
-
-#: GAN_Products.php:365
-msgid "Zip File Path missing."
-msgstr "Zip File Path missing."
-
-#: GAN_Products.php:395 GAN.php:637 GAN_DB_List_Table.php:510
-msgid "Advertiser:"
-msgstr "Advertiser:"
-
-#: GAN_Products.php:407
-msgid "-- Select a Merchant --"
-msgstr "-- Select a Merchant --"
-
-#: GAN_Products.php:417
-msgid "Zip File Path:"
-msgstr "Zip File Path:"
-
-#: GAN_Products.php:423
-msgid "Import Daily?"
-msgstr "Import Daily?"
-
-#: GAN_Products.php:432 GAN_Products.php:450
-msgid "Add Product Subscription"
-msgstr "Add Product Subscription"
-
-#: GAN_Products.php:435
-msgid "Update Product Subscription"
-msgstr "Update Product Subscription"
-
-#: GAN_Products.php:438 GAN_DB_List_Table.php:603 GAN_DB_List_Table.php:697
-msgid "Return"
-msgstr "Return"
-
-#: GAN_Products.php:451
-msgid "Edit Product Subscription"
-msgstr "Edit Product Subscription"
-
-#: GAN_Products.php:452
-msgid "View Product Subscription"
-msgstr "View Product Subscription"
-
-#: GAN_Products.php:468 GAN_DB_List_Table.php:319
-msgid "%s inserted with id %d."
-msgstr "%s inserted with id %d."
-
-#: GAN_Products.php:484 GAN_DB_List_Table.php:350
-msgid "%s updated."
-msgstr "%s updated."
-
-#: GAN_Products.php:529 GAN.php:377
-msgid "Options Saved"
-msgstr "Options Saved"
-
-#: GAN_Products.php:536
-msgid "Configure Product Options"
-msgstr "Configure Product Options"
-
-#: GAN_Products.php:542
-msgid "Import for Shopper Press?"
-msgstr "Import for Shopper Press?"
-
-#: GAN_Products.php:547 GAN.php:398 GAN.php:409 GAN.php:420
-#: GAN_DB_List_Table.php:277
-msgid "Yes"
-msgstr "Yes"
-
-#: GAN_Products.php:551 GAN.php:402 GAN.php:413 GAN.php:424
-#: GAN_DB_List_Table.php:279
-msgid "No"
-msgstr "No"
-
-#: GAN_Products.php:553
-msgid "Post format (for other than Shopper Press)"
-msgstr "Post format (for other than Shopper Press)"
-
-#: GAN_Products.php:558
-msgid "CSS for posts (for other than Shopper Press)"
-msgstr "CSS for posts (for other than Shopper Press)"
-
-#: GAN_Products.php:563
-msgid "Custom Fields (for other than Shopper Press)"
-msgstr "Custom Fields (for other than Shopper Press)"
-
-#: GAN_Products.php:582 GAN.php:427
-msgid "Save Options"
-msgstr "Save Options"
-
-#: GAN_Products.php:637
-msgid "%d Products imported from %s."
-msgstr "%d Products imported from %s."
-
-#: GAN_Products.php:639
-msgid "Failed to open %s: %d."
-msgstr "Failed to open %s: %d."
 
 #: GAN.php:128 GAN.php:187 GAN.php:288
 msgid "GAN Database"
@@ -508,69 +720,17 @@ msgstr "Add/Edit/View GAN Database page"
 msgid "This is the name of the advertiser."
 msgstr "This is the name of the advertiser."
 
-#: GAN.php:640 GAN_DB_List_Table.php:516
-msgid "Link ID:"
-msgstr "Link ID:"
-
-#: GAN.php:644 GAN_DB_List_Table.php:521
-msgid "Link Name:"
-msgstr "Link Name:"
-
-#: GAN.php:647 GAN_DB_List_Table.php:527
-msgid "Merchandising Text:"
-msgstr "Merchandising Text:"
-
-#: GAN.php:651 GAN_DB_List_Table.php:532
-msgid "Alt Text:"
-msgstr "Alt Text:"
-
-#: GAN.php:654 GAN_DB_List_Table.php:537
-msgid "Start Date:"
-msgstr "Start Date:"
-
-#: GAN.php:658 GAN_DB_List_Table.php:542
-msgid "End Date:"
-msgstr "End Date:"
-
-#: GAN.php:662 GAN_DB_List_Table.php:548
-msgid "Clickserver Link:"
-msgstr "Clickserver Link:"
-
 #: GAN.php:663
 msgid "This is the ad's target link."
 msgstr "This is the ad's target link."
-
-#: GAN.php:665 GAN_DB_List_Table.php:554
-msgid "Image URL:"
-msgstr "Image URL:"
-
-#: GAN.php:668 GAN_DB_List_Table.php:560
-msgid "Image Height:"
-msgstr "Image Height:"
-
-#: GAN.php:674 GAN_DB_List_Table.php:572
-msgid "Link URL:"
-msgstr "Link URL:"
 
 #: GAN.php:675
 msgid "This is the optional auxillary link URL."
 msgstr "This is the optional auxillary link URL."
 
-#: GAN.php:677 GAN_DB_List_Table.php:577
-msgid "Promo Type:"
-msgstr "Promo Type:"
-
 #: GAN.php:678
 msgid "This is the promotion type for the ad."
 msgstr "This is the promotion type for the ad."
-
-#: GAN.php:680 GAN_DB_List_Table.php:582
-msgid "Merchant ID:"
-msgstr "Merchant ID:"
-
-#: GAN.php:685 GAN_DB_List_Table.php:588
-msgid "enabled?"
-msgstr "enabled?"
 
 #: GAN.php:711
 msgid "Ad Impression Statistics page"
@@ -587,151 +747,3 @@ msgstr "GAN Option Configuration page"
 #: GAN.php:769 GAN.php:771
 msgid "Add Ad Unit"
 msgstr "Add Ad Unit"
-
-#: GAN_Help.php:3
-msgid "Help Using the Google Affiliate Network Plugin"
-msgstr "Help Using the Google Affiliate Network Plugin"
-
-#: GAN_Server.php:40 GAN_ExportStats.php:108
-msgid ""
-"The headers have been sent by another plugin - there may be a plugin "
-"conflict."
-msgstr ""
-"The headers have been sent by another plugin - there may be a plugin "
-"conflict."
-
-#: GAN_Server.php:60
-msgid ""
-"The needed parameters are missing. Probably because this file was not called "
-"from an iframe."
-msgstr ""
-"The needed parameters are missing. Probably because this file was not called "
-"from an iframe."
-
-#: GAN_DB_List_Table.php:26 GAN_DB_List_Table.php:396
-msgid "Start Date"
-msgstr "Start Date"
-
-#: GAN_DB_List_Table.php:28
-msgid "Enabled?"
-msgstr "Enabled?"
-
-#: GAN_DB_List_Table.php:186
-msgid "Toggle Enabled"
-msgstr "Toggle Enabled"
-
-#: GAN_DB_List_Table.php:201
-msgid "Enable All"
-msgstr "Enable All"
-
-#: GAN_DB_List_Table.php:205
-msgid "Delete Expired"
-msgstr "Delete Expired"
-
-#: GAN_DB_List_Table.php:211
-msgid "Delete Merchant"
-msgstr "Delete Merchant"
-
-#: GAN_DB_List_Table.php:214
-msgid "Disable Merchant"
-msgstr "Disable Merchant"
-
-#: GAN_DB_List_Table.php:217
-msgid "Enable Merchant"
-msgstr "Enable Merchant"
-
-#: GAN_DB_List_Table.php:386
-msgid "Link ID missing."
-msgstr "Link ID missing."
-
-#: GAN_DB_List_Table.php:388
-msgid "Duplicate Link ID."
-msgstr "Duplicate Link ID."
-
-#: GAN_DB_List_Table.php:391
-msgid "Link Name missing."
-msgstr "Link Name missing."
-
-#: GAN_DB_List_Table.php:394
-msgid "Start Date missing."
-msgstr "Start Date missing."
-
-#: GAN_DB_List_Table.php:400
-msgid "End Date missing."
-msgstr "End Date missing."
-
-#: GAN_DB_List_Table.php:406
-msgid "Clickserver Link missing."
-msgstr "Clickserver Link missing."
-
-#: GAN_DB_List_Table.php:409
-msgid "Merchant ID missing."
-msgstr "Merchant ID missing."
-
-#: GAN_DB_List_Table.php:414
-msgid "Image Height should be a whole number."
-msgstr "Image Height should be a whole number."
-
-#: GAN_DB_List_Table.php:419
-msgid "Image Width should be a whole number."
-msgstr "Image Width should be a whole number."
-
-#: GAN_DB_List_Table.php:436
-msgid "%s invalid: should be YYYY-MM-DD or MM/DD/YYYY."
-msgstr "%s invalid: should be YYYY-MM-DD or MM/DD/YYYY."
-
-#: GAN_DB_List_Table.php:439
-msgid "%s month out of range, should be 1 to 12."
-msgstr "%s month out of range, should be 1 to 12."
-
-#: GAN_DB_List_Table.php:442
-msgid "%s date out of range, should be 1 to 31."
-msgstr "%s date out of range, should be 1 to 31."
-
-#: GAN_DB_List_Table.php:481
-msgid "Add Element to the GAN Database"
-msgstr "Add Element to the GAN Database"
-
-#: GAN_DB_List_Table.php:482
-msgid "Edit Element in the GAN Database"
-msgstr "Edit Element in the GAN Database"
-
-#: GAN_DB_List_Table.php:483
-msgid "View Element in the GAN Database"
-msgstr "View Element in the GAN Database"
-
-#: GAN_DB_List_Table.php:597
-msgid "Add Ad To Database"
-msgstr "Add Ad To Database"
-
-#: GAN_DB_List_Table.php:600
-msgid "Update Ad In Database"
-msgstr "Update Ad In Database"
-
-#: GAN_DB_List_Table.php:646
-msgid "Duplicate Link ID %s (%s). Ad not inserted into database."
-msgstr "Duplicate Link ID %s (%s). Ad not inserted into database."
-
-#: GAN_DB_List_Table.php:656
-msgid "Inserted %s (%s) into ad database."
-msgstr "Inserted %s (%s) into ad database."
-
-#: GAN_DB_List_Table.php:660
-msgid "Inserted %d ads into ad database."
-msgstr "Inserted %d ads into ad database."
-
-#: GAN_DB_List_Table.php:695
-msgid "Select TSV File:"
-msgstr "Select TSV File:"
-
-#: GAN_DB_List_Table.php:696
-msgid "Upload file"
-msgstr "Upload file"
-
-#: GAN_Widget.php:14
-msgid "Display Google Affiliate Network links"
-msgstr "Display Google Affiliate Network links"
-
-#: GAN_Widget.php:20
-msgid "GAN Widget"
-msgstr "GAN Widget"
