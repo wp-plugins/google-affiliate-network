@@ -315,7 +315,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	    <?php if ($message != '') {
 		?><div id="message" class="update fade"><?php echo $message; ?></div><?php
 		} ?>
-	    <form action="" method="post">
+	    <form action="<?php echo admin_url('admin.php'); ?>" method="get">
 	    <input type="hidden" name="page" value="gan-database-add-element" />
 	    <?php $this->gan_db_list_table->display_one_item_form(
 			add_query_arg(array('page' => 'gan-database-page',

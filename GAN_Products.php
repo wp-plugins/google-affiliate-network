@@ -10,6 +10,7 @@ require_once (dirname(__FILE__) . '/../../../wp-admin/includes/class-wp-list-tab
 global $wpdb;
 define('GAN_PRODUCT_SUBSCRIPTIONS_TABLE',$wpdb->prefix . "dws_gan_prodsubscript");
 define('GAN_PROD_HEADERS',"ProductID,ProductName,ProductURL,BuyURL,ImageURL,Category,CategoryID,PFXCategory,BriefDesc,ShortDesc,IntermDesc,LongDesc,ProductKeyword,Brand,Manufacturer,ManfID,ManufacturerModel,UPC,Platform,MediaTypeDesc,MerchandiseType,Price,SalePrice,VariableCommission,SubFeedID,InStock,Inventory,RemoveDate,RewPoints,PartnerSpecific,ShipAvail,ShipCost,ShippingIsAbsolut,ShippingWeight,ShipNeeds,ShipPromoText,ProductPromoText,DailySpecialsInd,GiftBoxing,GiftWrapping,GiftMessaging,ProductContainerName,CrossSellRef,AltImagePrompt,AltImageURL,AgeRangeMin,AgeRangeMax,ISBN,Title,Publisher,Author,Genre,Media,Material,PermuColor,PermuSize,PermuWeight,PermuItemPrice,PermuSalePrice,PermuInventorySta,Permutation,PermutationSKU,BaseProductID,Option1,Option2,Option3,Option4,Option5,Option6,Option7,Option8,Option9,Option10,Option11,Option12,Option13,Option14,Option15,Option16,Option17,Option18,Option19,Option20");
+define('GAN_TIMELIMIT', 25*100);
 
 class GAN_Products_List extends WP_List_Table {
 	var $row_actions = array();
@@ -110,6 +111,8 @@ class GAN_Products_List extends WP_List_Table {
 	function prepare_items() {
 	  $this->check_permissions();
 
+	  $answer = '';
+
 	  if ( isset($_REQUEST['action']) && $_REQUEST['action'] != -1 ) {
 	    $theaction = $_REQUEST['action'];
 	  } else if ( isset($_REQUEST['action2']) && $_REQUEST['action2'] != -1 ) {
@@ -121,19 +124,21 @@ class GAN_Products_List extends WP_List_Table {
 	  switch ($theaction) {
 	    case 'delete':
 		if ( isset($_REQUEST['id']) ) {
-		  GAN_Products::delete_sub_by_id($_REQUEST['id']);
+		  $answer = '<p>'.GAN_Products::delete_sub_by_id($_REQUEST['id']).'</p>';
 		} else {
+		  $answer = '';
 		  foreach ( $_REQUEST['checked'] as $theitem ) {
-		    GAN_Products::delete_sub_by_id($theitem);
+		    $answer .= '<p>'.GAN_Products::delete_sub_by_id($theitem).'</p>';
 		  }
 		}
 		break;
 	    case 'import':
 		if ( isset($_REQUEST['id']) ) {
-		  GAN_Products::import_products($_REQUEST['id']);
+		  $answer = '<p>'.GAN_Products::import_products($_REQUEST['id']).'</p>';
 		} else {
+		  $answer = '';
 		  foreach ( $_REQUEST['checked'] as $theitem ) {
-		    GAN_Products::import_products($theitem);
+		    $answer .= '<p>'.GAN_Products::import_products($theitem).'</p>';
 		  }
 		}
 		break;
@@ -155,6 +160,7 @@ class GAN_Products_List extends WP_List_Table {
 	  }
 	  $start = ($pagenum-1)*$per_page;
   	  $this->items = array_slice( $all_items,$start,$per_page );
+	  return $answer;
 	}
 }
 
@@ -197,7 +203,8 @@ a.gan_prod_prodlink {
 	background-color: #87ceeb;
 	-webkit-border-radius: 10px;}');
 	  add_option('wp_gan_products_customfields',"");
-
+	  add_option('wp_gan_products_batchqueue',"");
+	  add_action('wp_gan_products_batchrun',array('GAN_Products','run_batch'));
 	}
 	function admin_menu() {
 	  $screen_id = add_menu_page( __('GAN Product Database','gan'), 
@@ -233,7 +240,7 @@ a.gan_prod_prodlink {
 
 
 	function admin_product_subscriptions() {
-	  $this->prod_list->prepare_items();
+	  $message = $this->prod_list->prepare_items();
 	  /* Head of page, filter and screen options. */
 	  ?><div class="wrap"><div id="icon-gan-prod" class="icon32"><br /></div>
 	    <h2><?php _e('GAN Product Subscriptions','gan'); ?> <a href="<?php
@@ -245,6 +252,9 @@ a.gan_prod_prodlink {
                 ?></a><?php
 			$this->gan->InsertVersion(); ?></h2>
 	    <?php $this->gan->PluginSponsor(); ?>
+	    <?php if ($message != '') {
+		?><div id="message" class="update fade"><?php echo $message; ?></div><?php
+		} ?>
 	    <form method="post" action="">
 		<input type="hidden" name="page" value="gan-database-products" />
 		<?php $this->prod_list->display(); ?></form></div><?php
@@ -292,7 +302,7 @@ a.gan_prod_prodlink {
 	    <?php if ($message != '') {
 		?><div id="message" class="update fade"><?php echo $message; ?></div><?php
 		} ?>
-	    <form action="" method="post">
+	    <form action="<?php echo admin_url('admin.php'); ?>" method="get">
 	    <input type="hidden" name="page" value="gan-database-add-products" />
 	    <?php $this->display_one_item_form(
 			add_query_arg(array('page' => 'gan-database-products',
@@ -353,6 +363,35 @@ a.gan_prod_prodlink {
 	    'zipfilepath' => '',
 	    'MerchantID' => '',
 	    'dailyimport' => 1);
+	}
+	static function delete_sub_by_id($id) {
+	  $answer = GAN_Products::delete_products($id);
+	  $item =   GAN_Products::get_prod($id);
+	  if (get_option('wp_gan_products_shoppress') == 'yes') {
+	    $posts = get_posts( array('meta_key'        => 'datafeedr_merchant_id',
+				      'meta_value'      => $item->MerchantID) );
+	  } else {
+	    $posts = get_posts( array('meta_key'        => '_merchant_id',
+				      'meta_value'      => $item->MerchantID) );
+	  }
+	  if (count($posts) == 0) {
+	    global $wpdb;
+	    $sql = $wpdb->prepare("DELETE FROM ".
+				  GAN_PRODUCT_SUBSCRIPTIONS_TABLE.
+				  " WHERE ID = %d",$id);
+	    $wpdb->query($sql);
+	    $answer .= '<p>'.
+		sprintf(__('%s product subscription deleted.','gan'),
+			GAN_Database::get_merch_name($item->MerchantID)).
+		'</p>';
+	  } else {
+	    $answer .= '<p>'.
+		sprintf(__('%d pending posts to be deleted for %s.','gan'),
+			   count($posts),
+			   GAN_Database::get_merch_name($item->MerchantID)).
+		'</p>';
+	  }
+	  return $answer;
 	}
 	function checkiteminform($id) {
 	  $result = '';
@@ -600,19 +639,22 @@ a.gan_prod_prodlink {
 	}
 	function wp_dashboard_setup () {
 	}
-	static function import_products($id) {
+	static function import_products($id,$skip=0) {
 	  $item = GAN_Products::get_prod($id);
 	  $Advertiser = GAN_Database::get_merch_name($item->MerchantID);
 	  $products_shoppress = get_option('wp_gan_products_shoppress');
 	  $products_postformat = get_option('wp_gan_products_postformat');
 	  $products_customfields = explode(',',get_option('wp_gan_products_customfields'));
 	  $count = 0;
+	  $skip_count = 0;
 	  $zip = new ZipArchive;
 	  $res = $zip->open($item->zipfilepath);
 	  if ($res === TRUE) {
 	    $fp = $zip->getStream(basename($item->zipfilepath,'.zip').'.txt');
 	    $headers = explode("\t",fgets($fp));
 	    while ($line = fgets($fp)) {
+	      $skip_count++;
+	      if ($skip_count < $skip) {continue;}
 	      $rowvect =  explode("\t",$line);
 	      $row = array();
 	      foreach ($headers as $index => $header) {
@@ -631,6 +673,21 @@ a.gan_prod_prodlink {
 						       $Advertiser);
 	      }
 	      $count++;
+	      if (($count & 0x01ff) == 0) {
+		$times = posix_times();
+		if ($times['utime'] > GAN_TIMELIMIT) {
+		  $products_batchqueue = get_option('wp_gan_products_batchqueue');
+		  if ($products_batchqueue == "") {
+		    wp_schedule_event(time()+60, 'hourly', 'wp_gan_products_batchrun');
+		  }
+		  // Queue batch: $id,$skip_count
+		  $the_queue = explode(':',$products_batchqueue);
+		  $the_queue[] = sprintf("I,%d,%d",$id,$skip_count);
+		  $products_batchqueue = implode(':',$the_queue);
+		  update_option('wp_gan_products_batchqueue',$products_batchqueue);
+		  break;
+		}
+	      }
 	    }
 	    fclose($fp);
 	    $zip->close();
@@ -761,6 +818,59 @@ a.gan_prod_prodlink {
 	    }
 	  }
 	  return str_replace('\n',"\n",$result);
+	}
+	static function run_batch() {
+	  $products_batchqueue = get_option('wp_gan_products_batchqueue');
+	  $the_queue = explode(':',$products_batchqueue);
+	  $job = $the_queue[0];
+	  $the_queue = array_slice($the_queue,1);
+	  $products_batchqueue = implode(':',$the_queue);
+	  update_option('wp_gan_products_batchqueue',$products_batchqueue);
+	  if ($products_batchqueue == '') {
+	    wp_clear_scheduled_hook('wp_gan_products_batchrun');
+	  }
+	  $jobvect = explode(',',$job);
+	  $fun = $jobvect[0];
+	  $id  = $jobvect[1];
+	  $skip = $jobvect[2];
+	  if ($fun == 'I') {
+	    GAN_Products::import_products($id,$skip);
+	  } else if ($fun == 'D') {
+	    GAN_Products::delete_sub_by_id($id);
+	  }
+	}
+	static function delete_products($id) {
+	  $item =   GAN_Products::get_prod($id);
+	  if (get_option('wp_gan_products_shoppress') == 'yes') {
+	    $posts = get_posts( array('meta_key'        => 'datafeedr_merchant_id',
+				      'meta_value'      => $item->MerchantID) );
+	  } else {
+	    $posts = get_posts( array('meta_key'        => '_merchant_id',
+				      'meta_value'      => $item->MerchantID) );
+	  }
+	  if (count($posts) == 0) return '';
+	  $count = 0;
+	  foreach ($posts as $p) {
+	    wp_delete_post($p->ID, true);
+	    $count++;
+	    if (($count & 0x01ff) == 0) {
+	      $times = posix_times();
+	      if ($times['utime'] > GAN_TIMELIMIT) {
+		$products_batchqueue = get_option('wp_gan_products_batchqueue');
+		if ($products_batchqueue == "") {
+		  wp_schedule_event(time()+60, 'hourly', 'wp_gan_products_batchrun');
+		}
+		// Queue batch: $id,$skip_count
+		$the_queue = explode(':',$products_batchqueue);
+		$the_queue[] = sprintf("D,%d",$id);
+		$products_batchqueue = implode(':',$the_queue);
+		update_option('wp_gan_products_batchqueue',$products_batchqueue);
+		break;
+	      }
+	    }
+	  }
+	  return sprintf(__('%d product posts deleted from %s.','gan'),
+			 $count,GAN_Database::get_merch_name($item->MerchantID) );
 	}
 }
 
