@@ -10,6 +10,7 @@ require_once (dirname(__FILE__) . '/../../../wp-admin/includes/class-wp-list-tab
 global $wpdb;
 define('GAN_PRODUCT_SUBSCRIPTIONS_TABLE',$wpdb->prefix . "dws_gan_prodsubscript");
 define('GAN_PROD_HEADERS',"ProductID,ProductName,ProductURL,BuyURL,ImageURL,Category,CategoryID,PFXCategory,BriefDesc,ShortDesc,IntermDesc,LongDesc,ProductKeyword,Brand,Manufacturer,ManfID,ManufacturerModel,UPC,Platform,MediaTypeDesc,MerchandiseType,Price,SalePrice,VariableCommission,SubFeedID,InStock,Inventory,RemoveDate,RewPoints,PartnerSpecific,ShipAvail,ShipCost,ShippingIsAbsolut,ShippingWeight,ShipNeeds,ShipPromoText,ProductPromoText,DailySpecialsInd,GiftBoxing,GiftWrapping,GiftMessaging,ProductContainerName,CrossSellRef,AltImagePrompt,AltImageURL,AgeRangeMin,AgeRangeMax,ISBN,Title,Publisher,Author,Genre,Media,Material,PermuColor,PermuSize,PermuWeight,PermuItemPrice,PermuSalePrice,PermuInventorySta,Permutation,PermutationSKU,BaseProductID,Option1,Option2,Option3,Option4,Option5,Option6,Option7,Option8,Option9,Option10,Option11,Option12,Option13,Option14,Option15,Option16,Option17,Option18,Option19,Option20");
+define('GAN_PROD_TAGABLE_HEADERS',"ProductKeyword,Brand,Manufacturer,Platform,MerchandiseType,Publisher,Author,Genre,Media,Material");
 define('GAN_TIMELIMIT', 25*100);
 
 class GAN_Products_List extends WP_List_Table {
@@ -103,7 +104,11 @@ class GAN_Products_List extends WP_List_Table {
 	  return $item->zipfilepath;
 	}
 	function column_dailyimport($item) {
-	  return $item->dailyimport;
+	  if ($item->dailyimport) {
+	    return 'yes';
+	  } else {
+	    return 'no';
+	  }
 	}
 	function column_default($item, $column_name) {
 	  return apply_filters( 'manage_items_custom_column','',$column_name,$item->id);
@@ -203,6 +208,10 @@ a.gan_prod_prodlink {
 	background-color: #87ceeb;
 	-webkit-border-radius: 10px;}');
 	  add_option('wp_gan_products_customfields',"");
+	  add_option('wp_gan_products_category_mode','category_tree');
+	  add_option('wp_gan_products_category_treesep','>');
+	  add_option('wp_gan_products_category_maxtreedepth',0);
+	  add_option('wp_gan_products_tagheaders','ProductKeyword,Brand,Manufacturer');
 	  add_option('wp_gan_products_batchqueue',"");
 	  add_action('wp_gan_products_batchrun',array('GAN_Products','run_batch'));
 	}
@@ -364,7 +373,23 @@ a.gan_prod_prodlink {
 	    'MerchantID' => '',
 	    'dailyimport' => 1);
 	}
+	static function delete_import_job($theid) {
+	  $products_batchqueue = get_option('wp_gan_products_batchqueue');
+	  $the_queue = explode(':',$products_batchqueue);
+	  $new_queue = array();
+	  foreach ($the_queue as $job) {
+	    $jobvect = explode(',',$job);
+	    $fun = $jobvect[0];
+	    $id  = $jobvect[1];
+	    $skip = $jobvect[2];
+	    if ($fun == 'I' && $id == $theid) continue;
+	    else $new_queue[] = $job;
+	  }
+	  $products_batchqueue = implode(':',$new_queue);
+	  update_option('wp_gan_products_batchqueue',$products_batchqueue);
+	}
 	static function delete_sub_by_id($id) {
+	  GAN_Products::delete_import_job($id);
 	  $answer = GAN_Products::delete_products($id);
 	  $item =   GAN_Products::get_prod($id);
 	  if (get_option('wp_gan_products_shoppress') == 'yes') {
@@ -565,6 +590,14 @@ a.gan_prod_prodlink {
 	    update_option('wp_gan_products_css',$products_css);
 	    $products_customfields = implode(',',$_REQUEST['gan_products_customfields']);
 	    update_option('wp_gan_products_customfields',$products_customfields);
+	    $products_category_mode = $_REQUEST['gan_products_category_mode'];
+	    update_option('wp_gan_products_category_mode',$products_category_mode);
+	    $products_category_treesep = $_REQUEST['gan_products_category_treesep'];
+	    update_option('wp_gan_products_category_treesep',$products_category_treesep);
+	    $products_category_maxtreedepth = $_REQUEST['gan_products_category_maxtreedepth'];
+	    update_option('wp_gan_products_category_maxtreedepth',$products_category_maxtreedepth);
+	    $products_tagheaders = implode(',',$_REQUEST['gan_products_tagheaders']);
+	    update_option('wp_gan_products_tagheaders',$products_tagheaders);
 	    ?><div id="message"class="updated fade"><p><?php _e('Options Saved','gan'); ?></p></div><?php
 	  }
 	  /* Head of page, filter and screen options. */
@@ -572,6 +605,11 @@ a.gan_prod_prodlink {
 	  $products_postformat = get_option('wp_gan_products_postformat');
 	  $products_css = get_option('wp_gan_products_css');
 	  $products_customfields = explode(',',get_option('wp_gan_products_customfields'));
+	  $products_category_mode = get_option('wp_gan_products_category_mode');
+	  $products_category_treesep = get_option('wp_gan_products_category_treesep');
+	  $products_category_maxtreedepth = get_option('wp_gan_products_category_maxtreedepth');
+	  $products_tagheaders = explode(',',get_option('wp_gan_products_tagheaders'));
+	  $products_batchqueue = get_option('wp_gan_products_batchqueue');
 	  ?><div class="wrap"><div id="icon-gan-prod-options" class="icon32"><br /></div><h2><?php _e('Configure Product Options','gan'); ?><?php $this->gan->InsertVersion(); ?></h2>
 	    <?php $this->gan->PluginSponsor(); ?>
 	    <form method="post" action="">
@@ -606,26 +644,89 @@ a.gan_prod_prodlink {
 			  ?><input type="checkbox" 
 				   name="gan_products_customfields[]" 
 				   value="<?php echo $fieldname; ?>"
-				   <?php if ($this->ismember($fieldname,$products_customfields))
+				   <?php if (in_array($fieldname,$products_customfields))
 						echo ' checked="checked"'; ?> /><?php
 			    echo '&nbsp;'.$fieldname;
 			    $cols++;
-			    if ($cols < 5) echo ' ';
+			    if ($cols < 5) echo '&nbsp;';
 			    else {
 				echo '<br />';
 				$cols = 0;
 			    }
 			} ?></td></tr>
+		  <tr valign="top">
+		    <th scope="row"><label for="gan_products_category_mode" style="width:20%;"><?php _e('Category Mode:','gan'); ?></label></th>
+		    <td style="width:75%;">
+		        <!-- <?php echo "products_category_mode = $products_category_mode"; ?> -->
+			<input id="gan_products_category_mode"
+			       name="gan_products_category_mode"
+			       type="radio"
+			       value="category_tree"
+			       <?php if ($products_category_mode == 'category_tree') echo 'checked="checked"'; ?>
+			       />Category Tree<br />
+			&nbsp;&nbsp;<label for="gan_products_category_treesep"><?php
+			  _e('Tree branch separator:','gan'); 
+			?></label>&nbsp;<input id="gan_products_category_treesep"
+					 name="gan_products_category_treesep"
+					 type="text" size="1" maxlength="1" 
+					 value="<?php 
+					echo $products_category_treesep; 
+			?>" />&nbsp;<label for="gan_products_category_maxtreedepth"><?php
+			  _e('Max tree depth (0 means unlimited)','gan');
+			?></label>&nbsp;<input 
+				    id="gan_products_category_maxtreedepth"
+			 	    name="gan_products_category_maxtreedepth"
+				    type="text" size="2" maxlength="2"
+				    value="<?php 
+					echo $products_category_maxtreedepth;
+			?>" /><br clear="all"/>
+			<input id="gan_products_category_mode"
+			       name="gan_products_category_mode"
+			       type="radio"
+			       value="category_flat"
+			       <?php if ($products_category_mode == 'category_flat') echo 'checked="checked"'; ?>
+			       />Flat Category<br />
+			<input id="gan_products_category_mode"
+			       name="gan_products_category_mode"
+			       type="radio"
+			       value="brand"
+			       <?php if ($products_category_mode == 'brand') echo 'checked="checked"'; ?>
+			       />Brand as Category<br />
+			<input id="gan_products_category_mode"
+			       name="gan_products_category_mode"
+			       type="radio"
+			       value="merchant"
+			       <?php if ($products_category_mode == 'merchant') echo 'checked="checked"'; ?>
+			       />Merchant as Category</td></tr>
+		  <tr valign="top">
+		    <th scope="row"><label for="gan_products_tagheaders" style="width:20%;"><?php _e('Tag Columns','gan'); ?></label></th>
+		    <td><?php
+			$cols = 0;
+			foreach (explode(',',GAN_PROD_TAGABLE_HEADERS) as $fieldname) {
+			  ?><input type="checkbox" 
+				   name="gan_products_tagheaders[]" 
+				   value="<?php echo $fieldname; ?>"
+				   <?php if (in_array($fieldname,$products_tagheaders))
+						echo ' checked="checked"'; ?> /><?php
+			    echo '&nbsp;'.$fieldname;
+			    $cols++;
+			    if ($cols < 5) echo '&nbsp;';
+			    else {
+				echo '<br />';
+				$cols = 0;
+			    }
+			} ?></td></tr>
+		  <tr valign="top">
+		    <th scope="row"><label for="gan_products_batchqueue" style="width:20%;"><?php _e('Batch Queue:','gan'); ?></label></th>
+		    <td><input id="gan_products_batchqueue"
+		    	       value="<?php echo $products_batchqueue; ?>"
+			       name="gan_products_batchqueue"
+			       style="width:75%;"
+			       readonly="readonly" /></td></tr>
 		</table>
 		<p>
 			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options','gan'); ?>" />
 		</p></form></div><?php
-	}
-	function ismember($field,$fields) {
-	  foreach ($fields as $index => $value) {
-	    if ($field == $value) return true;
-	  }
-	  return false;
 	}
 	function wp_head () {
 	  if (get_option('wp_gan_products_shoppress') == 'no' && 
@@ -698,20 +799,48 @@ a.gan_prod_prodlink {
 	}
 	static function import_products_as_shoppress($rowobj,$MerchantID,
 							$Advertiser) {
+	  $products_category_mode = get_option('wp_gan_products_category_mode');
+	  if (!in_array($products_category_mode,array('category_tree','category_flat','brand','merchant'))) {
+	    $products_category_mode = 'category_tree';
+	  }
+	  $products_category_treesep = get_option('wp_gan_products_category_treesep');
+	  if ($products_category_mode == 'category_tree' && $products_category_treesep == '') {
+	    $products_category_treesep = '>';
+	  }
+	  $products_category_maxtreedepth = get_option('wp_gan_products_category_maxtreedepth');
+	  if ($products_category_mode == 'category_tree' && $products_category_maxtreedepth == '') {
+	    $products_category_maxtreedepth = 0;
+	  }
+	  
 	  // SETUP MAIN DATA
 	  $my_post = array(
 	  	'post_title'		  => $rowobj->ProductName,
 	  	'post_content'		  => $rowobj->LongDesc,
 	  	'post_excerpt'		  => $rowobj->ShortDesc,
 	  	'post_author'		  => 1,
-	  	'post_status'		  => "publish",
-	  	'post_category'		  => array(GAN_Products::getTheCat($rowobj->Category))
+	  	'post_status'		  => "publish"
 		);
-	  $prodTags = array();
-	  if ($rowobj->ProductKeyword != '') $prodTags[] = $rowobj->ProductKeyword;
-	  if ($rowobj->Brand != '') $prodTags[] = $rowobj->Brand;
-	  if ($rowobj->Manufacturer != '') $prodTags[] = $rowobj->Manufacturer;
-	  $my_post['tags_input'] = $prodTags;
+	  switch ($products_category_mode) {
+	    case 'category_tree':
+	      $my_post['post_category'] = GAN_Products::getTheCat(
+			explode($products_category_treesep,$rowobj->Category),
+			$products_category_maxtreedepth);
+	      break;
+	    case 'category_flat':
+	      $my_post['post_category'] = GAN_Products::getTheCat(
+			array($rowobj->Category),1);
+	      break;
+	    case 'brand':
+	      $my_post['post_category'] = GAN_Products::getTheCat(
+			array($rowobj->Brand),1);
+	      break;
+	    case 'merchant':
+	      $my_post['post_category'] = GAN_Products::getTheCat(
+			 array($Advertiser),1);
+	      break;
+	  }
+	  $my_post['tags_input'] = GAN_Products::getTheTags((array)$rowobj,
+					explode(',',get_option('wp_gan_products_tagheaders')));
 	  $customFields = array(
 		"price"			=> $rowobj->Price,
 		"featured"		=> "no",
@@ -743,20 +872,47 @@ a.gan_prod_prodlink {
 	static function import_products_as_other($rowobj,$postformat,
 						 $customfields,$MerchantID,
 						 $Advertiser) {
+	  $products_category_mode = get_option('wp_gan_products_category_mode');
+	  if (!in_array($products_category_mode,array('category_tree','category_flat','brand','merchant'))) {
+	    $products_category_mode = 'category_tree';
+	  }
+	  $products_category_treesep = get_option('wp_gan_products_category_treesep');
+	  if ($products_category_mode == 'category_tree' && $products_category_treesep == '') {
+	    $products_category_treesep = '>';
+	  }
+	  $products_category_maxtreedepth = get_option('wp_gan_products_category_maxtreedepth');
+	  if ($products_category_mode == 'category_tree' && $products_category_maxtreedepth == '') {
+	    $products_category_maxtreedepth = 0;
+	  }
 	  $rowary = (ARRAY)$rowobj;
 	  $my_post = array(
 		'post_title'		  => $rowobj->ProductName,
 	  	'post_content'		  => GAN_Products::substfields($postformat,$rowary),
 	  	'post_excerpt'		  => $rowobj->ShortDesc,
 	  	'post_author'		  => 1,
-		'post_status'		  => "publish",
-		'post_category'		  => array(GAN_Products::getTheCat($rowobj->Category))
+		'post_status'		  => "publish"
 		);
-	  $prodTags = array();
-	  if ($rowobj->ProductKeyword != '') $prodTags[] = $rowobj->ProductKeyword;
-	  if ($rowobj->Brand != '') $prodTags[] = $rowobj->Brand;
-	  if ($rowobj->Manufacturer != '') $prodTags[] = $rowobj->Manufacturer;
-	  $my_post['tags_input'] = $prodTags;
+	  switch ($products_category_mode) {
+	    case 'category_tree':
+	      $my_post['post_category'] = GAN_Products::getTheCat(
+			explode($products_category_treesep,$rowobj->Category),
+			$products_category_maxtreedepth);
+	      break;
+	    case 'category_flat':
+	      $my_post['post_category'] = GAN_Products::getTheCat(
+			array($rowobj->Category),1);
+	      break;
+	    case 'brand':
+	      $my_post['post_category'] = GAN_Products::getTheCat(
+			array($rowobj->Brand),1);
+	      break;
+	    case 'merchant':
+	      $my_post['post_category'] = GAN_Products::getTheCat(
+			 array($Advertiser),1);
+	      break;
+	  }
+	  $my_post['tags_input'] = GAN_Products::getTheTags((array)$rowobj,
+			explode(',',get_option('wp_gan_products_tagheaders')));
 	  $customFields = array(
 	    '_ProductID'	=> $rowobj->ProductID,
 	    '_network'		=> "Google Affiliate Network",
@@ -783,10 +939,11 @@ a.gan_prod_prodlink {
 	    }
 	  }
 	}
-	static function getTheCat($catstring) {
-	  $catlist = explode('>',$catstring);
+	static function getTheCat($catlist,$maxdepth) {
 	  $parent = 0;
 	  $catid  = '0';
+	  $resultarray = array();
+	  $depth = 0;
 	  foreach ($catlist as $catname) {
 	    $catid = get_cat_ID($catname);
 	    if ( !$catid ) {
@@ -796,9 +953,19 @@ a.gan_prod_prodlink {
 		$catid = wp_create_category($catname);
 	      }
 	    }
+	    $resultarray[] = $catid;
 	    $parent = $catid;
+	    $depth++;
+	    if ($maxdepth > 0 && $depth >= $maxdepth) break;
 	  }
-	  return $catid;		
+	  return $resultarray;		
+	}
+	static function getTheTags($rowary,$tagheads) {
+	  $resultarray = array();
+	  foreach ($tagheads as $taghead) {
+	    $resultarray[] = $rowary[$taghead];
+	  }
+	  return $resultarray;
 	}
 	static function substfields($postformat,$rowary) {
 	  $result = '';
@@ -875,3 +1042,4 @@ a.gan_prod_prodlink {
 }
 
 ?>
+

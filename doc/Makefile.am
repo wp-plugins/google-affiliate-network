@@ -5,7 +5,7 @@ Article_FIGS = gandatabase.png ganmanualadd.png bulkadd.png ganLinksTab.png \
 
 Article_PDF  = gan_manual.pdf
 
-EXTRA_DIST=$(Article_TEXS)
+EXTRA_DIST=$(Article_TEXS) $(Article_FIGS)
 
 noinst_DATA=$(Article_PDF)
 
