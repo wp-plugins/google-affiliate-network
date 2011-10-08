@@ -1042,4 +1042,3 @@ a.gan_prod_prodlink {
 }
 
 ?>
-
