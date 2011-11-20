@@ -10,7 +10,7 @@ require_once (dirname(__FILE__) . '/../../../wp-admin/includes/class-wp-list-tab
 global $wpdb;
 define('GAN_PRODUCT_SUBSCRIPTIONS_TABLE',$wpdb->prefix . "dws_gan_prodsubscript");
 define('GAN_PROD_HEADERS',"ProductID,ProductName,ProductURL,BuyURL,ImageURL,Category,CategoryID,PFXCategory,BriefDesc,ShortDesc,IntermDesc,LongDesc,ProductKeyword,Brand,Manufacturer,ManfID,ManufacturerModel,UPC,Platform,MediaTypeDesc,MerchandiseType,Price,SalePrice,VariableCommission,SubFeedID,InStock,Inventory,RemoveDate,RewPoints,PartnerSpecific,ShipAvail,ShipCost,ShippingIsAbsolut,ShippingWeight,ShipNeeds,ShipPromoText,ProductPromoText,DailySpecialsInd,GiftBoxing,GiftWrapping,GiftMessaging,ProductContainerName,CrossSellRef,AltImagePrompt,AltImageURL,AgeRangeMin,AgeRangeMax,ISBN,Title,Publisher,Author,Genre,Media,Material,PermuColor,PermuSize,PermuWeight,PermuItemPrice,PermuSalePrice,PermuInventorySta,Permutation,PermutationSKU,BaseProductID,Option1,Option2,Option3,Option4,Option5,Option6,Option7,Option8,Option9,Option10,Option11,Option12,Option13,Option14,Option15,Option16,Option17,Option18,Option19,Option20");
-define('GAN_PROD_TAGABLE_HEADERS',"ProductKeyword,Brand,Manufacturer,Platform,MerchandiseType,Publisher,Author,Genre,Media,Material");
+define('GAN_PROD_TAGABLE_HEADERS',"Category,CategoryID,ProductKeyword,Brand,Manufacturer,Platform,MerchandiseType,Publisher,Author,Genre,Media,Material");
 define('GAN_TIMELIMIT', 25*100);
 
 class GAN_Products_List extends WP_List_Table {
@@ -212,6 +212,8 @@ a.gan_prod_prodlink {
 	  add_option('wp_gan_products_category_treesep','>');
 	  add_option('wp_gan_products_category_maxtreedepth',0);
 	  add_option('wp_gan_products_tagheaders','ProductKeyword,Brand,Manufacturer');
+	  add_option('wp_gan_products_matchcols','');
+	  add_option('wp_gan_products_matchpattern','');
 	  add_option('wp_gan_products_batchqueue',"");
 	  add_action('wp_gan_products_batchrun',array('GAN_Products','run_batch'));
 	}
@@ -598,6 +600,10 @@ a.gan_prod_prodlink {
 	    update_option('wp_gan_products_category_maxtreedepth',$products_category_maxtreedepth);
 	    $products_tagheaders = implode(',',$_REQUEST['gan_products_tagheaders']);
 	    update_option('wp_gan_products_tagheaders',$products_tagheaders);
+	    $products_matchcols = implode(',',$_REQUEST['gan_products_matchcols']);
+	    update_option('wp_gan_products_matchcols',$products_matchcols);
+	    $products_matchpattern = $_REQUEST['gan_products_matchpattern'];
+	    update_option('wp_gan_products_matchpattern',$products_matchpattern);
 	    ?><div id="message"class="updated fade"><p><?php _e('Options Saved','gan'); ?></p></div><?php
 	  }
 	  /* Head of page, filter and screen options. */
@@ -609,6 +615,8 @@ a.gan_prod_prodlink {
 	  $products_category_treesep = get_option('wp_gan_products_category_treesep');
 	  $products_category_maxtreedepth = get_option('wp_gan_products_category_maxtreedepth');
 	  $products_tagheaders = explode(',',get_option('wp_gan_products_tagheaders'));
+	  $products_matchcols = explode(',',get_option('wp_gan_products_matchcols'));
+	  $products_matchpattern = get_option('wp_gan_products_matchpattern');
 	  $products_batchqueue = get_option('wp_gan_products_batchqueue');
 	  ?><div class="wrap"><div id="icon-gan-prod-options" class="icon32"><br /></div><h2><?php _e('Configure Product Options','gan'); ?><?php $this->gan->InsertVersion(); ?></h2>
 	    <?php $this->gan->PluginSponsor(); ?>
@@ -717,6 +725,31 @@ a.gan_prod_prodlink {
 			    }
 			} ?></td></tr>
 		  <tr valign="top">
+		    <th scope="row"><label for="gan_products_matchcols" style="width:20%;"><?php _e('Matchable Columns','gan'); ?></label></th>
+		    <td><?php
+			$cols = 0;
+			foreach (explode(',',GAN_PROD_TAGABLE_HEADERS) as $fieldname) {
+			  ?><input type="checkbox" 
+				   name="gan_products_matchcols[]" 
+				   value="<?php echo $fieldname; ?>"
+				   <?php if (in_array($fieldname,$products_matchcols))
+						echo ' checked="checked"'; ?> /><?php
+			    echo '&nbsp;'.$fieldname;
+			    $cols++;
+			    if ($cols < 5) echo '&nbsp;';
+			    else {
+				echo '<br />';
+				$cols = 0;
+			    }
+			} ?></td></tr>
+		  <tr valign="top">
+		    <th scope="row"><label for="gan_products_matchpattern" style="width:20%;"><?php _e("Column Match Pattern (don't forget the delimiters!):",'gan'); ?></label></th>
+		    <td><input id="gan_products_matchpattern"
+		    	       value="<?php echo $products_matchpattern; ?>"
+			       name="gan_products_matchpattern"
+			       style="width:75%;" /><br />
+			<a href="http://us.php.net/manual/en/reference.pcre.pattern.syntax.php"><?php _e('Pattern Syntax','gan'); ?></a></td></tr>
+		  <tr valign="top">
 		    <th scope="row"><label for="gan_products_batchqueue" style="width:20%;"><?php _e('Batch Queue:','gan'); ?></label></th>
 		    <td><input id="gan_products_batchqueue"
 		    	       value="<?php echo $products_batchqueue; ?>"
@@ -746,15 +779,17 @@ a.gan_prod_prodlink {
 	  $products_shoppress = get_option('wp_gan_products_shoppress');
 	  $products_postformat = get_option('wp_gan_products_postformat');
 	  $products_customfields = explode(',',get_option('wp_gan_products_customfields'));
+	  $products_matchcols = explode(',',get_option('wp_gan_products_matchcols'));
+	  $products_matchpattern = get_option('wp_gan_products_matchpattern');
 	  $count = 0;
-	  $skip_count = 0;
+	  $skip_index = 0;
 	  $zip = new ZipArchive;
 	  $res = $zip->open($item->zipfilepath);
 	  if ($res === TRUE) {
 	    $fp = $zip->getStream(basename($item->zipfilepath,'.zip').'.txt');
 	    $headers = explode("\t",fgets($fp));
 	    while ($line = fgets($fp)) {
-	      $skip_count++;
+	      $skip_index++;
 	      if ($skip_count < $skip) {continue;}
 	      $rowvect =  explode("\t",$line);
 	      $row = array();
@@ -762,19 +797,28 @@ a.gan_prod_prodlink {
 		$row[$header] = $rowvect[$index];
 	      }
 	      $rowobj = (OBJECT) $row;
-	      if ($products_shoppress == 'yes') {
-		GAN_Products::import_products_as_shoppress($rowobj,
-							   $item->MerchantID,
-							   $Advertiser);
-	      } else {
-		GAN_Products::import_products_as_other($rowobj,
-						       $products_postformat,
-						       $products_customfields,
-						       $item->MerchantID,
-						       $Advertiser);
+	      $matched = count($products_matchcols) == 0;
+	      foreach ($products_matchcols as $matchcolumn) {
+		if (preg_match($products_matchpattern,$row[$matchcolumn]) > 0) {
+		  $matched = true;
+		  break;
+		}
 	      }
-	      $count++;
-	      if (($count & 0x01ff) == 0) {
+	      if ($matched) {
+	        if ($products_shoppress == 'yes') {
+		  GAN_Products::import_products_as_shoppress($rowobj,
+							     $item->MerchantID,
+							     $Advertiser);
+	        } else {
+		  GAN_Products::import_products_as_other($rowobj,
+						         $products_postformat,
+						         $products_customfields,
+						         $item->MerchantID,
+						         $Advertiser);
+	        }
+	        $count++;
+	      }
+	      if (($skip_index & 0x01ff) == 0) {
 		$times = posix_times();
 		if ($times['utime'] > GAN_TIMELIMIT) {
 		  $products_batchqueue = get_option('wp_gan_products_batchqueue');
@@ -783,7 +827,7 @@ a.gan_prod_prodlink {
 		  }
 		  // Queue batch: $id,$skip_count
 		  $the_queue = explode(':',$products_batchqueue);
-		  $the_queue[] = sprintf("I,%d,%d",$id,$skip_count);
+		  $the_queue[] = sprintf("I,%d,%d",$id,$skip_index);
 		  $products_batchqueue = implode(':',$the_queue);
 		  update_option('wp_gan_products_batchqueue',$products_batchqueue);
 		  break;
