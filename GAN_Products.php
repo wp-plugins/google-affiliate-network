@@ -392,16 +392,17 @@ a.gan_prod_prodlink {
 	}
 	static function delete_sub_by_id($id) {
 	  GAN_Products::delete_import_job($id);
+	  
 	  $answer = GAN_Products::delete_products($id);
 	  $item =   GAN_Products::get_prod($id);
 	  if (get_option('wp_gan_products_shoppress') == 'yes') {
-	    $posts = get_posts( array('meta_key'        => 'datafeedr_merchant_id',
+	    $q = new WP_Query(  array('meta_key'        => 'datafeedr_merchant_id',
 				      'meta_value'      => $item->MerchantID) );
 	  } else {
-	    $posts = get_posts( array('meta_key'        => '_merchant_id',
+	    $q = new WP_Query(  array('meta_key'        => '_merchant_id',
 				      'meta_value'      => $item->MerchantID) );
 	  }
-	  if (count($posts) == 0) {
+	  if (!$q->have_posts()) {
 	    global $wpdb;
 	    $sql = $wpdb->prepare("DELETE FROM ".
 				  GAN_PRODUCT_SUBSCRIPTIONS_TABLE.
@@ -414,7 +415,7 @@ a.gan_prod_prodlink {
 	  } else {
 	    $answer .= '<p>'.
 		sprintf(__('%d pending posts to be deleted for %s.','gan'),
-			   count($posts),
+			   $q->found_posts,
 			   GAN_Database::get_merch_name($item->MerchantID)).
 		'</p>';
 	  }
@@ -1053,18 +1054,20 @@ a.gan_prod_prodlink {
 	static function delete_products($id) {
 	  $item =   GAN_Products::get_prod($id);
 	  if (get_option('wp_gan_products_shoppress') == 'yes') {
-	    $posts = get_posts( array('meta_key'        => 'datafeedr_merchant_id',
+	    $q = new WP_Query(  array('posts_per_page'  => 1000,
+				      'meta_key'        => 'datafeedr_merchant_id',
 				      'meta_value'      => $item->MerchantID) );
 	  } else {
-	    $posts = get_posts( array('meta_key'        => '_merchant_id',
+	    $q = new WP_Query(  array('posts_per_page'  => 1000,
+				      'meta_key'        => '_merchant_id',
 				      'meta_value'      => $item->MerchantID) );
 	  }
-	  if (count($posts) == 0) return '';
+	  if (!$q->have_posts()) return '';
 	  $count = 0;
-	  foreach ($posts as $p) {
-	    wp_delete_post($p->ID, true);
+	  for ($i = 0; $i < $q->post_count; $i++) {
+	    wp_delete_post($q->current_post, true);
 	    $count++;
-	    if (($count & 0x01ff) == 0) {
+	    if (($count & 0x00ff) == 0) {
 	      $times = posix_times();
 	      if ($times['utime'] > GAN_TIMELIMIT) {
 		$products_batchqueue = get_option('wp_gan_products_batchqueue');
@@ -1079,6 +1082,7 @@ a.gan_prod_prodlink {
 		break;
 	      }
 	    }
+    	    $q->next_post();
 	  }
 	  return sprintf(__('%d product posts deleted from %s.','gan'),
 			 $count,GAN_Database::get_merch_name($item->MerchantID) );
