@@ -591,7 +591,12 @@ a.gan_prod_prodlink {
 	    update_option('wp_gan_products_postformat',$products_postformat);
 	    $products_css = $_REQUEST['gan_products_css'];
 	    update_option('wp_gan_products_css',$products_css);
-	    $products_customfields = implode(',',$_REQUEST['gan_products_customfields']);
+	    $products_customfields_vec = $_REQUEST['gan_products_customfields'];
+	    if (empty($products_customfields_vec)) {
+	      $products_customfields = '';
+	    } else {
+	      $products_customfields = implode(',',$products_customfields_vec);
+	    }
 	    update_option('wp_gan_products_customfields',$products_customfields);
 	    $products_category_mode = $_REQUEST['gan_products_category_mode'];
 	    update_option('wp_gan_products_category_mode',$products_category_mode);
@@ -599,9 +604,19 @@ a.gan_prod_prodlink {
 	    update_option('wp_gan_products_category_treesep',$products_category_treesep);
 	    $products_category_maxtreedepth = $_REQUEST['gan_products_category_maxtreedepth'];
 	    update_option('wp_gan_products_category_maxtreedepth',$products_category_maxtreedepth);
-	    $products_tagheaders = implode(',',$_REQUEST['gan_products_tagheaders']);
+	    $products_tagheaders_vec = $_REQUEST['gan_products_tagheaders'];
+	    if (empty($products_tagheaders_vec)) {
+	      $products_tagheaders = '';
+	    } else {
+	      $products_tagheaders = implode(',',$products_tagheaders_vec);
+	    }
 	    update_option('wp_gan_products_tagheaders',$products_tagheaders);
-	    $products_matchcols = implode(',',$_REQUEST['gan_products_matchcols']);
+	    $products_matchcols_vec = $_REQUEST['gan_products_matchcols'];
+	    if (empty($products_matchcols_vec)) {
+	      $products_matchcols = '';
+	    } else {
+	      $products_matchcols = implode(',',$products_matchcols_vec);
+	    }
 	    update_option('wp_gan_products_matchcols',$products_matchcols);
 	    $products_matchpattern = $_REQUEST['gan_products_matchpattern'];
 	    update_option('wp_gan_products_matchpattern',$products_matchpattern);
