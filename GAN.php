@@ -400,18 +400,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 				  echo ' checked="checked" ';
 				}
 			?> /><?php _e('No','gan'); ?></td></tr>
-		  //<tr valign="top">
-		  //  <th scope="row"><label for="gan_disablesponsor" style="width:20%;"><?php _e('Disable PluginSponsor messages?','gan'); ?></label></th>
-		  //  <td><input type="radio" name="gan_disablesponsor" value="yes"<?php
-		  //		if ($disablesponsor == 'yes') {
-		  //		  echo ' checked="checked" ';
-		  //		} 
-		  //	?> /><?php _e('Yes','gan'); ?>&nbsp;<input type="radio" name="gan_disablesponsor" value="no"<?php
-		  //		if ($disablesponsor == 'no') {
-		  //		  echo ' checked="checked" ';
-		  //		}
-		  //	?> /><?php _e('No','gan'); ?></td></tr>
-		  <tr valign="top">
+		<tr valign="top">
 		    <th scope="row"><label for="gan_products" style="width:20%;"><?php _e('Enable GAN Products?','gan'); ?></label></th>
 		    <td><input type="radio" name="gan_products" value="yes"<?php
 				if ($products == 'yes') {
