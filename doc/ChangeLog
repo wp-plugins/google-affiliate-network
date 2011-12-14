@@ -4,7 +4,7 @@ Donate link: http://www.deepsoft.com/GAN
 Tags: gan,affiliate,widget,google,plugin,ads,shortcode
 Requires at least: 3.0
 Tested up to: 3.2.1
-Stable tag: 4.11
+Stable tag: 4.11.1
 
 A Widget / shortcode plugin to display Google Affiliate Network ads. 
 Both text links and image ads can be displayed.
@@ -107,6 +107,10 @@ a documentation bug at [Deepwoods Software's Bugzilla][bugreport] as well.
 4. Front side view, showing both textual ads and banner ads.
 
 == Changelog ==
+
+= 4.11.1 =
+* Mantainence release.  Plugin Sponsors is closed, disable it, and always 
+  display the PayPal Donate Button.
 
 = 4.11 =
 * Add support for product feeds *This code is experimental*.  Includes support
@@ -296,6 +300,10 @@ figures.
 * First official release.
 
 == Upgrade Notice ==
+
+= 4.11.1 =
+Maintaince release. Plugin Sponsors is closed, disable it, and always display
+the PayPal Donate Button.
 
 = 4.11 =
 Add support for product feeds. Note: the product feed code is still beta

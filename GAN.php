@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 4.11
+ * Version: 4.11.1
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -253,7 +253,9 @@ class GAN_Plugin {
 	}
 
 	function PluginSponsor() {
-	  if (get_option('wp_gan_disablesponsor') == 'yes') {
+	  /* Plugin Sponsors is closed, disable it, and always display 
+	     the PayPal Donate Button. */
+	  if (true || get_option('wp_gan_disablesponsor') == 'yes') {
 	    $this->InsertPayPalDonateButton();
 	  } else {
 	    ?><script type="text/javascript">
