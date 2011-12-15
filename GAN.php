@@ -263,6 +263,8 @@ var psHost = (("https:" == document.location.protocol) ? "https://" : "http://")
 document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/spsn/display.php?client=google-affiliate-network&spot=' type='text/javascript'%3E%3C/script%3E"));
 </script><?php
 	  }
+	  $helppageURL = add_query_arg(array('page' => 'gan-database-help'))
+	  ?><div id="gan_supportSmall"><a href="<?php echo $helppageURL.'#SupportGAN'; ?>"><?php _e('More ways to support the GAN project.','gan'); ?></a></div><br clear="all" /><?php
 	}
 	function InsertH2AffiliateLoginButton() {
 	  ?><p><a target="_blank" href="http://www.google.com/ads/affiliatenetwork/" class="button"><?php _e('Login into Google Affiliate Network','gan'); ?></a></p><?php
