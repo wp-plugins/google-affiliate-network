@@ -107,6 +107,9 @@ wp_enqueue_script( 'jquery-color' );
 		<option value="vertical" selected="selected"><?php _e('vertical','gan'); ?></option>
 		<option value="horizontal"><?php _e('horizontal','gan'); ?></option>
 	   </select>
+	<p>
+	  <?php GAN_Database::merchdropdown(""); ?>
+	</p>
 	</p><label for="target"><?php _e('Target:','gan'); ?></label>
 	    <select id="target" name="target" class="widefat" style="width:75%;">
 		<option value="same" selected="selected"><?php _e('Same Window','gan'); ?></option>
@@ -129,6 +132,7 @@ wp_enqueue_script( 'jquery-color' );
 	  var imsize = document.getElementById('gan-imsize').value.split('x');
 	  var imwidth = parseInt(imsize[0]); var imheight = parseInt(imsize[1]);
 	  var orientation = document.getElementById('orientation').value;
+	  var merchid = document.getElementById('gan-merchid').value;
 	  var ifwidth;
 	  var ifheight;
 	  switch (orientation) {
@@ -154,12 +158,14 @@ wp_enqueue_script( 'jquery-color' );
 	document.getElementById('maxads').onchange = changeupdate;
 	document.getElementById('gan-imsize').onchange = changeupdate;
 	document.getElementById('orientation').onchange = changeupdate;
+	document.getElementById('gan-merchid').onchange = changeupdate;
 	jQuery('.insertad').click(function(){
 		var win = window.dialogArguments || opener || parent || top;
 		var maxads = parseInt(jQuery('#maxads').val());
 		var imsize = jQuery('#gan-imsize').val().split('x');
 		var imwidth = parseInt(imsize[0]); var imheight = parseInt(imsize[1]);
 		var orientation = jQuery('#orientation').val();
+		var merchid = document.getElementById('gan-merchid').value;
 		var target = jQuery('#target').val();
 		var ifwidth = jQuery('#ifwidth').val();
 		var ifheight = jQuery('#ifheight').val();
@@ -181,7 +187,8 @@ wp_enqueue_script( 'jquery-color' );
 					'" maxads="'+maxads+
 					'" ifwidth="'+ifwidth+
 					'" ifheight="'+ifheight+
-					'" target="'+target+'"]');
+					'" target="'+target+
+					'" merchid="'+merchid+'"]');
 		} else {
 		   win.send_to_editor('[GAN_Image orientation="'+orientation+
 					'" maxads="'+maxads+
@@ -189,7 +196,8 @@ wp_enqueue_script( 'jquery-color' );
 					'" height="'+imheight+
 					'" ifwidth="'+ifwidth+
 					'" ifheight="'+ifheight+
-					'" target="'+target+'"]');
+					'" target="'+target+
+					'" merchid="'+merchid+'"]');
 		}
 	});
 	/* ]]> */
