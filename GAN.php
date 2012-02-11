@@ -756,7 +756,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	  add_contextual_help($screenid,$help);
 	}
 	function add_media_button() {
-	  $url = GAN_PLUGIN_URL.'/GAN_InsertAdUnit.php?TB_iframe=true&amp;height=700&amp;width=640';
+	  $url = GAN_PLUGIN_URL.'/GAN_InsertAdUnit.php?TB_iframe=true&amp;height=750&amp;width=640';
 	  if (is_ssl()) $url = str_replace( 'http://', 'https://',  $url );
 	  echo '<a href="'.$url.'" class="thickbox" title="'.
 			__('Add Ad Unit','gan').'"><img src="'.
