@@ -81,6 +81,26 @@ ul#gan-admin-tabs li a.selected{
 	background: transparent url(../images/GANicons32.png) no-repeat -315px -5px;
 }
 
+#icon-gan-add-prod-db {
+	background: transparent url(../images/GANicons32.png) no-repeat -64px -47px;
+}
+
+#icon-gan-edit-prod-db {
+	background: transparent url(../images/GANicons32.png) no-repeat -131px -47px;
+}
+
+#icon-gan-view-prod-db {
+	background: transparent url(../images/GANicons32.png) no-repeat -363px -47px;
+}
+
+#icon-gan-prod-db {
+	background: transparent url(../images/GANicons32.png) no-repeat -12px -47px;
+}
+
+#icon-gan-prod-imp {
+	background: transparent url(../images/GANicons32.png) no-repeat -177px -47px;
+}
+
 .gantops_table td.value {
 	background-image: url(../images/gridline58.gif);
 	background-repeat: repeat-x;

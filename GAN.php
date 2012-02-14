@@ -39,8 +39,6 @@ define('GAN_PATH', GAN_DIR . '/' . GAN_FILE);
 
 /* Load Database code */
 require_once(GAN_DIR . "/GAN_Database.php");
-/* Load Product code */
-require_once(GAN_DIR.'/GAN_Products.php');
 
 /* Main plugin class. Implements the basic admin functions of the plugin. */
 class GAN_Plugin {
@@ -56,7 +54,6 @@ class GAN_Plugin {
 	var $product_stats_list_table;
 	var $ad_stats_list_table;
 	var $merch_stats_list_table;
-	var $products_processing;
 
 	var $admin_tabs;
 	var $admin_tablist;
@@ -77,12 +74,6 @@ class GAN_Plugin {
 		add_action('gan_daily_event',array($this,'daily_work'));
 		add_option('wp_gan_autoexpire','yes');
 	        add_option('wp_gan_disablesponsor','yes');
-		add_option('wp_gan_products','no');	/* products */
-
-		if (get_option('wp_gan_products') == 'yes') {
-		  $this->products_processing = new GAN_Products($this);
-		}
-
 
 		load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',
 					  basename(GAN_DIR).'/languages/');
@@ -527,8 +518,6 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	    update_option('wp_gan_autoexpire',$autoexpire);
 	    //$disablesponsor = $_REQUEST['gan_disablesponsor'];
 	    //update_option('wp_gan_disablesponsor',$disablesponsor);
-	    $products = $_REQUEST['gan_products'];
-	    update_option('wp_gan_products',$products);
 	    ?><div id="message"class="updated fade"><p><?php _e('Options Saved','gan'); ?></p></div><?php
 	  } else if ( isset($_REQUEST['upgradedatabase']) ) {
 	    GAN_Database::upgrade_database();
@@ -537,7 +526,6 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	  /* Head of page, filter and screen options. */
 	  $autoexpire = get_option('wp_gan_autoexpire');
 	  //$disablesponsor = get_option('wp_gan_disablesponsor');
-	  $products = get_option('wp_gan_products');
 	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-options'); ?><br clear="all" />
 	    <div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?><?php $this->InsertVersion(); ?></h2>
 	    <?php $this->PluginSponsor(); ?>
@@ -552,17 +540,6 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 				} 
 			?> /><?php _e('Yes','gan'); ?>&nbsp;<input type="radio" name="gan_autoexpire" value="no"<?php
 				if ($autoexpire == 'no') {
-				  echo ' checked="checked" ';
-				}
-			?> /><?php _e('No','gan'); ?></td></tr>
-		<tr valign="top">
-		    <th scope="row"><label for="gan_products" style="width:20%;"><?php _e('Enable GAN Products?','gan'); ?></label></th>
-		    <td><input type="radio" name="gan_products" value="yes"<?php
-				if ($products == 'yes') {
-				  echo ' checked="checked" ';
-				} 
-			?> /><?php _e('Yes','gan'); ?>&nbsp;<input type="radio" name="gan_products" value="no"<?php
-				if ($products == 'no') {
 				  echo ' checked="checked" ';
 				}
 			?> /><?php _e('No','gan'); ?></td></tr>
