@@ -129,7 +129,8 @@ if (isset($_REQUEST['products'])) {
 		?><a href="<?php echo $GANProd['Tracking_URL'];
 		?>" target="<?php echo $instance['target'];
 		?>"><?php echo $GANProd['Product_Name']; ?></a> <?php
-		echo $GANProd['Product_Descr']; ?></p><?php
+		echo $GANProd['Product_Descr']; 
+		?> Price: $<?php echo $GANProd['Price']; ?></p><?php
       }
     }
   }
