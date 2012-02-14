@@ -11,6 +11,26 @@ iframe.GANleader {
 /*  top: 0pt;*/
 }
 
+
+img.GANleader, img.GANright {
+  border: 0;
+}
+
+img.GANleader {
+  float: left;
+  right-margin: 10px;
+}
+
+img.GANright {
+  clear: both;
+  bottom-margin: 10px;
+}
+
+p.GANleader, p.GANright {
+  font-size: 60%;
+  font-family: sans-serif;
+}
+
 ul#GANleader {
 list-style:none;
 list-style-type:none;

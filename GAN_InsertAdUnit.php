@@ -94,9 +94,19 @@ wp_enqueue_script( 'jquery-color' );
 	do_action('admin_head');
 	if ( isset($content_func) && is_string($content_func) )
 		do_action( "admin_head_{$content_func}" );
+	$tab = isset($_REQUEST['tab'])?$_REQUEST['tab']:'links';
+	
 	?>
 </head>
 <body id="media-upload">
+<div id="media-upload-header">
+	<ul id="sidemenu">
+	<li id="tab-links"><a <?php if ($tab=='links') echo "class='current'"; ?> href="GAN_InsertAdUnit.php?tab=links">Insert Links</a></li>
+	<li id="tab-products"><a <?php if ($tab=='products') echo "class='current'"; ?> href="GAN_InsertAdUnit.php?tab=products">Insert Products</a></li>
+	</ul></div>
+	<?php
+	  switch ($tab) {
+	    case 'links': ?>
 <form style="clear:both" class="media-upload-form">
 	<p><label for="maxads"><?php _e('Max ads:','gan'); ?></label>
 	   <input id="maxads" value="4" name="maxads" style="width:75%;" />
@@ -165,7 +175,7 @@ wp_enqueue_script( 'jquery-color' );
 		var imsize = jQuery('#gan-imsize').val().split('x');
 		var imwidth = parseInt(imsize[0]); var imheight = parseInt(imsize[1]);
 		var orientation = jQuery('#orientation').val();
-		var merchid = document.getElementById('gan-merchid').value;
+		var merchid = jQuery('#gan-merchid').val();
 		var target = jQuery('#target').val();
 		var ifwidth = jQuery('#ifwidth').val();
 		var ifheight = jQuery('#ifheight').val();
@@ -201,7 +211,101 @@ wp_enqueue_script( 'jquery-color' );
 		}
 	});
 	/* ]]> */
-</script>
+</script><?php
+	      break;
+	    case 'products': ?>
+<form style="clear:both" class="media-upload-form">
+	<p><label for="orientation"><?php _e('Orientation:','gan'); ?></label>
+	   <select id="orientation" name="orientation" class="widefat" style="width:75%;">
+		<option value="vertical" selected="selected"><?php _e('vertical','gan'); ?></option>
+		<option value="horizontal"><?php _e('horizontal','gan'); ?></option>
+	   </select>
+	<p>
+	<p>
+	  <?php GAN_Database::merchdropdown(""); ?>
+	</p>
+	</p><label for="target"><?php _e('Target:','gan'); ?></label>
+	    <select id="target" name="target" class="widefat" style="width:75%;">
+		<option value="same" selected="selected"><?php _e('Same Window','gan'); ?></option>
+		<option value="new"><?php _e('New Window or Tab','gan'); ?></option>
+	   </select>
+	    <p>
+		<label for="namepat"><?php _e('Name Pattern','gan'); ?></label>
+		<input id="namepat"
+			value=""
+			name="namepat"
+			style="width:100%;" />
+	    </p>
+	    <p>
+		<label for="catpat"><?php _e('Category Pattern','gan'); ?></label>
+		<input id="catpat"
+			value=""
+			name="catpat"
+			style="width:100%;" />
+	    </p>
+	    <p>
+		<label for="brandpat"><?php _e('Brand Pattern','gan'); ?></label>
+		<input id="brandpat"
+			value=""
+			name="brandpat"
+			style="width:100%;" />
+	    </p>
+	<p><label for="ifwidth"><?php _e('Product frame width:','gan'); ?></label>
+	   <input id="ifwidth" name="ifwidth" value="" style="width:75%;" />
+	</p>
+	<p><label for="ifheight"><?php _e('Product frame height:','gan'); ?></label>
+	   <input id="ifheight" name="ifheight" value="" style="width:75%;" />
+	</p>
+	<p>
+	<a href="#" class="button insertprod"><?php _e('Insert Product Ad','gan'); ?></a>
+	</p>
+</form>
+<script type="text/javascript">
+	/* <![CDATA[ */
+	function changeupdate() {
+	  var orientation = document.getElementById('orientation').value;
+	  var ifwidth = document.getElementById('ifwidth').value;
+	  var ifheight = document.getElementById('ifheight').value;
+	  switch (orientation) {
+	    case "vertical":
+	      if (ifwidth == '') ifwidth = 120;
+	      document.getElementById('ifwidth').value = ifwidth;
+	      if (ifheight == '') ifheight = 600;
+	      document.getElementById('ifheight').value = ifheight;
+	      break;
+	    case "horizontal":
+	      if (ifwidth == '') ifwidth = 468;
+	      document.getElementById('ifwidth').value = ifwidth;
+	      if (ifheight == '') ifheight = 150;
+	      document.getElementById('ifheight').value = ifheight;
+	      break;
+	  }
+	  return false;
+	}
+	document.getElementById('orientation').onchange = changeupdate;
+	jQuery('.insertprod').click(function(){
+		var win = window.dialogArguments || opener || parent || top;
+		var orientation = jQuery('#orientation').val();
+		var merchid = jQuery('#gan-merchid').val();
+		var namepat = jQuery('#namepat').val();
+		var catpat = jQuery('#catpat').val();
+		var brandpat = jQuery('#brandpat').val();
+		var target = jQuery('#target').val();
+		var ifwidth = jQuery('#ifwidth').val();
+		var ifheight = jQuery('#ifheight').val();
+		win.send_to_editor('[GAN_Product orientation="'+orientation+
+				      '" ifwidth="'+ifwidth+
+				      '" ifheight="'+ifheight+
+				      '" target="'+target+
+				      '" merchid="'+merchid+
+				      '" namepat="'+namepat+
+				      '" catpat="'+namepat+
+				      '" brandpat="'+namepat+'"]');
+	});
+	/* ]]> */
+</script><?php
+	      break;
+	  } ?>
 </body>
 </html>
 

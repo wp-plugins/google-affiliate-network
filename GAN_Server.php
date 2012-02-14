@@ -61,7 +61,14 @@ if (!isset($_REQUEST['ulid']) && !isset($_REQUEST['maxads']) ) {
 }
 
 /* Load parameters */
-$instance = array( 'ulid' => $_REQUEST['ulid'], 'maxads' => $_REQUEST['maxads'] );
+$instance = array( 'ulid' => $_REQUEST['ulid'] );
+if (isset($_REQUEST['products'])) {
+  $instance['namepat'] = $_REQUEST['namepat'];
+  $instance['catpat'] = $_REQUEST['catpat'];
+  $instance['brandpat'] = $_REQUEST['brandpat'];
+} else {
+  $instance['maxads'] = $_REQUEST['maxads'];
+}
 if ( isset($_REQUEST['target']) ) {
   $instance['target'] = $_REQUEST['target'];
 } else {
@@ -75,10 +82,58 @@ if ( isset($_REQUEST['merchid']) ) {
 
 ?><div style="margin:0px;padding:0px"><?php
 
-/* Text or image ads? If height and width are not set (or are 0), serve text 
+/* Product, text or image ads? If height and width are not set (or are 0), serve text 
  * ads */
 
-if ((!isset($_REQUEST['height']) || $_REQUEST['height'] == "0") && 
+if (isset($_REQUEST['products'])) {
+  if ($instance['merchid'] != '') {
+    $merchlist[] = $instance['merchid'];
+  } else {
+    $merchlist = GAN_Database::ordered_merchants_prods();
+  }
+  echo "\n"; ?><!-- merchlist is <?php print_r($merchlist); ?> --><?php
+  if (! empty($merchlist) ) {
+    $numads = 0;
+    while ($numads < 1) {
+      foreach ($merchlist as $merchid) {
+        $prods = GAN_Database::ordered_prod_ads($merchid,$instance['namepat'],
+						$instance['catpat'],
+						$instance['brandpat']);
+        if (count($prods) == 0) continue;
+      }
+      if (count($prods) == 0) {
+	if ($instance['brandpat'] != '') {
+	  $instance['brandpat'] = '';
+	} else if ($instance['catpat'] != '') {
+	  $instance['catpat'] = '';
+	} else if ($instance['namepat'] != '') {
+	  $instance['namepat'] = '';
+	} else {
+	  break;
+	}
+      } else {
+	echo "\n"; ?><!-- prods is <?php print_r($prods); ?> --><?php
+	$GANProd = GAN_Database::get_product($prods[0]);
+	echo "\n"; ?><!-- GANProd  is <?php print_r($GANProd); ?> --><?php
+	GAN_Database::bump_product_counts($prods[0]);
+	$numads++;
+	?><p class="<?php echo $instance['ulid']; 
+		?>"><a href="<?php echo $GANProd['Tracking_URL']; 
+		?>" target="<?php echo $instance['target']; 
+		?>"><img class="<?php echo $instance['ulid'];
+		?>" src="<?php echo $GANProd['Creative_URL'];
+		?>" alt="<?php echo $GANProd['Product_Name']; 
+		?>" /></a><?php 
+		   if ($instance['ulid'] == 'GANright') 
+		      echo '<br clear="all" />'; 
+		?><a href="<?php echo $GANProd['Tracking_URL'];
+		?>" target="<?php echo $instance['target'];
+		?>"><?php echo $GANProd['Product_Name']; ?></a> <?php
+		echo $GANProd['Product_Descr']; ?></p><?php
+      }
+    }
+  }
+} else if ((!isset($_REQUEST['height']) || $_REQUEST['height'] == "0") && 
     (!isset($_REQUEST['width'])  || $_REQUEST['width'] == "0") ) {
 	$maxads = $instance['maxads'];
 	//echo "\n<!-- GAN_Widget::widget: \$maxads (1) = " . $maxads . " -->";

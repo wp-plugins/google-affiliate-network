@@ -44,5 +44,7 @@ define('GAN_MERCH_STATS_TABLE',$wpdb->prefix . "DWS_GAN_MERCH_STATS");
 /* Views (combinations of Ad database and statistics tables) */
 define('GAN_AD_STATS_TABLE_VIEW',$wpdb->prefix . "DWS_GAN_AD_STATS_VIEW");
 define('GAN_MERCH_STATS_TABLE_VIEW',$wpdb->prefix . "DWS_GAN_MERCH_STATS_VIEW");
+/* 3.1 Tables: GAN_ProdAdTable */
+define('GAN_PRODUCTS_AD_TABLE',$wpdb->prefix . "dws_gan_products_ad_table");
 }
 ?>

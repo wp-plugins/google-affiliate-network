@@ -49,6 +49,11 @@ class GAN_Plugin {
 	var $database_screen_id;
 	var $add_db_screen_id;
 	var $add_db_bulk_screen_id;
+	var $product_database_page_screen_id;
+	var $product_add_db_screen_id;
+	var $product_add_db_bulk_screen_id;
+	var $product_db_list_table;
+	var $product_stats_list_table;
 	var $ad_stats_list_table;
 	var $merch_stats_list_table;
 	var $products_processing;
@@ -103,7 +108,8 @@ class GAN_Plugin {
 		if ($dbvers == 0.0) {
 		  GAN_Database::make_ad_table();
 		  GAN_Database::make_merchs_table();
-		} else if ($dbvers < 3.0) {
+		  GAN_Database::make_products_ad_table();
+		} else if ($dbvers < 3.1) {
 		  GAN_Database::upgrade_database();
 		}
 		wp_schedule_event(mktime(2,0,0), 'daily', 'gan_daily_event');
@@ -119,6 +125,8 @@ class GAN_Plugin {
 	  add_shortcode('GAN_Text', array('GAN_Widget','shortcode'));
 	  register_widget( 'GAN_ImageWidget' );   /* Image links */
 	  add_shortcode('GAN_Image', array('GAN_ImageWidget','shortcode'));
+	  register_widget( 'GAN_Product_Widget' );        /* Products */
+	  add_shortcode('GAN_Product', array('GAN_Product_Widget','shortcode'));
 	}
 
 	/* Add in our Admin Menu */
@@ -128,28 +136,52 @@ class GAN_Plugin {
 	  $this->database_screen_id = add_menu_page( __('GAN Database','gan'), __('GAN DB','gan'), 'manage_options', 
 		 'gan-database-page', array($this,'admin_database_page'), 
 		 GAN_PLUGIN_IMAGE_URL.'/GAN_menu.png');
-	  $this->admin_tabs['gan-database-page'] = __('GAN DB','gan');
+	  $this->admin_tabs['gan-database-page'] = __('GAN Link DB','gan');
 	  $this->admin_tablist[] = 'gan-database-page';
 	  add_action("load-$this->database_screen_id", array($this,'_init_db_list_table') );
 	  $this->add_contentualhelp($this->database_screen_id,'gan-database-page');
 
-	  $this->add_db_screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN DB element','gan'), 
-		    __('Add new','gan'), 
+	  $this->add_db_screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN Link','gan'), 
+		    __('Add new link','gan'), 
 		    'manage_options', 'gan-database-add-element', 
 		    array($this,'admin_add_element'));
-	  $this->admin_tabs['gan-database-add-element'] = __('Add new','gan');
-	  $this->admin_tablist[] = 'gan-database-add-element';
+	  /*$this->admin_tabs['gan-database-add-element'] = __('Add new','gan');*/
+	  /*$this->admin_tablist[] = 'gan-database-add-element';*/
 	  add_action("load-$this->add_db_screen_id", array($this,'_init_add_db_list_table') );
 	  $this->add_contentualhelp($this->add_db_screen_id,'gan-database-add-element');
 
-	  $this->add_db_bulk_screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN DB elements in bulk','gan'), 
-		    __('Add new bulk','gan'), 
+	  $this->add_db_bulk_screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN Links in bulk','gan'), 
+		    __('Add new bulk links','gan'), 
 		    'manage_options', 'gan-database-add-element-bulk', 
 		    array($this,'admin_add_element_bulk'));
-	  $this->admin_tabs['gan-database-add-element-bulk'] = __('Add new bulk','gan');
-	  $this->admin_tablist[] = 'gan-database-add-element-bulk';
+	  /*$this->admin_tabs['gan-database-add-element-bulk'] = __('Add new bulk','gan');*/
+	  /*$this->admin_tablist[] = 'gan-database-add-element-bulk';*/
 	  add_action("load-$this->add_db_bulk_screen_id", array($this,'_init_add_db_list_table') );
 	  $this->add_contentualhelp($this->add_db_bulk_screen_id,'gan-database-add-element-bulk');
+
+	  $this->product_database_page_screen_id = add_submenu_page( 
+		    'gan-database-page', __('GAN Product DB','gan'), 
+		    __('GAN Product DB','gan'), 'manage_options', 
+		    'gan-prod-database-page', 
+		    array($this,'admin_product_database_page'));
+	  $this->admin_tabs['gan-prod-database-page'] = __('GAN Product DB','gan');
+	  $this->admin_tablist[] = 'gan-prod-database-page';
+	  add_action("load-$this->product_database_page_screen_id", array($this,'_init_product_database_list_table') );
+	  $this->add_contentualhelp($this->product_database_page_screen_id,'gan-prod-database-page');
+
+	  $this->product_add_db_screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN Product','gan'),
+		__('Add new product','gan'), 'manage_options',
+		'gan-database-add-product',
+		array($this,'admin_add_product_database_page'));
+	  add_action("load-$this->product_add_db_screen_id", array($this,'_init_add_product_database_list_table') );
+	  $this->add_contentualhelp($this->product_add_db_screen_id,'gan-database-add-product');
+
+	  $this->product_add_db_bulk_screen_id = add_submenu_page( 'gan-database-page', __('Add new GAN Products in bulk','gan'),
+		__('Add new products in bulk','gan'), 'manage_options',
+		'gan-database-add-product-bulk',
+		array($this,'admin_add_product_bulk_database_page'));
+	  add_action("load-$this->product_add_db_bulk_screen_id", array($this,'_init_add_product_database_list_table') );
+	  $this->add_contentualhelp($this->product_add_db_bulk_screen_id,'gan-database-add-product-bulk');
 
 	  $screen_id = add_submenu_page( 'gan-database-page', __('Ad Impression Statistics','gan'),
 	  	    __('Ad Stats','gan'),
@@ -159,6 +191,15 @@ class GAN_Plugin {
 	  $this->admin_tablist[] = 'gan-database-ad-impstats';
 	  add_action("load-$screen_id", array($this,'_init_ad_stats_list_table') );
 	  $this->add_contentualhelp($screen_id,'gan-database-ad-impstats');
+
+	  $screen_id = add_submenu_page( 'gan-database-page', __('Product Impression Statistics','gan'),
+	  	    __('Product Stats','gan'),
+		    'manage_options', 'gan-database-prod-impstats',
+		    array($this,'admin_prod_impstats'));
+	  $this->admin_tabs['gan-database-prod-impstats'] = __('Product Stats','gan');
+	  $this->admin_tablist[] = 'gan-database-prod-impstats';
+	  add_action("load-$screen_id", array($this,'_init_prod_stats_list_table') );
+	  $this->add_contentualhelp($screen_id,'gan-database-prod-impstats');
 
 	  $screen_id = add_submenu_page( 'gan-database-page', __('Merchant Impression Statistics','gan'),
 	  	    __('Merchant Stats','gan'),
@@ -228,6 +269,13 @@ class GAN_Plugin {
 	    $this->ad_stats_list_table = new Ad_Stats_List_Table();
 	  }
 	}
+	function _init_prod_stats_list_table() {
+	  add_screen_option('per_page',array('label' => __('Rows','gan')));
+	  $this->register_List_Table('Prod_Stats_List_Table');
+	  if (! isset($this->product_stats_list_table) ) {
+	    $this->product_stats_list_table = new Prod_Stats_List_Table();
+	  }
+	}
 	function _init_merch_stats_list_table() {
 	  add_screen_option('per_page',array('label' => __('Rows','gan') ));
 	  $this->register_List_Table('Merch_Stats_List_Table');
@@ -245,6 +293,12 @@ class GAN_Plugin {
 		return $class;
 	    case 'Merch_Stats_List_Table':
 		require_once GAN_DIR . '/Merch_Stats_List_Table.php';
+		return $class;
+	    case 'Prod_Stats_List_Table':
+		require_once GAN_DIR . '/Prod_Stats_List_Table.php';
+		return $class;
+	    case 'GAN_Product_List_Table':
+		require_once GAN_DIR . '/GAN_Product_List_Table.php';
 		return $class;
 	  }
 	}	
@@ -354,6 +408,17 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 		<?php $this->ad_stats_list_table->display(); ?></form></div><?php
 	}
 
+	function admin_prod_impstats() {
+	  $this->product_stats_list_table->prepare_items();
+	  /* Head of page, filter and screen options. */
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-prod-impstats'); ?><br clear="all" />
+	    <div id="icon-gan-prod-imp" class="icon32"><br /></div><h2><?php _e('Product Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
+	    <?php $this->PluginSponsor(); ?>
+	    <form method="post" action="">
+	    	<input type="hidden" name="page" value="gan-database-prod-impstats" />
+		<?php $this->product_stats_list_table->display(); ?></form></div><?php
+	}
+
 	function admin_merch_impstats() {
 	  $this->merch_stats_list_table->prepare_items();
 	  /* Head of page, filter and screen options. */
@@ -363,6 +428,92 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	    <form method="post" action="">
 		<input type="hidden" name="page" value="gan-database-merch-impstats" />
 		<?php $this->merch_stats_list_table->display(); ?></form></div><?php
+	}
+
+	function admin_product_database_page() {
+	  $this->product_db_list_table->prepare_items();
+	  /* Head of page, filter and screen options. */
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-prod-database-page'); ?><br clear="all" />
+	    <div id="icon-gan-prod-db" class="icon32"><br /></div>
+	    <h2><?php _e('GAN Product Database','gan'); ?> <a href="<?php 
+		echo add_query_arg(
+		   array('page' => 'gan-database-add-product',
+			 'mode' => 'add',
+			 'id' => false)); 
+		?>" class="button add-new-h2"><?php _e('Add New','gan'); 
+		?></a> <a href="<?php 
+		echo add_query_arg(
+		   array('page' => 'gan-database-add-product-bulk')); 
+		?>" class="button add-new-h2"><?php 
+			_e('Add New in Bulk','gan'); ?></a><?php 
+					$this->InsertVersion(); ?></h2>
+	    <?php $this->PluginSponsor(); ?>
+	    <form method="post" action="">
+		<input type="hidden" name="page" value="gan-prod-database-page" />
+		<?php $this->product_db_list_table->display(); ?></form></div><?php
+	}
+
+	function _init_product_database_list_table() {
+	  add_screen_option('per_page',array('label' => __('Rows','gan')) );
+	  $this->_init_add_product_database_list_table();
+	}
+	function _init_add_product_database_list_table() {
+	  $this->register_List_Table('GAN_Product_List_Table');
+	  if (! isset($this->product_db_list_table) ) {
+	    $this->product_db_list_table = new GAN_Product_List_Table();
+	    $this->product_db_list_table->set_row_actions(
+		array( __('Edit','gan') => add_query_arg(
+					array('page' => 'gan-database-add-product',
+					      'mode' => 'edit'),
+					admin_url('admin.php')),
+		       __('View','gan') => add_query_arg(
+					array('page' => 'gan-database-add-product',
+					      'mode' => 'view'),
+					admin_url('admin.php')),
+		       __('Delete','gan') => add_query_arg(
+					array('page' => 'gan-prod-database-page',
+					      'action' => 'delete'),
+					admin_url('admin.php')),
+		       __('Toggle Enable','gan') => add_query_arg(
+					array('page' => 'gan-prod-database-page',
+					      'action' => 'enabletoggle'),
+					admin_url('admin.php')) ));
+	  }					      
+	}
+
+	function admin_add_product_database_page() {
+	  $message = $this->product_db_list_table->prepare_one_item();
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-add-product'); ?><br clear="all" />
+	    <div id="<?php echo $this->product_db_list_table->add_item_icon(); ?>" class="icon32"><br />
+	    </div><h2><?php echo $this->product_db_list_table->add_item_h2(); ?><?php   
+				     $this->InsertVersion(); ?></h2>
+	    <?php $this->PluginSponsor(); 
+		  $this->InsertH2AffiliateLoginButton(); ?>
+	    <?php if ($message != '') {
+		?><div id="message" class="update fade"><?php echo $message; ?></div><?php
+		} ?>
+	    <form action="<?php echo admin_url('admin.php'); ?>" method="get">
+	    <input type="hidden" name="page" value="gan-database-add-product" />
+	    <?php $this->product_db_list_table->display_one_item_form(
+			add_query_arg(array('page' => 'gan-prod-database-page',
+			'mode' => false, 
+			'id' => false))); ?></form></div><?php
+	}
+
+	function admin_add_product_bulk_database_page() {
+	  $message = $this->product_db_list_table->process_bulk_upload();
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-add-product-bulk'); ?><br clear="all" />
+	    <div id="icon-gan-add-prod-db" class="icon32"><br />
+	    </div><h2><?php _e('Add Products in bulk to the GAN Database','gan'); ?><?php   
+                                     $this->InsertVersion(); ?></h2>
+	    <?php $this->PluginSponsor(); 
+		  $this->InsertH2AffiliateLoginButton(); ?>
+	    <?php if ($message != '') {
+		?><div id="message" class="update fade"><?php echo $message; ?></div><?php
+		} ?>
+	    <form method="post" action=""  enctype="multipart/form-data" >
+	    <input type="hidden" name="page" value="gan-database-add-product-bulk" />
+	    <?php $this->product_db_list_table->display_bulk_upload_form(add_query_arg(array('page' => 'gan-prod-database-page'))); ?></form></div><?php
 	}
 
 	function admin_configure_options() {
@@ -420,7 +571,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options','gan'); ?>" />
 		</p><?php 
 		?><span id="gan_dash_version"><?php printf(__('Database Version: %3.1f','gan'),GAN_Database::database_version()) ?></span><br /><?php
-		if (GAN_Database::database_version() < 3.0) {
+		if (GAN_Database::database_version() < 3.1) {
 		  ?><p><?php _e('Your database needs to be upgraded.','gan'); ?>&nbsp;<input type="submit" name="upgradedatabase" class="button-primary" value="<?php _e('Upgrade Database','gan'); ?>"></p><?php
 		} ?></form></div><?php
 	}
@@ -439,6 +590,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	function wp_dashboard_setup() {
 	  if (current_user_can( 'manage_options' )) {
 	    wp_add_dashboard_widget('gan_dashboard_widget', __('GAN Database Stats','gan'), array($this,'database_stats_widget'));
+	    if (GAN_Database::database_version() >= 3.1) wp_add_dashboard_widget('gan_proddashboard_widget', __('GAN Product Database Stats','gan'), array($this,'product_database_stats_widget'));
 	    wp_add_dashboard_widget('ganimp_dashboard_widget', __('GAN Impression Stats','gan'), array($this,'impression_stats_widget'));
 	  }
 	}
@@ -466,6 +618,27 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 			echo add_query_arg(array('page' => 'gan-database-page'),
 					   admin_url('admin.php')); 
 			?>" style="float:right;" class="button"><?php _e('Manage the GAN ad DB','gan'); 
+		?></a><br clear="all" />
+		<?php $this->InsertDashVersion(); ?><br clear="all" />
+		</div><?php 
+	}
+	/* Product Database statisics dashboard widget */
+	function product_database_stats_widget() {
+
+	  $total_products = GAN_Database::total_products();
+	  $disabled  = GAN_Database::disabled_product_count();
+
+	  ?><div class="table">
+		<table class="ganstats">
+		<tr><td class="ganstats_total"><?php echo $total_products; ?></td>
+		    <td class="ganstats_label"><?php _e('Total products','gan'); ?></td>
+		    <td class="ganstats_total"><?php echo $disabled; ?></td>
+		    <td class="ganstats_label"><?php _e('Disabled','gan'); ?></td></tr>
+		</table>
+		<a href="<?php 
+			echo add_query_arg(array('page' => 'gan-prod-database-page'),
+					   admin_url('admin.php')); 
+			?>" style="float:right;" class="button"><?php _e('Manage the GAN product DB','gan'); 
 		?></a><br clear="all" />
 		<?php $this->InsertDashVersion(); ?><br clear="all" />
 		</div><?php 
@@ -589,6 +762,65 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 			echo add_query_arg(array('page' => 'gan-database-ad-impstats'),
 					   admin_url('admin.php')); 
 			?>" style="float:right;" class="button"><?php _e('Detailed Ad Stats','gan'); 
+		?></a><br clear="all" />
+	  <?php
+	  $top_products = GAN_Database::top_products();
+	  $product_statistics = GAN_Database::product_statistics();
+	  $max_product_impressions = GAN_Database::max_product_impressions();
+	  ?>
+	  <h4 style="width: 100%;text-align: center;">Products</h4><br />
+	  <table class="ganstats_table" width="100%">
+	    <thead>
+		<tr>
+		   <th scope="col"><?php _e('Maximum','gan'); ?></th><th scope="col"><?php _e('Minimum','gan'); ?></th>
+		   <th scope="col"><?php _e('Average','gan'); ?></th><th scope="col"><?php _e('Std. Deviation','gan'); ?></th>
+		   <th scope="col"><?php _e('Variance','gan'); ?></th></tr>
+	    <tbody>
+		<tr>
+		   <td width="20%" style="text-align: center;"><?php echo $product_statistics['maximum']; ?></td>
+		   <td width="20%" style="text-align: center;"><?php echo $product_statistics['minimum']; ?></td>
+		   <td width="20%" style="text-align: center;"><?php echo $product_statistics['average']; ?></td>
+		   <td width="20%" style="text-align: center;"><?php echo $product_statistics['std_deviation']; ?></td>
+		   <td width="20%" style="text-align: center;"><?php echo $product_statistics['variance']; ?></td></tr>
+	    </tbody>
+	  </table>
+	  <table class="gantops_table" width="100%">
+	  <tbody>
+		<tr>
+		   <th scope="col"><span class="auraltext"><?php _e('Product','gan'); ?></span> </th>
+		   <th scope="col"><span class="auraltext"><?php _e('Number of Impressions','gan'); ?></span> </th>
+		</tr>
+		<?php
+		   $loop = 1;
+		   $first = 'first';
+		   $num_ads = count($top_products);
+		   $last = "";
+		   echo "\n<!-- GAN_Plugin::impression_stats_widget: num_products = ".$num_products." -->\n";
+		   if ($num_products > 0 && $max_product_impressions > 0) {
+		     foreach ((array)$top_products as $product) {
+			$imps = $product['Impressions'];
+			$id = $product['id'];
+			$width = ($imps / $max_product_impressions * 90);
+			if ($loop == $num_products) $last = 'last';
+			echo '
+			<tr>
+				<td class="'.$first.'" style="width:25%;">'.GAN_Database::get_product_name($id).'</td>
+				<td class="value '.$first.' '.$last.'"><img src="'.GAN_PLUGIN_IMAGE_URL.'/bar.png" alt="" height="16" width="'.$width.'%" />'.$imps.'</td>
+			</tr>
+			';
+			$first = "";
+			$loop++;
+		     }
+		   } else {
+		     echo '<tr><td class="first last" style="border-right:1px solid #e5e5e5" colspan="2">No stats yet</td></tr>';
+		   }
+		?>
+	  </tbody>
+	  </table>
+	  <a href="<?php 
+			echo add_query_arg(array('page' => 'gan-database-product-impstats'),
+					   admin_url('admin.php')); 
+			?>" style="float:right;" class="button"><?php _e('Detailed Product Stats','gan'); 
 		?></a><br clear="all" />
 	  <?php
 	}
@@ -756,7 +988,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	  add_contextual_help($screenid,$help);
 	}
 	function add_media_button() {
-	  $url = GAN_PLUGIN_URL.'/GAN_InsertAdUnit.php?TB_iframe=true&amp;height=750&amp;width=640';
+	  $url = GAN_PLUGIN_URL.'/GAN_InsertAdUnit.php?tab=links&amp;TB_iframe=true&amp;height=750&amp;width=640';
 	  if (is_ssl()) $url = str_replace( 'http://', 'https://',  $url );
 	  echo '<a href="'.$url.'" class="thickbox" title="'.
 			__('Add Ad Unit','gan').'"><img src="'.
@@ -769,10 +1001,12 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 /* Load widget code */
 require_once(GAN_DIR . "/GAN_Widget.php");
 require_once(GAN_DIR . "/GAN_ImageWidget.php");
+require_once(GAN_DIR . "/GAN_Product_Widget.php");
 
 /* Create an instanance of the plugin */
 global $gan_plugin;
 $gan_plugin = new GAN_Plugin;
+
 
 
 

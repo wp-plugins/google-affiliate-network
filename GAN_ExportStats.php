@@ -108,7 +108,7 @@ if (headers_sent()) {
   wp_die(__('The headers have been sent by another plugin - there may be a plugin conflict.','gan'));
 }
   
-if (isset($_REQUEST['mode']) && in_array(strtolower($_REQUEST['mode']),array('ad','merch')) ) {
+if (isset($_REQUEST['mode']) && in_array(strtolower($_REQUEST['mode']),array('ad','merch','product')) ) {
   $mode = strtolower($_REQUEST['mode']);
 } else {
   $mode = 'ad';
@@ -132,7 +132,7 @@ if ( $merchid != '' || $imsize != -1 ) {
     $wclause = $wpdb->prepare(' MerchantID = %s',$merchid);
     $and = ' && ';
   }
-  if ($imsize != -1) {
+  if ($imsize != -1 && $mode == 'ad') {
     $size = explode('x',$imsize);
     $wclause = $wpdb->prepare($wclause . $and . 
 				' ImageWidth = %d && ImageHeight = %d',
@@ -173,6 +173,17 @@ switch ($mode) {
 	  $csv .= '"'.gan_csv_quote(GAN_Database::get_merch_name($MerchStatRow['MerchantID'])).'",';
 	  $csv .= $MerchStatRow['Impressions'].',';
 	  $csv .= '"'.gan_csv_quote($MerchStatRow['LastRunDate']).'"'."\n";
+	}
+	break;
+  case 'product':
+	$ProdStatsData = get_GAN_Product_Stats_data($where);
+	$csv .= '"Advertiser","Product_Name","Product_Brand","Impressions","Last View"'."\n";
+	foreach ((array)$ProdStatsData as $ProdStatRow) {
+	  $csv .= '"'.gan_csv_quote(GAN_Database::get_merch_name($ProdStatRow['MerchantID'])).'",';
+	  $csv .= '"'.gan_csv_quote($ProdStatRow['Product_Name']).'",';
+	  $csv .= '"'.gan_csv_quote($ProdStatRow['Product_Brand']).'",';
+	  $csv .= $ProdStatRow['Impressions'].',';
+	  $csv .= '"'.gan_csv_quote($ProdStatRow['LastRunDate']).'"'."\n";
 	}
 	break;
 }

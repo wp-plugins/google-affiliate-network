@@ -27,24 +27,6 @@ preference given to new ads and to ads which are expiring soonest.
 After using &quot;in house&quot; for a while, I have made this plugin
 available to other WordPress users who also using the Google Affiliate
 Network as a source of advertising revenue.</p>
-<h4>Sustainable Plugin Development - and Your Privacy</h4>
-<p>Google Affiliate Network is a participant in the Sustainable Plugins
-Sponsorship Network (SPSN) - 
-<a href="http://pluginsponsors.com/">http://pluginsponsors.com/</a>. The
-SPSN model offers modest sponsorships to plugin authors in return for a
-small amount of screen real estate on plugin options pages. The SPSN
-sponsor messages can be switched altogether: just visit the Config
-page.</p>
-<p><strong>IMPORTANT PRIVACY INFORMATION: NO INDIVIDUALLY IDENTIFIABLE
-DETAILS OF ANY KIND, REGARDING EITHER YOU OR YOUR SITE</strong>, will be
-collected or shared as a result of displaying Sustainable Plugins
-Sponsorship Network (SPSN) sponsor messages. Sponsors receive only
-aggregate reports of impressions on a worldwide per-plugin basis, NOT
-on impressions or on any other activity at any individual site which
-happens to be using a plugin.</p>
-<p>There is a configuration option to disable PluginSponsor messages,
-see the section on <a href="#Configuring">configuring</a> for details
-about this option.</p>
 <a name="Installation"></a><h3>Installation</h3> 
 <p>Installation is just a matter of installing from the new plugin
 page.  Once installed and activated, the plugin is ready to start
