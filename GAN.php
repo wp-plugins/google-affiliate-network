@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 5.0.1
+ * Version: 5.0.2
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -770,7 +770,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 		<?php
 		   $loop = 1;
 		   $first = 'first';
-		   $num_ads = count($top_products);
+		   $num_products = count($top_products);
 		   $last = "";
 		   echo "\n<!-- GAN_Plugin::impression_stats_widget: num_products = ".$num_products." -->\n";
 		   if ($num_products > 0 && $max_product_impressions > 0) {
@@ -795,7 +795,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	  </tbody>
 	  </table>
 	  <a href="<?php 
-			echo add_query_arg(array('page' => 'gan-database-product-impstats'),
+			echo add_query_arg(array('page' => 'gan-database-prod-impstats'),
 					   admin_url('admin.php')); 
 			?>" style="float:right;" class="button"><?php _e('Detailed Product Stats','gan'); 
 		?></a><br clear="all" />
