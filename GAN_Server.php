@@ -130,7 +130,7 @@ if (isset($_REQUEST['products'])) {
 		?>" target="<?php echo $instance['target'];
 		?>"><?php echo $GANProd['Product_Name']; ?></a> <?php
 		echo $GANProd['Product_Descr']; 
-		?> Price: $<?php echo $GANProd['Price']; ?></p><?php
+		?> Price: $<?php printf("%.2f",$GANProd['Price']); ?></p><?php
       }
     }
   }
