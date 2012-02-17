@@ -53,21 +53,27 @@ echo " ";	/* End of headers */
 ?><html><HEAD><TITLE>Google Affiliate Network</TITLE><?php
 $path = GAN_PLUGIN_CSS_URL . '/GAN.css';
 echo '<link rel="stylesheet" type="text/css" href="' . $path . '" />';
+$extra_css = stripslashes(get_option('wp_gan_extra_css'));
+if ($extra_css != '') {
+  ?><style type="text/css" media="all"><?php echo $extra_css; ?></style><?php
+}
 ?></head><body style="margin:0px;padding:0px"><?php
 
 /* Make sure we have the parameters we need. */
-if (!isset($_REQUEST['ulid']) && !isset($_REQUEST['maxads']) ) {
-  wp_die(__('The needed parameters are missing. Probably because this file was not called from an iframe.','gan'));
+if (!isset($_REQUEST['ulid']) ) {
+  wp_die(__('The needed ulid parameter is missing. Probably because this file was not called from an iframe.','gan'));
 }
 
 /* Load parameters */
 $instance = array( 'ulid' => $_REQUEST['ulid'] );
 if (isset($_REQUEST['products'])) {
-  $instance['namepat'] = $_REQUEST['namepat'];
-  $instance['catpat'] = $_REQUEST['catpat'];
-  $instance['brandpat'] = $_REQUEST['brandpat'];
-} else {
+  $instance['namepat'] = (isset($_REQUEST['namepat'])?$_REQUEST['namepat']:'');
+  $instance['catpat'] = (isset($_REQUEST['catpat'])?$_REQUEST['catpat']:'');
+  $instance['brandpat'] = (isset($_REQUEST['brandpat'])?$_REQUEST['brandpat']:'');
+} else if (isset($_REQUEST['maxads']) ) {
   $instance['maxads'] = $_REQUEST['maxads'];
+} else {
+  wp_die(__('The needed maxads or products parameters are missing. Probably because this file was not called from an iframe.','gan'));
 }
 if ( isset($_REQUEST['target']) ) {
   $instance['target'] = $_REQUEST['target'];
