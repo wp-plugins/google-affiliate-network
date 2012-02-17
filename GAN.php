@@ -319,6 +319,10 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	  $path = GAN_PLUGIN_CSS_URL . '/GAN.css';
 
 	  echo '<link rel="stylesheet" type="text/css" href="' . $path . '?version='.GAN_VERSION.'" />';
+	  $extra_css = stripslashes(get_option('wp_gan_extra_css'));
+	  if ($extra_css != '') {
+	    ?><style type="text/css" media="all"><?php echo $extra_css; ?></style><?php
+	  }
 	}
 
 	/* Admin side head action: load our admin style sheet */
