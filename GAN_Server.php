@@ -59,6 +59,7 @@ if ($extra_css != '') {
 }
 ?></head><body style="margin:0px;padding:0px"><?php
 
+
 /* Make sure we have the parameters we need. */
 if (!isset($_REQUEST['ulid']) ) {
   wp_die(__('The needed ulid parameter is missing. Probably because this file was not called from an iframe.','gan'));
@@ -90,14 +91,12 @@ if ( isset($_REQUEST['merchid']) ) {
 
 /* Product, text or image ads? If height and width are not set (or are 0), serve text 
  * ads */
-
 if (isset($_REQUEST['products'])) {
   if ($instance['merchid'] != '') {
     $merchlist[] = $instance['merchid'];
   } else {
     $merchlist = GAN_Database::ordered_merchants_prods();
   }
-  echo "\n"; ?><!-- merchlist is <?php print_r($merchlist); ?> --><?php
   if (! empty($merchlist) ) {
     $numads = 0;
     while ($numads < 1) {
@@ -105,7 +104,7 @@ if (isset($_REQUEST['products'])) {
         $prods = GAN_Database::ordered_prod_ads($merchid,$instance['namepat'],
 						$instance['catpat'],
 						$instance['brandpat']);
-        if (count($prods) == 0) continue;
+        if (count($prods) > 0) break;
       }
       if (count($prods) == 0) {
 	if ($instance['brandpat'] != '') {
@@ -118,9 +117,7 @@ if (isset($_REQUEST['products'])) {
 	  break;
 	}
       } else {
-	echo "\n"; ?><!-- prods is <?php print_r($prods); ?> --><?php
 	$GANProd = GAN_Database::get_product($prods[0]);
-	echo "\n"; ?><!-- GANProd  is <?php print_r($GANProd); ?> --><?php
 	GAN_Database::bump_product_counts($prods[0]);
 	$numads++;
 	?><p class="<?php echo $instance['ulid']; 
