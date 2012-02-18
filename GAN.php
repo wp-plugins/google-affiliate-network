@@ -100,7 +100,7 @@ class GAN_Plugin {
 		  GAN_Database::make_ad_table();
 		  GAN_Database::make_merchs_table();
 		  GAN_Database::make_products_ad_table();
-		} else if ($dbvers < 3.1) {
+		} else if ($dbvers < 3.2) {
 		  GAN_Database::upgrade_database();
 		}
 		wp_schedule_event(mktime(2,0,0), 'daily', 'gan_daily_event');
@@ -558,7 +558,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options','gan'); ?>" />
 		</p><?php 
 		?><span id="gan_dash_version"><?php printf(__('Database Version: %3.1f','gan'),GAN_Database::database_version()) ?></span><br /><?php
-		if (GAN_Database::database_version() < 3.1) {
+		if (GAN_Database::database_version() < 3.2) {
 		  ?><p><?php _e('Your database needs to be upgraded.','gan'); ?>&nbsp;<input type="submit" name="upgradedatabase" class="button-primary" value="<?php _e('Upgrade Database','gan'); ?>"></p><?php
 		} ?></form></div><?php
 	}

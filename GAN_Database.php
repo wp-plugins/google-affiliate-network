@@ -18,7 +18,12 @@ class GAN_Database {
       if ($wpdb->get_var("SHOW TABLES LIKE '".GAN_PRODUCTS_AD_TABLE."'") != GAN_PRODUCTS_AD_TABLE) {
 	return 3.0;
       } else {
-        return 3.1;
+        $trackurl = $wpdb->get_row('DESCRIBE '.GAN_PRODUCTS_AD_TABLE.' Tracking_URL', 'ARRAY_A' );
+	if ($trackurl['Type'] == 'varchar(1024)') {
+	  return 3.2;
+	} else {
+	  return 3.1;
+	}
       }
     } else {
 	return 1.0;
@@ -37,11 +42,11 @@ class GAN_Database {
 		       'AltText' => "varchar(255) default ''" ,		 /* Alt text */
 		       'StartDate' => "date NOT NULL default '1970-01-01'" ,		 /* Start date */
 		       'EndDate'   => "date NOT NULL default '2037-12-31'" ,		 /* End data */
-		       'ClickserverLink' => "varchar(255) NOT NULL default ''" , /* Ad link */
-		       'ImageURL' => "varchar(255) default ''" ,		 /* URL of image */
+		       'ClickserverLink' => "varchar(1024) NOT NULL default ''" , /* Ad link */
+		       'ImageURL' => "varchar(1024) default ''" ,		 /* URL of image */
 		       'ImageHeight' => 'int default 0' ,	 /* height of image */
 		       'ImageWidth' => 'int default 0' ,	 /* width of image */
-		       'LinkURL' => "varchar(255) NOT NULL default ''" ,	 /* Link URL */
+		       'LinkURL' => "varchar(1024) NOT NULL default ''" ,	 /* Link URL */
 		       'PromoType' => "varchar(32) NOT NULL default ''" ,   /* Type of promo */
 		       'MerchantID'  => "varchar(16) NOT NULL default ''",  /* Merchant ID */
 	// column dropped (not used)   'side' => 'boolean NOT NULL',		 /* side (not used) */
@@ -86,8 +91,8 @@ class GAN_Database {
     $columns = array ( 'id' => 'int NOT NULL AUTO_INCREMENT',   /* ID */
     			'Product_Name' => "varchar(255) NOT NULL default ''" , /* Product name */
 			'Product_Descr' => "text NOT NULL default ''" , /* Product description */
-			'Tracking_URL' => "varchar(255) NOT NULL default ''" , /* Tracking URL */
-			'Creative_URL' => "varchar(255) NOT NULL default ''" , /* Creative URL */
+			'Tracking_URL' => "varchar(1024) NOT NULL default ''" , /* Tracking URL */
+			'Creative_URL' => "varchar(1024) NOT NULL default ''" , /* Creative URL */
 			'Product_Category' => "varchar(255) NOT NULL default ''" , /* Product category */
 			'Product_Brand' => "varchar(255) NOT NULL default ''" , /* Product Brand */
 			'Product_UPC' => "varchar(16) NOT NULL default ''" , /* Product UPC */
@@ -112,7 +117,7 @@ class GAN_Database {
     global $wpdb;
     $dbversion = GAN_Database::database_version();
     //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: dbversion = ".$dbversion."\n");
-    if ($dbversion == 3.1) return;
+    if ($dbversion == 3.2) return;
     /*$olderror = $wpdb->show_errors(true);*/
     if ($dbversion > 0.0 && $dbversion < 3.0) {
       //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: populating merchs table\n");
