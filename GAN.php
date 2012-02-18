@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 5.0.2
+ * Version: 5.0.4
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -73,7 +73,7 @@ class GAN_Plugin {
 		add_action('wp_dashboard_setup', array($this,'wp_dashboard_setup'));
 		add_action('gan_daily_event',array($this,'daily_work'));
 		add_option('wp_gan_autoexpire','yes');
-	        add_option('wp_gan_disablesponsor','yes');
+		add_option('wp_gan_extra_css','');
 
 		load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',
 					  basename(GAN_DIR).'/languages/');
@@ -100,7 +100,7 @@ class GAN_Plugin {
 		  GAN_Database::make_ad_table();
 		  GAN_Database::make_merchs_table();
 		  GAN_Database::make_products_ad_table();
-		} else if ($dbvers < 3.1) {
+		} else if ($dbvers < 3.2) {
 		  GAN_Database::upgrade_database();
 		}
 		wp_schedule_event(mktime(2,0,0), 'daily', 'gan_daily_event');
@@ -319,6 +319,10 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	  $path = GAN_PLUGIN_CSS_URL . '/GAN.css';
 
 	  echo '<link rel="stylesheet" type="text/css" href="' . $path . '?version='.GAN_VERSION.'" />';
+	  $extra_css = stripslashes(get_option('wp_gan_extra_css'));
+	  if ($extra_css != '') {
+	    ?><style type="text/css" media="all"><?php echo $extra_css; ?></style><?php
+	  }
 	}
 
 	/* Admin side head action: load our admin style sheet */
@@ -338,11 +342,11 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 		echo add_query_arg(
 		   array('page' => 'gan-database-add-element',
 			 'mode' => 'add',
-			 'id' => false)); 
+			 'id' => false),admin_url('admin.php')); 
 		?>" class="button add-new-h2"><?php _e('Add New','gan'); 
 		?></a> <a href="<?php 
 		echo add_query_arg(
-		   array('page' => 'gan-database-add-element-bulk')); 
+		   array('page' => 'gan-database-add-element-bulk')admin_url('admin.php')); 
 		?>" class="button add-new-h2"><?php 
 			_e('Add New in Bulk','gan'); ?></a><?php 
 					$this->InsertVersion(); ?></h2>
@@ -430,11 +434,11 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 		echo add_query_arg(
 		   array('page' => 'gan-database-add-product',
 			 'mode' => 'add',
-			 'id' => false)); 
+			 'id' => false),admin_url('admin.php')); 
 		?>" class="button add-new-h2"><?php _e('Add New','gan'); 
 		?></a> <a href="<?php 
 		echo add_query_arg(
-		   array('page' => 'gan-database-add-product-bulk')); 
+		   array('page' => 'gan-database-add-product-bulk'),admin_url('admin.php')); 
 		?>" class="button add-new-h2"><?php 
 			_e('Add New in Bulk','gan'); ?></a><?php 
 					$this->InsertVersion(); ?></h2>
@@ -518,6 +522,8 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	    update_option('wp_gan_autoexpire',$autoexpire);
 	    //$disablesponsor = $_REQUEST['gan_disablesponsor'];
 	    //update_option('wp_gan_disablesponsor',$disablesponsor);
+	    $extra_css = $_REQUEST['gan_extra_css'];
+	    update_option('wp_gan_extra_css',$extra_css);
 	    ?><div id="message"class="updated fade"><p><?php _e('Options Saved','gan'); ?></p></div><?php
 	  } else if ( isset($_REQUEST['upgradedatabase']) ) {
 	    GAN_Database::upgrade_database();
@@ -525,6 +531,7 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 	  }
 	  /* Head of page, filter and screen options. */
 	  $autoexpire = get_option('wp_gan_autoexpire');
+	  $extra_css = get_option('wp_gan_extra_css');
 	  //$disablesponsor = get_option('wp_gan_disablesponsor');
 	  ?><div class="wrap"><?php $this->admin_tabs('gan-database-options'); ?><br clear="all" />
 	    <div id="icon-gan-options" class="icon32"><br /></div><h2><?php _e('Configure Options','gan'); ?><?php $this->InsertVersion(); ?></h2>
@@ -543,12 +550,15 @@ document.write(unescape("%3Cscript src='" + psHost + "pluginsponsors.com/direct/
 				  echo ' checked="checked" ';
 				}
 			?> /><?php _e('No','gan'); ?></td></tr>
+		  <tr valign="top">
+		    <th scope="row"><label for="gan_extra_css" style="width:20%;"><?php _e('Extra style (CSS) settings for ad and product units','gan'); ?></label></th>
+		    <td><textarea rows="10" cols="40" id="gan_extra_css" name="gan_extra_css"><?php echo stripslashes($extra_css); ?></textarea></td></tr>
 		</table>
 		<p>
 			<input type="submit" name="saveoptions" class="button-primary" value="<?php _e('Save Options','gan'); ?>" />
 		</p><?php 
 		?><span id="gan_dash_version"><?php printf(__('Database Version: %3.1f','gan'),GAN_Database::database_version()) ?></span><br /><?php
-		if (GAN_Database::database_version() < 3.1) {
+		if (GAN_Database::database_version() < 3.2) {
 		  ?><p><?php _e('Your database needs to be upgraded.','gan'); ?>&nbsp;<input type="submit" name="upgradedatabase" class="button-primary" value="<?php _e('Upgrade Database','gan'); ?>"></p><?php
 		} ?></form></div><?php
 	}

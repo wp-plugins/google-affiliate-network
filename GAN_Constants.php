@@ -7,7 +7,7 @@
 
 define('GAN_PLUGIN_NAME', 'GAN_Plugin'); /* Name of the plugin */
 define('GAN_DIR', dirname(__FILE__));    /* The Plugin directory */
-define('GAN_VERSION', '5.0.2');		 /* The Plug in version */
+define('GAN_VERSION', '5.0.4');		 /* The Plug in version */
 /* Plug in display name */
 define('GAN_DISPLAY_NAME', 'Google Affiliate Network Plugin');
 /* Base URL of the plug in */

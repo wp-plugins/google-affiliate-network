@@ -14,16 +14,14 @@ iframe.GANleader {
 
 img.GANleader, img.GANright {
   border: 0;
+  width: 150px;
+  height: 150px;
 }
 
 img.GANleader {
   float: left;
   right-margin: 10px;
-}
-
-img.GANright {
-  clear: both;
-  bottom-margin: 10px;
+  right-padding: 5px;
 }
 
 p.GANleader, p.GANright {
@@ -58,6 +56,13 @@ border: none;
 
 iframe.GANright {
 }
+
+img.GANright {
+  clear: both;
+  bottom-margin: 10px;
+  bottom-padding: 5px;
+}
+
 ul#GANright {
 list-style:none;
 list-style-type:none;

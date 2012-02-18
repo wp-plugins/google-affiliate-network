@@ -4,7 +4,7 @@ Donate link: http://www.deepsoft.com/GAN
 Tags: gan,affiliate,widget,google,plugin,ads,shortcode
 Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 5.0.2
+Stable tag: 5.0.4
 
 A Widget / shortcode plugin to display Google Affiliate Network ads. 
 Both text links and image ads can be displayed.
@@ -107,6 +107,14 @@ a documentation bug at [Deepwoods Software's Bugzilla][bugreport] as well.
 4. Front side view, showing both textual ads and banner ads.
 
 == Changelog ==
+
+= 5.0.4 =
+* Assorted minor fixes, including database field size change and minor link
+  context updates.
+
+= 5.0.3 =
+* Fixed anoying bugs in GAN_InsertAdUnit (copy-and-paste error) and 
+  GAN_Server (backwards loop exit condition).
 
 = 5.0.2 =
 * Fixed minor problem with dashboard widget.
@@ -316,6 +324,12 @@ figures.
 * First official release.
 
 == Upgrade Notice ==
+
+= 5.0.4 =
+Maintainence release. Minor bug fixes.
+
+= 5.0.3 =
+Maintainence release. Fixed bugs in GAN_InsertAdUnit and GAN_Server.
 
 = 5.0.2 =
 Maintainence release. Fixed minor problem with dashboard widget.
