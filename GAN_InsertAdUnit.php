@@ -299,8 +299,8 @@ wp_enqueue_script( 'jquery-color' );
 				      '" target="'+target+
 				      '" merchid="'+merchid+
 				      '" namepat="'+namepat+
-				      '" catpat="'+namepat+
-				      '" brandpat="'+namepat+'"]');
+				      '" catpat="'+catpat+
+				      '" brandpat="'+brandpat+'"]');
 	});
 	/* ]]> */
 </script><?php

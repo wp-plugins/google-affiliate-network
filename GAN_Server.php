@@ -53,21 +53,28 @@ echo " ";	/* End of headers */
 ?><html><HEAD><TITLE>Google Affiliate Network</TITLE><?php
 $path = GAN_PLUGIN_CSS_URL . '/GAN.css';
 echo '<link rel="stylesheet" type="text/css" href="' . $path . '" />';
+$extra_css = stripslashes(get_option('wp_gan_extra_css'));
+if ($extra_css != '') {
+  ?><style type="text/css" media="all"><?php echo $extra_css; ?></style><?php
+}
 ?></head><body style="margin:0px;padding:0px"><?php
 
+
 /* Make sure we have the parameters we need. */
-if (!isset($_REQUEST['ulid']) && !isset($_REQUEST['maxads']) ) {
-  wp_die(__('The needed parameters are missing. Probably because this file was not called from an iframe.','gan'));
+if (!isset($_REQUEST['ulid']) ) {
+  wp_die(__('The needed ulid parameter is missing. Probably because this file was not called from an iframe.','gan'));
 }
 
 /* Load parameters */
 $instance = array( 'ulid' => $_REQUEST['ulid'] );
 if (isset($_REQUEST['products'])) {
-  $instance['namepat'] = $_REQUEST['namepat'];
-  $instance['catpat'] = $_REQUEST['catpat'];
-  $instance['brandpat'] = $_REQUEST['brandpat'];
-} else {
+  $instance['namepat'] = (isset($_REQUEST['namepat'])?$_REQUEST['namepat']:'');
+  $instance['catpat'] = (isset($_REQUEST['catpat'])?$_REQUEST['catpat']:'');
+  $instance['brandpat'] = (isset($_REQUEST['brandpat'])?$_REQUEST['brandpat']:'');
+} else if (isset($_REQUEST['maxads']) ) {
   $instance['maxads'] = $_REQUEST['maxads'];
+} else {
+  wp_die(__('The needed maxads or products parameters are missing. Probably because this file was not called from an iframe.','gan'));
 }
 if ( isset($_REQUEST['target']) ) {
   $instance['target'] = $_REQUEST['target'];
@@ -84,14 +91,12 @@ if ( isset($_REQUEST['merchid']) ) {
 
 /* Product, text or image ads? If height and width are not set (or are 0), serve text 
  * ads */
-
 if (isset($_REQUEST['products'])) {
   if ($instance['merchid'] != '') {
     $merchlist[] = $instance['merchid'];
   } else {
     $merchlist = GAN_Database::ordered_merchants_prods();
   }
-  echo "\n"; ?><!-- merchlist is <?php print_r($merchlist); ?> --><?php
   if (! empty($merchlist) ) {
     $numads = 0;
     while ($numads < 1) {
@@ -99,7 +104,7 @@ if (isset($_REQUEST['products'])) {
         $prods = GAN_Database::ordered_prod_ads($merchid,$instance['namepat'],
 						$instance['catpat'],
 						$instance['brandpat']);
-        if (count($prods) == 0) continue;
+        if (count($prods) > 0) break;
       }
       if (count($prods) == 0) {
 	if ($instance['brandpat'] != '') {
@@ -112,9 +117,7 @@ if (isset($_REQUEST['products'])) {
 	  break;
 	}
       } else {
-	echo "\n"; ?><!-- prods is <?php print_r($prods); ?> --><?php
 	$GANProd = GAN_Database::get_product($prods[0]);
-	echo "\n"; ?><!-- GANProd  is <?php print_r($GANProd); ?> --><?php
 	GAN_Database::bump_product_counts($prods[0]);
 	$numads++;
 	?><p class="<?php echo $instance['ulid']; 
@@ -130,7 +133,7 @@ if (isset($_REQUEST['products'])) {
 		?>" target="<?php echo $instance['target'];
 		?>"><?php echo $GANProd['Product_Name']; ?></a> <?php
 		echo $GANProd['Product_Descr']; 
-		?> Price: $<?php echo $GANProd['Price']; ?></p><?php
+		?> Price: $<?php printf("%.2f",$GANProd['Price']); ?></p><?php
       }
     }
   }
