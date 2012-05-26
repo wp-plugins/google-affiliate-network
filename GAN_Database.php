@@ -242,7 +242,7 @@ class GAN_Database {
    * Returns only enabled products. The results are ordered by product 
    * Impressions -- the least viewed product is first.
    */
-  static function ordered_prod_ads($merch,$namepat,$catpat,$brandpat) {
+  static function ordered_prod_ads($merch,$namepat,$catpat,$brandpat,$descrpat) {
     global $wpdb;
     if (GAN_Database::database_version() < 3.1) {/* no product ads before DB V3.1 */
       return array();
@@ -257,6 +257,9 @@ class GAN_Database {
       }
       if ($brandpat != '') {
 	$sql .= $wpdb->prepare(" && Product_Brand LIKE %s ",'%'.$brandpat.'%');
+      }
+      if ($descrpat != '') {
+	$sql .= $wpdb->prepare(" && Product_Descr LIKE %s ",'%'.$descrpat.'%');
       }
       $sql .= " ORDER BY Impressions LIMIT 1";
       return $wpdb->get_col($sql);
