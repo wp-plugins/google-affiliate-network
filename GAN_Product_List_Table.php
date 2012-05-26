@@ -407,7 +407,7 @@ class GAN_Product_List_Table extends WP_List_Table {
 	    <tr valign="top">
 	      <th scope="row"><label for="GAN-Product_Name" style="width:20%;"><?php _e('Product Name:','gan'); ?></label></th>
 	      <td><input id="GAN-Product_Name"
-			value="<?php echo stripslashes($this->viewitem->Product_Name); ?>"
+			value="<?php echo htmlspecialchars(stripslashes($this->viewitem->Product_Name)); ?>"
 			name="Product_Name"
 			style="width:75%;"<?php if ($this->viewmode == 'view') echo ' readonly="readonly"'; ?> /></td></tr>
 	    <tr valign="top">
