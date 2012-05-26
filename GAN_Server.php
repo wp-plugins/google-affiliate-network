@@ -109,14 +109,14 @@ if (isset($_REQUEST['products'])) {
         if (count($prods) > 0) break;
       }
       if (count($prods) == 0) {
-	if ($instance['descrpat'] != '') {
-	  $instance['descrpat'] = '';
-	} else if ($instance['brandpat'] != '') {
+	if ($instance['brandpat'] != '') {
 	  $instance['brandpat'] = '';
 	} else if ($instance['catpat'] != '') {
 	  $instance['catpat'] = '';
 	} else if ($instance['namepat'] != '') {
 	  $instance['namepat'] = '';
+	} else if ($instance['descrpat'] != '') {
+	  $instance['descrpat'] = '';
 	} else {
 	  break;
 	}
