@@ -611,35 +611,44 @@ class GAN_DB_List_Table extends WP_List_Table {
 	    $fp = fopen($_FILES['gan-tsv-file']['tmp_name'], 'r');
 	    $sep = ',';
 	    $row1 = fgetcsv($fp, 0, $sep);
-	    if ($row1 && count($row1) < 16 || count($row1) > 17) {
+	    if ($row1 && count($row1) < 10) {
 	      $sep = "\t";
 	      fseek ( $fp, 0, SEEK_SET);
 	      $row1 = fgetcsv($fp, 0, $sep);
-	      if (count($row1) < 16 || count($row1) > 17) {
+	      if (count($row1) < 10) {
 		$message .= '<p>'.__('Not a proper CSV or TSV file.','gan').'</p>';
 		fclose($fp);
 		return $message;
 	      }
 	    }
+	    $columns = count($row1);
 	    $indexes = array();
 	    foreach (array("Id","Name","Advertiser Id","Advertiser name",
 			   "Tracking URL","Creative URL","Image Size",
 			   "Start Date","End Date","Promotion Type",
 			   "Merchandising Text") as $colname) {
-	      $indexes[$colname] = array_search($colname,$row1);
+	      $found = array_search($colname,$row1);
+	      if ($found === FALSE) {
+		$indexes[$colname] = -1;
+	      } else {
+		$indexes[$colname] = $found;
+	      }
 	    }
+	    
 	    $count = 0;
 	    $message .= '<p>';
 	    while (($rawelts = fgetcsv($fp, 0, $sep)) != FALSE) {
 	      //file_put_contents("php://stderr","*** GAN_DB_List_Table::process_bulk_upload: rawelts is ".print_r($rawelts,true)."\n");
-	      if (count($rawelts) < 16 || count($rawelts) > 17) {continue;}
+	      if (count($rawelts) < $columns) {continue;}
 	      $Advertizer = $rawelts[$indexes["Advertiser name"]];
 	      $LinkID     = $rawelts[$indexes["Id"]];
 	      $LinkName   = $rawelts[$indexes["Name"]];
 	      $MerchandisingText = $rawelts[$indexes["Merchandising Text"]];
 	      $AltText    = '';
-	      $StartDate = $this->fixdate(trim($rawelts[$indexes["Start Date"]]));
-	      $EndDate = $this->fixdate(trim($rawelts[$indexes["End Date"]]));
+	      if ($indexes["Start Date"] < 0) $StartDate = "1970-01-01";
+	      else $StartDate = $this->fixdate(trim($rawelts[$indexes["Start Date"]]));
+	      if ($indexes["End Date"] < 0) $EndDate = 'none';
+	      else $EndDate = $this->fixdate(trim($rawelts[$indexes["End Date"]]));
 	      if ($EndDate == 'none' || $EndDate == '') {$EndDate = "2037-12-31";}
 	      $ClickserverURL = $rawelts[$indexes["Tracking URL"]];
 	      $ImageURL = $rawelts[$indexes["Creative URL"]];
@@ -654,7 +663,8 @@ class GAN_DB_List_Table extends WP_List_Table {
 		$height = $matches[2];
 	      }
 	      $LinkURL = '';
-	      $PromoType = $rawelts[$indexes["Promotion Type"]];
+	      if ($indexes["Promotion Type"] >= 0) $PromoType = $rawelts[$indexes["Promotion Type"]];
+	      else $PromoType = '';
 	      $MerchantID = $rawelts[$indexes["Advertiser Id"]];
 	      if (GAN_Database::find_ad_by_LinkID($LinkID) != 0) {
 		$message .= sprintf(__('Duplicate Link ID %s (%s). Ad not inserted into database.','gan'),$LinkID,$LinkName);
