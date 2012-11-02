@@ -52,6 +52,7 @@ class GAN_Product_Widget extends WP_Widget {
 			      'namepat' => $instance['namepat'],
 			      'catpat' => $instance['catpat'],
 			      'brandpat' => $instance['brandpat'],
+			      'descrpat' => $instance['descrpat'],
 			      'products' => 'yes'),
 			GAN_PLUGIN_URL.'/GAN_Server.php').'" '.
 		'frameborder="0" '.$ifwidth.$ifheight.'></iframe>';
@@ -69,6 +70,7 @@ class GAN_Product_Widget extends WP_Widget {
 	'merchid' => '',
 	'namepat' => '',
 	'catpat' => '',
+	'descrpat' => '',
 	'brandpat' => ''), $atts ) );
 
 	  switch ($orientation) {
@@ -103,6 +105,7 @@ class GAN_Product_Widget extends WP_Widget {
 					'namepat' => $namepat,
 					'catpat' => $catpat,
 					'brandpat' => $brandpat,
+					'descrpat' => $descrpat,
 					'products' => 'yes'),
 				GAN_PLUGIN_URL.'/GAN_Server.php').'" '.
 			'frameborder="0" '.$frameattrs.'></iframe>';
@@ -118,6 +121,7 @@ class GAN_Product_Widget extends WP_Widget {
 		$instance['namepat'] = $new_instance['namepat'];
 		$instance['catpat'] = $new_instance['catpat'];
 		$instance['brandpat'] = $new_instance['brandpat'];
+		$instance['descrpat'] = $new_instance['descrpat'];
                 $instance['ifwidth'] = $new_instance['ifwidth'];
                 $instance['ifheight'] = $new_instance['ifheight'];
 		$instance['target'] = $new_instance['target'];
@@ -140,6 +144,7 @@ class GAN_Product_Widget extends WP_Widget {
 				'namepat' => '',
 				'catpat' => '',
 				'brandpat' => '',
+				'descrpat' => '',
 				'merchid' => '' );
             $instance = wp_parse_args( (array) $instance, $defaults ); ?>
             <p>
@@ -182,6 +187,13 @@ class GAN_Product_Widget extends WP_Widget {
 		<input id="<?php echo $this->get_field_id( 'brandpat' ); ?>"
 			value="<?php echo $instance['brandpat']; ?>"
 			name="<?php echo $this->get_field_name( 'brandpat' ); ?>"
+			style="width:100%;" />
+	    </p>
+	    <p>
+		<label for="<?php echo $this->get_field_id( 'descrpat' ); ?>"><?php _e('Description Pattern','gan'); ?></label>
+		<input id="<?php echo $this->get_field_id( 'descrpat' ); ?>"
+			value="<?php echo $instance['descrpat']; ?>"
+			name="<?php echo $this->get_field_name( 'descrpat' ); ?>"
 			style="width:100%;" />
 	    </p>
             <p>
