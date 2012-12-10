@@ -28,79 +28,23 @@ if ($wp_db_version < 8201) {
 	if ( ! defined( 'WP_PLUGIN_DIR' ) ) define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
 }
 
+require_once(ABSPATH.'wp-admin/admin.php');
+
+if (!current_user_can('manage_options'))
+{
+  wp_die( __('You do not have sufficient permissions to access this page.', 'gan') );
+}
+
 /* Load support files: constants and database */
+
 require_once(dirname(__FILE__) . "/GAN_Constants.php");
 require_once(dirname(__FILE__) . "/GAN_Database.php");
 
 load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',basename(GAN_DIR).'/languages/');
-
-/* Minimal WP set up -- we are called directly, not through the normal WP
- * process.  We won't be displaying full fledged WP pages either.
- */
-$wp_root = dirname(__FILE__) .'/../../../';
-if(file_exists($wp_root . 'wp-load.php')) {
-      require_once($wp_root . "wp-load.php");
-} else if(file_exists($wp_root . 'wp-config.php')) {
-      require_once($wp_root . "wp-config.php");
-} else {
-      exit;
-}
-
-@error_reporting(0);
-  
-global $wp_db_version;
-if ($wp_db_version < 8201) {
-	// Pre 2.6 compatibility (BY Stephen Rider)
-	if ( ! defined( 'WP_CONTENT_URL' ) ) {
-		if ( defined( 'WP_SITEURL' ) ) define( 'WP_CONTENT_URL', WP_SITEURL . '/wp-content' );
-		else define( 'WP_CONTENT_URL', get_option( 'url' ) . '/wp-content' );
-	}
-	if ( ! defined( 'WP_CONTENT_DIR' ) ) define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
-	if ( ! defined( 'WP_PLUGIN_URL' ) ) define( 'WP_PLUGIN_URL', WP_CONTENT_URL. '/plugins' );
-	if ( ! defined( 'WP_PLUGIN_DIR' ) ) define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
-}
-
-/* Load support files: constants and database */
-require_once(dirname(__FILE__) . "/GAN_Constants.php");
-require_once(dirname(__FILE__) . "/GAN_Database.php");
-
-load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',basename(GAN_DIR).'/languages/');
-
-/* Minimal WP set up -- we are called directly, not through the normal WP
- * process.  We won't be displaying full fledged WP pages either.
- */
-$wp_root = dirname(__FILE__) .'/../../../';
-if(file_exists($wp_root . 'wp-load.php')) {
-      require_once($wp_root . "wp-load.php");
-} else if(file_exists($wp_root . 'wp-config.php')) {
-      require_once($wp_root . "wp-config.php");
-} else {
-      exit;
-}
 
 function gan_csv_quote($string) {
   return preg_replace('/"/','""', $string);
 }
-
-@error_reporting(0);
-  
-global $wp_db_version;
-if ($wp_db_version < 8201) {
-	// Pre 2.6 compatibility (BY Stephen Rider)
-	if ( ! defined( 'WP_CONTENT_URL' ) ) {
-		if ( defined( 'WP_SITEURL' ) ) define( 'WP_CONTENT_URL', WP_SITEURL . '/wp-content' );
-		else define( 'WP_CONTENT_URL', get_option( 'url' ) . '/wp-content' );
-	}
-	if ( ! defined( 'WP_CONTENT_DIR' ) ) define( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
-	if ( ! defined( 'WP_PLUGIN_URL' ) ) define( 'WP_PLUGIN_URL', WP_CONTENT_URL. '/plugins' );
-	if ( ! defined( 'WP_PLUGIN_DIR' ) ) define( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
-}
-
-/* Load support files: constants and database */
-require_once(dirname(__FILE__) . "/GAN_Constants.php");
-require_once(dirname(__FILE__) . "/GAN_Database.php");
-
-load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',basename(GAN_DIR).'/languages/');
 
 /* Make sure we are first and only program */
 if (headers_sent()) {
@@ -176,7 +120,7 @@ switch ($mode) {
 	}
 	break;
   case 'product':
-	$ProdStatsData = get_GAN_Product_Stats_data($where);
+	$ProdStatsData = GAN_Database::get_GAN_Product_Stats_data($where);
 	$csv .= '"Advertiser","Product_Name","Product_Brand","Impressions","Last View"'."\n";
 	foreach ((array)$ProdStatsData as $ProdStatRow) {
 	  $csv .= '"'.gan_csv_quote(GAN_Database::get_merch_name($ProdStatRow['MerchantID'])).'",';
