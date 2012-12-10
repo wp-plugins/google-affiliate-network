@@ -609,39 +609,63 @@ class GAN_DB_List_Table extends WP_List_Table {
 	  //file_put_contents("php://stderr","*** GAN_DB_List_Table::process_bulk_upload: _FILES is ".print_r($_FILES,true)."\n");
 	  if ( isset($_FILES['gan-tsv-file']) ) {
 	    $fp = fopen($_FILES['gan-tsv-file']['tmp_name'], 'r');
+	    $sep = ',';
+	    $row1 = fgetcsv($fp, 0, $sep);
+	    if ($row1 && count($row1) < 10) {
+	      $sep = "\t";
+	      fseek ( $fp, 0, SEEK_SET);
+	      $row1 = fgetcsv($fp, 0, $sep);
+	      if (count($row1) < 10) {
+		$message .= '<p>'.__('Not a proper CSV or TSV file.','gan').'</p>';
+		fclose($fp);
+		return $message;
+	      }
+	    }
+	    $columns = count($row1);
+	    $indexes = array();
+	    foreach (array("Id","Name","Advertiser Id","Advertiser name",
+			   "Tracking URL","Creative URL","Image Size",
+			   "Start Date","End Date","Promotion Type",
+			   "Merchandising Text") as $colname) {
+	      $found = array_search($colname,$row1);
+	      if ($found === FALSE) {
+		$indexes[$colname] = -1;
+	      } else {
+		$indexes[$colname] = $found;
+	      }
+	    }
+	    
 	    $count = 0;
 	    $message .= '<p>';
-	    while ($line = fgets($fp)) {
-	      //file_put_contents("php://stderr","*** GAN_DB_List_Table::process_bulk_upload: line (1) is '$line'\n");
-	      $line = trim($line,"\n");
-	      if (preg_match('/^"Id"[[:space:]]*"Name"/',$line)) {break;}
-	      if (preg_match('/^Id[[:space:]]*Name/',$line)) {break;}
-	    }
-	    while ($line = fgets($fp)) {
-	      $line = trim($line,"\n");
-	      //file_put_contents("php://stderr","*** GAN_DB_List_Table::process_bulk_upload: line (2) is '$line'\n");
-	      $rawelts = explode("\t",$line);
+	    while (($rawelts = fgetcsv($fp, 0, $sep)) != FALSE) {
 	      //file_put_contents("php://stderr","*** GAN_DB_List_Table::process_bulk_upload: rawelts is ".print_r($rawelts,true)."\n");
-	      if (count($rawelts) < 16) {continue;}
-	      $Advertizer = $this->tsv_unquote($rawelts[3]);
-	      $LinkID     = $this->tsv_unquote($rawelts[0]);
-	      $LinkName   = $this->tsv_unquote($rawelts[1]);
-	      $MerchandisingText = $this->tsv_unquote($rawelts[15]);
+	      if (count($rawelts) < $columns) {continue;}
+	      $Advertizer = $rawelts[$indexes["Advertiser name"]];
+	      $LinkID     = $rawelts[$indexes["Id"]];
+	      $LinkName   = $rawelts[$indexes["Name"]];
+	      $MerchandisingText = $rawelts[$indexes["Merchandising Text"]];
 	      $AltText    = '';
-	      $StartDate = $this->fixdate(trim($this->tsv_unquote($rawelts[8])));
-	      $EndDate = $this->fixdate(trim($this->tsv_unquote($rawelts[9])));
+	      if ($indexes["Start Date"] < 0) $StartDate = "1970-01-01";
+	      else $StartDate = $this->fixdate(trim($rawelts[$indexes["Start Date"]]));
+	      if ($indexes["End Date"] < 0) $EndDate = 'none';
+	      else $EndDate = $this->fixdate(trim($rawelts[$indexes["End Date"]]));
 	      if ($EndDate == 'none' || $EndDate == '') {$EndDate = "2037-12-31";}
-	      $ClickserverURL = $this->tsv_unquote($rawelts[4]);
-	      $ImageURL = $this->tsv_unquote($rawelts[5]);
+	      $ClickserverURL = $rawelts[$indexes["Tracking URL"]];
+	      $ImageURL = $rawelts[$indexes["Creative URL"]];
 	      $width = 0;
 	      $height = 0;
-	      if (preg_match('/^([[:digit:]]*)x([[:digit:]]*)$/',$this->tsv_unquote($rawelts[6]),$matches) ) {
+	      $imsize = $rawelts[$indexes["Image Size"]];
+	      if (preg_match('/^([[:digit:]]*)x([[:digit:]]*)$/',$imsize,$matches) ) {
+		$width = $matches[1];
+		$height = $matches[2];
+	      } else if (preg_match('/^([[:digit:]]*)[[:space:]]*\?[[:space:]]*([[:digit:]]*)$/',$imsize,$matches) ) {
 		$width = $matches[1];
 		$height = $matches[2];
 	      }
 	      $LinkURL = '';
-	      $PromoType = $this->tsv_unquote($rawelts[12]);
-	      $MerchantID = $this->tsv_unquote($rawelts[2]);
+	      if ($indexes["Promotion Type"] >= 0) $PromoType = $rawelts[$indexes["Promotion Type"]];
+	      else $PromoType = '';
+	      $MerchantID = $rawelts[$indexes["Advertiser Id"]];
 	      if (GAN_Database::find_ad_by_LinkID($LinkID) != 0) {
 		$message .= sprintf(__('Duplicate Link ID %s (%s). Ad not inserted into database.','gan'),$LinkID,$LinkName);
 		$message .= "<br />\n";
@@ -692,7 +716,7 @@ class GAN_DB_List_Table extends WP_List_Table {
 	}
 
 	function display_bulk_upload_form($returnURL) {
-	  ?><label for="gan-tsv-file"><?php _e('Select TSV File:','gan'); ?></label><input type='file' name="gan-tsv-file" size="40" /></p>
+	  ?><label for="gan-tsv-file"><?php _e('Select CSV or TSV File:','gan'); ?></label><input type='file' name="gan-tsv-file" size="40" /></p>
 	    <p><input type="submit" name="bulkadd" class="button-primary" value="<?php _e('Upload file','gan'); ?>" />
 		<a href="<?php echo $returnURL; ?>" class="button-primary"><?php _e('Return','gan'); ?></a>
 	    </p><?php

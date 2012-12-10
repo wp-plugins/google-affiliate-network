@@ -71,6 +71,7 @@ if (isset($_REQUEST['products'])) {
   $instance['namepat'] = (isset($_REQUEST['namepat'])?$_REQUEST['namepat']:'');
   $instance['catpat'] = (isset($_REQUEST['catpat'])?$_REQUEST['catpat']:'');
   $instance['brandpat'] = (isset($_REQUEST['brandpat'])?$_REQUEST['brandpat']:'');
+  $instance['descrpat'] = (isset($_REQUEST['descrpat'])?$_REQUEST['descrpat']:'');
 } else if (isset($_REQUEST['maxads']) ) {
   $instance['maxads'] = $_REQUEST['maxads'];
 } else {
@@ -103,7 +104,8 @@ if (isset($_REQUEST['products'])) {
       foreach ($merchlist as $merchid) {
         $prods = GAN_Database::ordered_prod_ads($merchid,$instance['namepat'],
 						$instance['catpat'],
-						$instance['brandpat']);
+						$instance['brandpat'],
+						$instance['descrpat']);
         if (count($prods) > 0) break;
       }
       if (count($prods) == 0) {
@@ -113,6 +115,8 @@ if (isset($_REQUEST['products'])) {
 	  $instance['catpat'] = '';
 	} else if ($instance['namepat'] != '') {
 	  $instance['namepat'] = '';
+	} else if ($instance['descrpat'] != '') {
+	  $instance['descrpat'] = '';
 	} else {
 	  break;
 	}

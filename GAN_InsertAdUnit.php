@@ -250,6 +250,13 @@ wp_enqueue_script( 'jquery-color' );
 			name="brandpat"
 			style="width:100%;" />
 	    </p>
+	    <p>
+		<label for="descrpat"><?php _e('Description Pattern','gan'); ?></label>
+		<input id="descrpat"
+			value=""
+			name="descrpat"
+			style="width:100%;" />
+	    </p>
 	<p><label for="ifwidth"><?php _e('Product frame width:','gan'); ?></label>
 	   <input id="ifwidth" name="ifwidth" value="" style="width:75%;" />
 	</p>
@@ -290,6 +297,7 @@ wp_enqueue_script( 'jquery-color' );
 		var namepat = jQuery('#namepat').val();
 		var catpat = jQuery('#catpat').val();
 		var brandpat = jQuery('#brandpat').val();
+		var descrpat = jQuery('#descrpat').val();
 		var target = jQuery('#target').val();
 		var ifwidth = jQuery('#ifwidth').val();
 		var ifheight = jQuery('#ifheight').val();
@@ -300,7 +308,8 @@ wp_enqueue_script( 'jquery-color' );
 				      '" merchid="'+merchid+
 				      '" namepat="'+namepat+
 				      '" catpat="'+catpat+
-				      '" brandpat="'+brandpat+'"]');
+				      '" brandpat="'+brandpat+
+				      '" descrpat="'+descrpat+'"]');
 	});
 	/* ]]> */
 </script><?php
