@@ -565,9 +565,12 @@ class GAN_Database {
       GAN_Database::delete_ad_by_id($id);
     }
   }
-  static function get_GAN_data($where,$format = 'ARRAY_A') {
+  static function get_GAN_data($where,$format = 'ARRAY_A',
+				$orderby = 'EndDate',$order = 'ASC') {
     global $wpdb;
-    return $wpdb->get_results("SELECT id,MerchantID,LinkID,ImageWidth,ImageHeight,LinkName,StartDate,EndDate,Enabled FROM " . GAN_AD_TABLE . $where . ' Order by EndDate', $format);
+    return $wpdb->get_results("SELECT id,MerchantID,LinkID,ImageWidth,ImageHeight,LinkName,StartDate,EndDate,Enabled FROM " .
+		 GAN_AD_TABLE . $where . ' Order by '.$orderby.' '.$order,
+		  $format);
   }
   static function get_GAN_Product_data($where,$format = 'ARRAY_A',
 					$orderby = 'Product_Name',
@@ -1098,7 +1101,7 @@ class GAN_Database {
     $GANMerchants = GAN_Database::get_merchants();
 	
     ?><label for="<?php echo $fieldid; ?>"><?php _e('Advertisers:','gan'); ?></label>
-      <select name="<?php echo $name; ?>" id="<?php echo $fieldid; ?>" maxlength="20">
+      <select class="gan-select" style="float: none;" name="<?php echo $name; ?>" id="<?php echo $fieldid; ?>" maxlength="20">
       <option value="" <?php 
 	if ( $merchid == "" ) echo 'selected="selected"'; 
 	?>><?php _e('All','gan'); ?></option><?php
@@ -1121,7 +1124,7 @@ class GAN_Database {
     $GANImageWidths = GAN_Database::get_imagewidths();
   
     ?><label for="gan-imwidth"><?php _e('Image Width:','gan'); ?></label>
-      <select name="<?php echo $name; ?>" id="gan-imwidth" maxlength="4">
+      <select class="gan-select" style="float: none;" name="<?php echo $name; ?>" id="gan-imwidth" maxlength="4">
       <option value="-1" <?php 
     if ( $imwidth == "-1" ) echo 'selected="selected"'; 
     ?>><?php _e('All','gan'); ?></option><?php
@@ -1141,7 +1144,7 @@ class GAN_Database {
     $GANImagesizes = GAN_Database::get_imagesizes();
   
     ?><label for="gan-imsize"><?php _e('Image Size:','gan'); ?></label>
-      <select name="<?php echo $name; ?>" id="gan-imsize" maxlength="8">
+      <select class="gan-select" style="float: none;" name="<?php echo $name; ?>" id="gan-imsize" maxlength="8">
       <option value="-1" <?php 
     if ( $imsize == "-1" ) echo 'selected="selected"'; 
     ?>><?php _e('All','gan'); ?></option><?php
