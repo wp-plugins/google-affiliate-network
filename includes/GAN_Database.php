@@ -1011,19 +1011,23 @@ class GAN_Database {
 				" WHERE ID = %s",$id);
     return $wpdb->get_var($sql);
   }
-  static function get_GAN_AD_VIEW_data($where,$format = 'ARRAY_A') {
+  static function get_GAN_AD_VIEW_data($where,$format = 'ARRAY_A',$orderby='Impressions, EndDate',$order='asc') {
+    //file_put_contents("php://stderr","*** GAN_Database::get_GAN_AD_VIEW_data($where,$format,$orderby,$order)\n");
     global $wpdb;
+    //$olderror = $wpdb->show_errors(true);
     if (GAN_Database::database_version() < 3.0) {
-      return $wpdb->get_results("SELECT * FROM " . GAN_AD_STATS_TABLE_VIEW . 
-				$where . ' Order by Impressions, EndDate', 
+      $results =  $wpdb->get_results("SELECT * FROM " . GAN_AD_STATS_TABLE_VIEW . 
+				$where . ' Order By '.$orderby.' '.$order, 
 				$format);
     } else {
-      return $wpdb->get_results("SELECT id, id adid, LastRunDate, Impressions,".
+      $results =  $wpdb->get_results("SELECT id, id adid, LastRunDate, Impressions,".
 				" ImageHeight, ImageWidth, MerchantID,".
 				" enabled, StartDate, EndDate  FROM " . 
 				GAN_AD_TABLE . $where . 
-				' Order by Impressions, EndDate', $format);
+				' Order by '.$orderby.' '.$order, $format);
     }
+    //$wpdb->show_errors($olderror);
+    return $results;
   }
   static function get_GAN_AD_VIEW_row_count($where) {
     global $wpdb;
@@ -1060,12 +1064,12 @@ class GAN_Database {
     if (GAN_Database::database_version() < 3.1) return;
     $wpdb->query("update " .GAN_PRODUCTS_AD_TABLE . " set Impressions=0,LastRunDate='1970-01-01' ".$where);
   }
-  static function get_GAN_MERCH_STATS_data($where, $format = 'ARRAY_A') {
+  static function get_GAN_MERCH_STATS_data($where, $format = 'ARRAY_A',$orderby='Impressions',$order='asc') {
     global $wpdb;
     if (GAN_Database::database_version() < 3.0) {
-      return $wpdb->get_results("SELECT * FROM " . GAN_MERCH_STATS_TABLE . $where . ' Order by Impressions', $format);
+      return $wpdb->get_results("SELECT * FROM " . GAN_MERCH_STATS_TABLE . $where . ' Order by '.$orderby.' '.$order, $format);
     } else {
-      return $wpdb->get_results("SELECT * FROM " . GAN_MERCH_TABLE . $where . ' Order by Impressions', $format);
+      return $wpdb->get_results("SELECT * FROM " . GAN_MERCH_TABLE . $where . ' Order by '.$orderby.' '.$order, $format);
     }
   }
   static function get_GAN_MERCH_STATS_row_count($where) {

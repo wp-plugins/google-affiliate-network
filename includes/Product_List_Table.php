@@ -47,7 +47,7 @@ class GAN_Product_List_Table extends WP_List_Table {
     /* Add screen option: links per page. */
     $this->per_page_screen_option = 
 	new GAN_Per_Page_Screen_Option($screen_id,
-		GAN_Link_List_Table::my_screen_option(),'Products');
+		GAN_Product_List_Table::my_screen_option(),'Products');
 
     //Set parent defaults
     parent::__construct( array ('singular' => 'Product',	// One thing
@@ -83,13 +83,13 @@ class GAN_Product_List_Table extends WP_List_Table {
   function column_Product_Name($item) {
      // Build row actions
     $actions = array(
-	'edit' => '<a href="'.add_query_arg(array('page' => 'gan-add-product,
+	'edit' => '<a href="'.add_query_arg(array('page' => 'gan-add-product',
 						  'mode' => 'edit',
 						  'merchid' => $this->merchid,
 						  'id' => $item->id),
 						admin_url('admin.php')).'">'.
 			__('Edit','gan')."</a>",
-	'view' => '<a href="'.add_query_arg(array('page' => 'gan-add-product,
+	'view' => '<a href="'.add_query_arg(array('page' => 'gan-add-product',
 						  'mode' => 'view',
 						  'merchid' => $this->merchid,
 						  'id' => $item->id),
@@ -112,7 +112,7 @@ class GAN_Product_List_Table extends WP_List_Table {
      return $item->Product_Name.$this->row_actions($actions);
   }
   function column_Enabled($item) {
-    if ($item->Enabled) {
+    if ($item->enabled) {
       return __('Yes', 'gan');
     } else {
       return __('No', 'gan');
@@ -267,7 +267,7 @@ class GAN_Product_List_Table extends WP_List_Table {
     if ($which == 'top') {
       ?><input type="hidden" name="merchid" value="<?php echo $this->merchid; ?>" /><?php
     }
-    ?><div class="alignleft actions"><?php
+    ?><br clear="all" /><div class="alignleft actions"><?php
     GAN_Database::merchdropdown($this->merchid,'merchid_'.$which);
     echo '&nbsp;';
     submit_button(__( 'Filter','gan'), 'secondary', 'filter_'.$which, 
@@ -317,7 +317,7 @@ class GAN_Product_List_Table extends WP_List_Table {
     $orderby = (!empty($_REQUEST['orderby'])) ? $_REQUEST['orderby'] : 'Product_Name';
     $order = (!empty($_REQUEST['order'])) ? $_REQUEST['order'] : 'asc';
 
-    $all_items = GAN_Database::get_GAN_Product_data($where,'OBJECT',$orderby,$order);
+    $all_items = GAN_Database::get_GAN_Product_data($whereclause,'OBJECT',$orderby,$order);
 
     $current_page = $this->get_pagenum();
     $total_items = count($all_items);

@@ -155,7 +155,8 @@ class GAN_Link_List_Table extends WP_List_Table {
 	'EndDate' => array('EndDate',false),
 	'StartDate' => array('StartDate',false),
 	'LinkName' => array('LinkName',false),
-	'LinkID' => array('LinkID',false)
+	'LinkID' => array('LinkID',false),
+	'ImageSize' => array('ImageWidth, ImageHeight',false)
 	);
   }
   function get_bulk_actions() {
@@ -321,7 +322,7 @@ class GAN_Link_List_Table extends WP_List_Table {
       ?><input type="hidden" name="merchid" value="<?php echo $this->merchid; ?>" />
 	<input type="hidden" name="imsize" value="<?php echo $this->imsize; ?>" /><?php
     }
-    ?><div class="alignleft actions"><?php
+    ?><br clear="all" /><div class="alignleft actions"><?php
     GAN_Database::merchdropdown($this->merchid,'merchid_'.$which);
     echo '&nbsp;';
     GAN_Database::imsizedropdown($this->imsize,'imsize_'.$which);
