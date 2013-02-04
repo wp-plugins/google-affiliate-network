@@ -3,8 +3,8 @@ Contributors: RobertPHeller
 Donate link: http://www.deepsoft.com/GAN
 Tags: gan,affiliate,widget,google,plugin,ads,shortcode
 Requires at least: 3.0
-Tested up to: 3.3
-Stable tag: 5.2.3.1
+Tested up to: 3.5
+Stable tag: 6.0
 
 A Widget / shortcode plugin to display Google Affiliate Network ads. 
 Both text links and image ads can be displayed.
@@ -40,22 +40,6 @@ also administration pages to view ad impression statistics and merchant
 (advertiser) impression statistics.  The statistics can be downloaded as
 CSV files.  The plugin also includes a help page and a printable PDF
 user manual.
-
-= Sustainable Plugin Development - and Your Privacy =
-
-Google Affiliate Network is a participant in the Sustainable Plugins
-Sponsorship Network (SPSN) - http://pluginsponsors.com/. The SPSN model
-offers modest sponsorships to plugin authors in return for a small
-amount of screen real estate on plugin options pages. The SPSN sponsor
-messages can be switched altogether: just visit the Config page.
-
-IMPORTANT PRIVACY INFORMATION: NO INDIVIDUALLY IDENTIFIABLE DETAILS OF
-ANY KIND, REGARDING EITHER YOU OR YOUR SITE, will be collected or
-shared as a result of displaying Sustainable Plugins Sponsorship
-Network (SPSN) sponsor messages. Sponsors receive only aggregate
-reports of impressions on a worldwide per-plugin basis, NOT on
-impressions or on any other activity at any individual site which
-happens to be using a plugin.
 
 == Installation ==
 
@@ -107,6 +91,17 @@ a documentation bug at [Deepwoods Software's Bugzilla][bugreport] as well.
 4. Front side view, showing both textual ads and banner ads.
 
 == Changelog ==
+
+= 6.0 =
+* Major re-write of the code.
+  All of the helper files moved to an includes directory.
+  All of the WP_List_Table classes re-written correctly.
+  The manual has been heavily revised and the help page has also been revised.
+  Things should generally work lots better and the admin pages should be
+  better behaved, with sorting and searching and working items per page
+  screen options.
+  A fresh set of screen shots has also been created.
+  
 
 = 5.2.3.1 =
 * Security and minor bug fixes.
@@ -348,6 +343,9 @@ figures.
 * First official release.
 
 == Upgrade Notice ==
+
+= 6.0 =
+Major rewrite of the code.
 
 = 5.2.3 =
 Google changed the link CSV/TSV file format, again.
