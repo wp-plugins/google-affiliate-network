@@ -37,8 +37,8 @@ if (!current_user_can('manage_options'))
 
 /* Load support files: constants and database */
 
-require_once(dirname(__FILE__) . "/GAN_Constants.php");
-require_once(dirname(__FILE__) . "/GAN_Database.php");
+require_once(dirname(__FILE__) . "/includes/GAN_Constants.php");
+require_once(dirname(__FILE__) . "/includes/GAN_Database.php");
 
 load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',basename(GAN_DIR).'/languages/');
 
