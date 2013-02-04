@@ -29,8 +29,8 @@ if ($wp_db_version < 8201) {
 }
 
 /* Load support files: constants and database */
-require_once(dirname(__FILE__) . "/GAN_Constants.php");
-require_once(dirname(__FILE__) . "/GAN_Database.php");
+require_once(dirname(__FILE__) . "/includes/GAN_Constants.php");
+require_once(dirname(__FILE__) . "/includes/GAN_Database.php");
 
 load_plugin_textdomain('gan',GAN_PLUGIN_URL.'/languages/',basename(GAN_DIR).'/languages/');
 

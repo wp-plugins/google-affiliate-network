@@ -118,9 +118,11 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 Article_TEXS = gan_manual.tex
-Article_FIGS = gandatabase.png ganmanualadd.png bulkadd.png ganLinksTab.png \
-		ganExport.png ganwidget.png ganimagewidget.png \
-		ganmediabutton.png ganinsertaddialog.png
+Article_FIGS = ganlinkads.png ganaddlinkad.png ganaddlinkbulk.png \
+		ganLinksTab.png ganExport.png ganwidget.png ganlinkads.png \
+		ganproducts.png ganaddproduct.png ganaddproductbulk.png \
+		ganProductsTab.png ganExportProducts.png ganimagewidget.png \
+		ganproductwidget.png ganmediabutton.png ganinsertaddialog.png
 
 Article_PDF = gan_manual.pdf
 EXTRA_DIST = $(Article_TEXS) $(Article_FIGS)
@@ -390,9 +392,6 @@ $(Article_PDF) : $(Article_TEXS) $(Article_FIGS)
 	$(PDFLATEX) gan_manual
 	$(PDFLATEX) gan_manual
 	$(PDFLATEX) gan_manual
-
-DWSPDFS.zip : $(pkgdata_DATA)
-	zip DWSPDFS.zip $(pkgdata_DATA)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

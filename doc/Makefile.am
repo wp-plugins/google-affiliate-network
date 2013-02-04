@@ -1,7 +1,9 @@
 Article_TEXS = gan_manual.tex
-Article_FIGS = gandatabase.png ganmanualadd.png bulkadd.png ganLinksTab.png \
-		ganExport.png ganwidget.png ganimagewidget.png \
-		ganmediabutton.png ganinsertaddialog.png
+Article_FIGS = ganlinkads.png ganaddlinkad.png ganaddlinkbulk.png \
+		ganLinksTab.png ganExport.png ganwidget.png ganlinkads.png \
+		ganproducts.png ganaddproduct.png ganaddproductbulk.png \
+		ganProductsTab.png ganExportProducts.png ganimagewidget.png \
+		ganproductwidget.png ganmediabutton.png ganinsertaddialog.png
 
 Article_PDF  = gan_manual.pdf
 
@@ -16,7 +18,4 @@ $(Article_PDF) : $(Article_TEXS) $(Article_FIGS)
 	$(PDFLATEX) gan_manual
 
 CLEANFILES = *.log *.aux *.toc *.bbl *.blg
-
-DWSPDFS.zip : $(pkgdata_DATA)
-	zip DWSPDFS.zip $(pkgdata_DATA)
 
