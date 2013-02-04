@@ -178,3 +178,10 @@ padding-left:   10px;
 padding-right:   0px;
 }
 
+select#gan-merchid {
+  float: none;
+}
+
+select#gan-imsize {
+  float: none;
+}
