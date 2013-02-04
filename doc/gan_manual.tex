@@ -55,7 +55,28 @@ expired ads and one to add additional CSS to fine tune how the ad
 blocks look.  The option to automatically delete expired ads is on by
 default. While it is possible to disable automatically deleting expired
 ads it is not recommended.  The additional CSS section can be used to
-adjust the look of ad blocks.
+adjust the look of ad blocks.  For the outer iframe, and for img and p
+tags in the ad units, the class attribute is set to GANleader for
+horizontal ad units and GANright for vertical ad units.  Within the ad
+unit (link ads), there is a ul tag, whose id attribute is set to
+GANleader for horizontal ad units and GANright for vertical ad units. 
+You can use these CSS selectors:
+
+\begin{description}
+  \item[iframe.GANleader] For the outer iframe of horizontal ad units.
+  \item[img.GANleader] For the product images of horizontal product ad units.
+  \item[p.GANleader] For the product description of horizontal product ad
+units.
+  \item[ul\#GANleader] For the list of link ads in horizontal ad units.
+  \item[iframe.GANright] For the outer iframe of vertical ad units.
+  \item[img.GANright] For the product images of vertical product ad
+units.
+  \item[p.GANright] For the product description of vertical product ad
+units.
+  \item[ul\#GANright] For the list of link ads in vertical ad units.
+\end{description}
+
+The file, GAN.css in the css directory, is the default stylesheet.
 
 If you have upgraded from an older version of the plugin, the
 configure page will display a button to upgrade the database to the new
@@ -280,13 +301,6 @@ Separated Values'' option (see figure~\ref{fig:ganExportProducts}),
 which can then be downloaded. This same file can in turn be uploaded to
 the GAN plugin and the products in this file will be added to your product
 database.
-
-\subsection{Editing Ads}
-
-When displaying the data on the main admin page, links are provided to
-edit, delete, or toggle the enabled flag for each ad. It is possible to
-select only a single merchant's ads to be displayed and/or a single
-size of ad or only text ads.
 
 \section{Showing Ads}
 

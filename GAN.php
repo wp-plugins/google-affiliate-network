@@ -314,6 +314,10 @@ class GAN_Plugin {
 	}
 	/* Front side head action: load our style sheet */
 	function wp_head() {
+	  $extra_css = stripslashes(get_option('wp_gan_extra_css'));
+	  if ($extra_css != '') {
+	    ?><style type="text/css" media="all"><?php echo $extra_css; ?></style><?php
+	  }
 	}
 	/* Admin side head action: load our admin style sheet */
 	function admin_head() {
