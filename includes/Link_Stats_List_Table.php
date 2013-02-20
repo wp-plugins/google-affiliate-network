@@ -260,13 +260,12 @@ class GAN_Link_Stats_List_Table extends WP_List_Table {
         $and = ' && ';
       }
       if ($this->merchid != '') {
-	$wclause = $wpdb->prepare($wclause . $and .' MerchantID = %s',$this->merchid);
+	$wclause .= $and .$wpdb->prepare(' MerchantID = %s',$this->merchid);
 	$and = ' && ';
       }
       if ($this->imsize != -1) {
 	$size = explode('x',$this->imsize);
-	$wclause = $wpdb->prepare($wclause . $and . 
-				  ' ImageWidth = %d && ImageHeight = %d',
+	$wclause .= $and .$wpdb->prepare(' ImageWidth = %d && ImageHeight = %d',
 				  $size[0],$size[1]);
       }
       $where = ' where ' . $wclause . ' ';

@@ -294,14 +294,15 @@ class GAN_Link_List_Table extends WP_List_Table {
         $and = ' && ';
       }
       if ($this->merchid != '') {
-	$wclause = $wpdb->prepare($wclause . $and .' MerchantID = %s',$this->merchid);
+	$wclause .= $and .$wpdb->prepare(' MerchantID = %s',$this->merchid);
 	$and = ' && ';
       }
       if ($this->imsize != -1) {
 	$size = explode('x',$this->imsize);
-	$wclause = $wpdb->prepare($wclause . $and . 
+	$wclause .= $and . $wpdb->prepare(
 				  ' ImageWidth = %d && ImageHeight = %d',
 				  $size[0],$size[1]);
+	//file_put_contents("php://stderr","*** GAN_Link_List_Table::process_filters_and_bulk_action: this->imsize is '".$this->imsize."', size is ".print_r($size,true).", wclause = '".$wclause."'\n");
       }
       $where = ' where ' . $wclause . ' ';
       $wand  = ' && ' . $wclause . ' ';

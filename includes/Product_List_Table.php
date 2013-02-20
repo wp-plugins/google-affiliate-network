@@ -246,7 +246,7 @@ class GAN_Product_List_Table extends WP_List_Table {
         $and = ' && ';
       }
       if ($this->merchid != '') {
-	$wclause = $wpdb->prepare($wclause . $and .' MerchantID = %s',$this->merchid);
+	$wclause .= $and .$wpdb->prepare(' MerchantID = %s',$this->merchid);
 	$and = ' && ';
       }
       $where = ' where ' . $wclause . ' ';
