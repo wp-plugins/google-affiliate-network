@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 6.0
+ * Version: 6.1
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -60,9 +60,9 @@ require_once(GAN_INCLUDES_DIR . "/GAN_Product_Widget.php");
 /* Load Table code */
 require_once(GAN_INCLUDES_DIR . "/Link_List_Table.php");
 require_once(GAN_INCLUDES_DIR . "/Product_List_Table.php");
-//require_once(GAN_INCLUDES_DIR . "/Link_Stats_List_Table.php");
-//require_once(GAN_INCLUDES_DIR . "/Prod_Stats_List_Table.php");
-//require_once(GAN_INCLUDES_DIR . "/Merch_Stats_List_Table.php");
+require_once(GAN_INCLUDES_DIR . "/Link_Stats_List_Table.php");
+require_once(GAN_INCLUDES_DIR . "/Prod_Stats_List_Table.php");
+require_once(GAN_INCLUDES_DIR . "/Merch_Stats_List_Table.php");
 
 /* Main plugin class. Implements the basic admin functions of the plugin. */
 class GAN_Plugin {
@@ -238,41 +238,41 @@ class GAN_Plugin {
 	  $this->add_contentualhelp($screen_id,
 				    'gan-add-product-bulk');
 
-//	  /* Link Stats page */
-//	  $screen_id = add_submenu_page( 'gan-link-ads-table',
-//					__('Link Impression Statistics','gan'),
-//					__('Link Stats','gan'),
-//					'manage_options', 
-//					'gan-link-impstats',
-//					array($this,'admin_link_impstats'));
-//	  $this->admin_tabs['gan-link-impstats'] = __('Link Stats','gan');
-//	  $this->admin_tablist[] = 'gan-link-impstats';
-//	  $this->add_contentualhelp($screen_id,'gan-link-impstats');
-//	  $this->link_stats_list_table = new GAN_Link_Stats_List_Table($screen_id);
-//						
-//	  /* Product Stats page */
-//	  $screen_id = add_submenu_page( 'gan-link-ads-table',
-//					__('Product Impression Statistics','gan'),
-//					__('Product Stats','gan'),
-//					'manage_options', 
-//					'gan-product-impstats',
-//					array($this,'admin_product_impstats'));
-//	  $this->admin_tabs['gan-product-impstats'] = __('Product Stats','gan');
-//	  $this->admin_tablist[] = 'gan-product-impstats';
-//	  $this->add_contentualhelp($screen_id,'gan-product-impstats');
-//	  $this->prod_stats_list_table = new GAN_Prod_Stats_List_Table($screen_id);
-//						
-//	  /* Merch Stats page */
-//	  $screen_id = add_submenu_page( 'gan-link-ads-table',
-//					__('Merchant Impression Statistics','gan'),
-//					__('Merchant Stats','gan'),
-//					'manage_options', 
-//					'gan-merch-impstats',
-//					array($this,'admin_merch_impstats'));
-//	  $this->admin_tabs['gan-merch-impstats'] = __('Merchant Stats','gan');
-//	  $this->admin_tablist[] = 'gan-merch-impstats';
-//	  $this->add_contentualhelp($screen_id,'gan-merch-impstats');
-//	  $this->merch_stats_list_table = new GAN_Merch_Stats_List_Table($screen_id);
+	  /* Link Stats page */
+	  $screen_id = add_submenu_page( 'gan-link-ads-table',
+					__('Link Impression Statistics','gan'),
+					__('Link Stats','gan'),
+					'manage_options', 
+					'gan-link-impstats',
+					array($this,'admin_link_impstats'));
+	  $this->admin_tabs['gan-link-impstats'] = __('Link Stats','gan');
+	  $this->admin_tablist[] = 'gan-link-impstats';
+	  $this->add_contentualhelp($screen_id,'gan-link-impstats');
+	  $this->link_stats_list_table = new GAN_Link_Stats_List_Table($screen_id);
+						
+	  /* Product Stats page */
+	  $screen_id = add_submenu_page( 'gan-link-ads-table',
+					__('Product Impression Statistics','gan'),
+					__('Product Stats','gan'),
+					'manage_options', 
+					'gan-product-impstats',
+					array($this,'admin_product_impstats'));
+	  $this->admin_tabs['gan-product-impstats'] = __('Product Stats','gan');
+	  $this->admin_tablist[] = 'gan-product-impstats';
+	  $this->add_contentualhelp($screen_id,'gan-product-impstats');
+	  $this->prod_stats_list_table = new GAN_Prod_Stats_List_Table($screen_id);
+						
+	  /* Merch Stats page */
+	  $screen_id = add_submenu_page( 'gan-link-ads-table',
+					__('Merchant Impression Statistics','gan'),
+					__('Merchant Stats','gan'),
+					'manage_options', 
+					'gan-merch-impstats',
+					array($this,'admin_merch_impstats'));
+	  $this->admin_tabs['gan-merch-impstats'] = __('Merchant Stats','gan');
+	  $this->admin_tablist[] = 'gan-merch-impstats';
+	  $this->add_contentualhelp($screen_id,'gan-merch-impstats');
+	  $this->merch_stats_list_table = new GAN_Merch_Stats_List_Table($screen_id);
 						
 
 	  $screen_id = add_submenu_page( 'gan-link-ads-table', __('Configure Options','gan'),
@@ -287,6 +287,8 @@ class GAN_Plugin {
 	  		    __('Help','gan'),'manage_options',
 			    'gan-help',
 			    array($this,'admin_help')); 
+	  $this->admin_tabs['gan-help'] = __('Help','gan');
+	  $this->admin_tablist[] = 'gan-help';
 	}
 
 	function admin_tabs($current) {
@@ -312,6 +314,10 @@ class GAN_Plugin {
 	}
 	/* Front side head action: load our style sheet */
 	function wp_head() {
+	  $extra_css = stripslashes(get_option('wp_gan_extra_css'));
+	  if ($extra_css != '') {
+	    ?><style type="text/css" media="all"><?php echo $extra_css; ?></style><?php
+	  }
 	}
 	/* Admin side head action: load our admin style sheet */
 	function admin_head() {
@@ -436,6 +442,41 @@ class GAN_Plugin {
 	}
 
 
+	function admin_link_impstats() {
+	  $this->link_stats_list_table->prepare_items();
+	  /* Head of page, filter and screen options. */
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-link-impstats'); ?><br clear="all" />
+	    <div id="icon-gan-ad-imp" class="icon32"><br /></div><h2><?php _e('Link Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
+	    <?php $this->InsertPayPalDonateButton(); ?>
+	    <form method="post" action="">
+	    	<input type="hidden" name="page" value="gan-link-impstats" />
+		<?php if (GAN_Database::database_version() >= 3.0) $this->link_stats_list_table->search_box( 'search', 'search_id' ); ?>
+		<?php $this->link_stats_list_table->display(); ?></form></div><?php
+	}
+
+	function admin_product_impstats() {
+	  $this->prod_stats_list_table->prepare_items();
+	  /* Head of page, filter and screen options. */
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-product-impstats'); ?><br clear="all" />
+	    <div id="icon-gan-prod-imp" class="icon32"><br /></div><h2><?php _e('Product Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
+	    <?php $this->InsertPayPalDonateButton(); ?>
+	    <form method="post" action="">
+	    	<input type="hidden" name="page" value="gan-product-impstats" />
+		<?php $this->prod_stats_list_table->search_box( 'search', 'search_id' ); ?>
+		<?php $this->prod_stats_list_table->display(); ?></form></div><?php
+	}
+
+	function admin_merch_impstats() {
+	  $this->merch_stats_list_table->prepare_items();
+	  /* Head of page, filter and screen options. */
+	  ?><div class="wrap"><?php $this->admin_tabs('gan-merch-impstats'); ?><br clear="all" />
+	    <div id="icon-gan-merch-imp" class="icon32"><br /></div><h2><?php _e('Merchant Impression Statistics','gan'); ?><?php $this->InsertVersion(); ?></h2>
+	    <?php $this->InsertPayPalDonateButton(); ?>
+	    <form method="post" action="">
+		<input type="hidden" name="page" value="gan-merch-impstats" />
+		<?php $this->merch_stats_list_table->display(); ?></form></div><?php
+	}
+
 	function admin_configure_options() {
 	  //must check that the user has the required capability 
 	  if (!current_user_can('manage_options'))
@@ -488,7 +529,7 @@ class GAN_Plugin {
 		} ?></form></div><?php
 	}
 	function admin_help() {
-	  require_once(GAN_DIR.'/GAN_Help.php');
+	  require_once(GAN_INCLUDES_DIR.'/GAN_Help.php');
 	}
 	function InsertVersion() {
 	  ?><span id="gan_version"><?php printf(__('Version: %s','gan'),GAN_VERSION) ?></span><?php
