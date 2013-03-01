@@ -748,13 +748,13 @@ class GAN_Link_List_Table extends WP_List_Table {
 	$ImageURL = $rawelts[$indexes["Creative URL"]];
 	$width = 0;
 	$height = 0;
-	$imsize = $rawelts[$indexes["Image Size"]];
-	if (preg_match('/^([[:digit:]]*)x([[:digit:]]*)$/',$imsize,$matches) ) {
+	$imsize = iconv("UTF-8","ASCII//TRANSLIT",$rawelts[$indexes["Image Size"]]);
+	//file_put_contents("php://stderr","*** GAN_Link_List_Table::process_bulk_upload: imsize = |$imsize|\n");
+	if (preg_match('/^([[:digit:]]*)[[:space:]]*([^[:space:]])[[:space:]]*([[:digit:]]*)$/',$imsize,$matches) ) {
+	  //file_put_contents("php://stderr","*** GAN_Link_List_Table::process_bulk_upload: matches is ".print_r($matches,true)."\n");
 	  $width = $matches[1];
-	  $height = $matches[2];
-	} else if (preg_match('/^([[:digit:]]*)[[:space:]]*\?[[:space:]]*([[:digit:]]*)$/',$imsize,$matches) ) {
-	  $width = $matches[1];
-	  $height = $matches[2];
+	  //file_put_contents("php://stderr","*** GAN_Link_List_Table::process_bulk_upload: ord(matches[2]) is ".ord($matches[2])."\n");
+	  $height = $matches[3];
 	}
 	$LinkURL = '';
 	if ($indexes["Promotion Type"] >= 0) $PromoType = $rawelts[$indexes["Promotion Type"]];
