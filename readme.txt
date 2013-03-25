@@ -92,6 +92,9 @@ a documentation bug at [Deepwoods Software's Bugzilla][bugreport] as well.
 
 == Changelog ==
 
+= 6.1.2 =
+* Fix missing database field
+
 = 6.1.1 =
 * Deal with (stupid) Utf-8 characters in Google's csv files.
 
