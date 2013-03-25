@@ -38,6 +38,7 @@ class GAN_Database {
     $sql = "CREATE TABLE ".GAN_AD_TABLE." (
 	  id int NOT NULL AUTO_INCREMENT,
 	  LinkID varchar(16)  NOT NULL default '',
+	  LinkName varchar(255) NOT NULL default '',
 	  MerchandisingText varchar(255) default '',
 	  AltText varchar(255) default '',
 	  StartDate date NOT NULL default '1970-01-01',
