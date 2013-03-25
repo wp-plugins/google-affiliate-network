@@ -38,6 +38,7 @@ class GAN_Database {
     $sql = "CREATE TABLE ".GAN_AD_TABLE." (
 	  id int NOT NULL AUTO_INCREMENT,
 	  LinkID varchar(16)  NOT NULL default '',
+	  LinkName varchar(255) NOT NULL default '',
 	  MerchandisingText varchar(255) default '',
 	  AltText varchar(255) default '',
 	  StartDate date NOT NULL default '1970-01-01',
@@ -1166,5 +1167,33 @@ class GAN_Database {
     }
     ?></select><?php
   }
-  
+
+  static function display_database() {
+    global $wpdb;
+    $table_names = array (GAN_AD_TABLE, GAN_MERCH_TABLE, GAN_PRODUCTS_AD_TABLE);
+    ?><table><?php
+    foreach ($table_names as $table_name) {
+      ?><tr><th valign="top"><?php echo $table_name;?></th><?php
+      $table_exists = $wpdb->get_var("SHOW TABLES LIKE '".$table_name. "'") == $table_name;
+      if ($table_exists) {
+	$table_info = $wpdb->get_results('DESCRIBE '.$table_name,'ARRAY_A');
+	?><td valign="top"><table border="2">
+	 <thead><tr><th>Field</th><th>Type</th><th>Null</th><th>Key</th><th>Default</th><th>Extra</th></tr></thead>
+	 <tfoot><tr><th>Field</th><th>Type</th><th>Null</th><th>Key</th><th>Default</th><th>Extra</th></tr></tfoot>
+	 <tbody><?php
+	foreach ($table_info as $col_row) {
+	  ?><tr><?php
+	  foreach ($col_row as $col) {
+	    ?><td><?php echo $col; ?></td><?php
+	  }
+	  ?></tr><?php
+	}
+	?></tbody></table></td><?php
+      } else {
+	?><td valign="top">Missing</td><?php
+      }
+      ?></tr><?php
+    }
+    ?></table><?php 
+  }  
 }

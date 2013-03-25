@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 6.1.1
+ * Version: 6.1.2
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -494,6 +494,9 @@ class GAN_Plugin {
 	  } else if ( isset($_REQUEST['upgradedatabase']) ) {
 	    GAN_Database::upgrade_database();
 	    ?><div id="message"class="updated fade"><p><?php _e('Database Upgraded','gan'); ?></p></div><?php
+	  } else if ( isset($_REQUEST['displaydatabasetab']) ) {
+	    GAN_Database::display_database();
+	    ?><div id="message"class="updated fade"><p><?php _e('Database Displayed','gan'); ?></p></div><?php
 	  }
 	  /* Head of page, filter and screen options. */
 	  $autoexpire = get_option('wp_gan_autoexpire');
@@ -526,7 +529,7 @@ class GAN_Plugin {
 		?><span id="gan_dash_version"><?php printf(__('Database Version: %3.1f','gan'),GAN_Database::database_version()) ?></span><br /><?php
 		if (GAN_Database::database_version() < 3.2) {
 		  ?><p><?php _e('Your database needs to be upgraded.','gan'); ?>&nbsp;<input type="submit" name="upgradedatabase" class="button-primary" value="<?php _e('Upgrade Database','gan'); ?>"></p><?php
-		} ?></form></div><?php
+		} ?><p><input type="submit" name="displaydatabasetab" class="button-primary" value="<?php _e('Display Database','gan'); ?>"></p></form></div><?php
 	}
 	function admin_help() {
 	  require_once(GAN_INCLUDES_DIR.'/GAN_Help.php');
