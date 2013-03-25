@@ -101,11 +101,11 @@ class GAN_Database {
     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
   }
-  static function upgrade_database() {
+  static function upgrade_database($force = false) {
     global $wpdb;
     $dbversion = GAN_Database::database_version();
     //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: dbversion = ".$dbversion."\n");
-    if ($dbversion == 3.2) return;
+    if ($dbversion == 3.2 && !$force) return;
     /*$olderror = $wpdb->show_errors(true);*/
     if ($dbversion > 0.0 && $dbversion < 3.0) {
       //file_put_contents("php://stderr","*** GAN_Database::upgrade_database: populating merchs table\n");
