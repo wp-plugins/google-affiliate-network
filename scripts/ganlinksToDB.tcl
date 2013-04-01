@@ -217,7 +217,7 @@ while { [gets stdin line] >= 0 } {
 # Body of table in message
 while { [gets stdin line] >= 0 } {
   set elts [split "$line" "\t"]
-  if {[llength $elts] != 14 || llength $elts] != 21} {continue}
+  if {[llength $elts] != 14 && [llength $elts] != 21} {continue}
 
   set elts [lreplace $elts 5 5 [fixdate [lindex $elts 5]]];# Fix start date
   # Fix EndDate
@@ -226,7 +226,13 @@ while { [gets stdin line] >= 0 } {
   } else {
     set elts [lreplace $elts 6 6 [fixdate [lindex $elts 6]]]
   }
-  eval insert_GAN [lrange $elts 0 13]
+  if {[llength $elts] == 21} {
+    set elts1 [lrange $elts 0 11]
+    lappend elts1 [lrange $elts 13 end]
+    lappend elts1 [lindex $elts 12]
+    set elts $elts1
+  }
+  eval insert_GAN $elts
 }
 
 
