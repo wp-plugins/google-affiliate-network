@@ -178,3 +178,7 @@ select.gan-select {
   float: none;
 }
 
+.wp-media-buttons .add_gan span.wp-media-buttons-icon {
+	background: url(../images/media-button.png) no-repeat scroll left top transparent;
+}
+
