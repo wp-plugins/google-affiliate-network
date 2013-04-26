@@ -4,7 +4,7 @@ Donate link: http://www.deepsoft.com/GAN
 Tags: gan,affiliate,widget,google,plugin,ads,shortcode
 Requires at least: 3.0
 Tested up to: 3.5
-Stable tag: 6.1.4
+Stable tag: 6.1.5.1
 
 A Widget / shortcode plugin to display Google Affiliate Network ads. 
 Both text links and image ads can be displayed.
@@ -40,6 +40,11 @@ also administration pages to view ad impression statistics and merchant
 (advertiser) impression statistics.  The statistics can be downloaded as
 CSV files.  The plugin also includes a help page and a printable PDF
 user manual.
+
+Notice:  Google is  planning on retiring  the Google  Affiliate  Network. I am
+going to stop working on this code.  It is available for whoever wants to look
+at it and maybe use it as  example  code or the basis of some other  affiliate
+advertising system.
 
 == Installation ==
 
@@ -91,6 +96,15 @@ a documentation bug at [Deepwoods Software's Bugzilla][bugreport] as well.
 4. Front side view, showing both textual ads and banner ads.
 
 == Changelog ==
+
+= 6.1.5.1 =
+* Notice about Google retiring the Google  Affiliate  Network.
+
+= 6.1.5 =
+* Minor improvement in the insert ad unit [media] button (posts and pages).
+
+= 6.1.4.1 =
+* Update ganlinksToDB.tcl to support Google's V2 e-mailed gan links (fixed).
 
 = 6.1.4 =
 * Update ganlinksToDB.tcl to support Google's V2 e-mailed gan links.
@@ -358,6 +372,9 @@ figures.
 * First official release.
 
 == Upgrade Notice ==
+
+= 6.1.5.1 =
+Notice about Google retiring the Google  Affiliate  Network. 
 
 = 6.1.1 =
 Deal with (stupid) Utf-8 characters in Google's csv/tsv files.

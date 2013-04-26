@@ -3,7 +3,7 @@
  * Plugin Name: Google Affiliate Network widget
  * Plugin URI: http://http://www.deepsoft.com/GAN
  * Description: A Widget to display Google Affiliate Network ads
- * Version: 6.1.4
+ * Version: 6.1.5.1
  * Author: Robert Heller
  * Author URI: http://www.deepsoft.com/
  * License: GPL2
@@ -951,10 +951,8 @@ class GAN_Plugin {
 	function add_media_button() {
 	  $url = GAN_PLUGIN_URL.'/GAN_InsertAdUnit.php?tab=links&amp;TB_iframe=true&amp;height=750&amp;width=640';
 	  if (is_ssl()) $url = str_replace( 'http://', 'https://',  $url );
-	  echo '<a href="'.$url.'" class="thickbox" title="'.
-			__('Add Ad Unit','gan').'"><img src="'.
-			GAN_PLUGIN_IMAGE_URL.'/media-button.png" alt="'.
-			__('Add Ad Unit','gan').'" /></a>';
+	  echo '<a href="'.$url.'" class="button insert-gan add_gan thickbox" title="'.
+			__('Add Ad Unit','gan').'"><span class="wp-media-buttons-icon"></span>Add GAN Ad Unit</a>';
 	  
 	}
 
